@@ -45,7 +45,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 min-w-0" aria-label="Church of God of Prophecy Home">
             <AppLogo size={32} />
-            <span className={`font-display text-lg font-semibold tracking-tight hidden sm:block whitespace-nowrap transition-colors duration-500 ${scrolled ? 'text-gray-900' : 'text-white'}`}>
+            <span className={`font-display text-sm sm:text-lg font-semibold tracking-tight whitespace-nowrap transition-colors duration-500 ${scrolled ? 'text-gray-900' : 'text-white'}`}>
               Church of God of Prophecy
             </span>
           </Link>
