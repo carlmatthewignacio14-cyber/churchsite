@@ -1,0 +1,370 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+:root {
+  --background: #FAF7F4;
+  --foreground: #240c08;
+  --primary: #744d2c;
+  --primary-foreground: #FFFFFF;
+  --secondary: #f0ebe4;
+  --secondary-foreground: #240c08;
+  --accent: #49220f;
+  --accent-foreground: #FFFFFF;
+  --muted: #EDE8E1;
+  --muted-foreground: #7a6a5e;
+  --card: #FFFFFF;
+  --card-foreground: #240c08;
+  --border: #ddd5c8;
+  --input: #ddd5c8;
+  --ring: #744d2c;
+  --radius: 0.75rem;
+  --font-sans: var(--font-dm-sans), sans-serif;
+  --font-display: var(--font-fraunces), serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-aktiv-grotesk-ex {
+    font-family: 'aktiv-grotesk-extended', 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  }
+
+  .text-gradient-warm {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(135deg, #744d2c 0%, #8f6240 50%, #c9cdc0 100%);
+  }
+
+  .grid-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .grid-inner {
+    width: 100%;
+    height: 100%;
+    max-width: 80rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
+
+  .grid-line-v {
+    width: 1px;
+    height: 100%;
+    background: rgba(116, 77, 44, 0.08);
+  }
+
+  /* Animation keyframes */
+  @keyframes animationIn {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+      filter: blur(8px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0px);
+    }
+  }
+
+  @keyframes scroll-line {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+
+  @keyframes float-gentle {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .animate-scroll-line {
+    animation: scroll-line 2s infinite ease-in-out;
+  }
+
+  .animate-float {
+    animation: float-gentle 4s ease-in-out infinite;
+  }
+
+  .animate-pulse-ring {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 20s linear infinite;
+  }
+
+  /* Scroll-triggered animation base */
+  .animate-on-scroll {
+    animation-play-state: paused !important;
+  }
+
+  .animate-on-scroll.animate {
+    animation-play-state: running !important;
+  }
+
+  .anim-in {
+    animation: animationIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Image zoom container */
+  .img-zoom-wrap {
+    overflow: hidden;
+  }
+
+  .img-zoom-wrap img {
+    transition: transform 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .img-zoom-wrap:hover img {
+    transform: scale(1.08);
+  }
+
+  /* Bento item */
+  .bento-card {
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .bento-card:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Sermon card play button */
+  .play-btn-wrap {
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .group:hover .play-btn-wrap {
+    transform: scale(1.1);
+  }
+
+  /* Step indicator */
+  .step-indicator {
+    transition: all 0.5s ease;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .step-indicator.active {
+    background: var(--primary);
+  }
+
+  .step-text-muted {
+    color: var(--muted-foreground);
+    transition: color 0.4s ease;
+  }
+
+  .step-text-muted.active {
+    color: var(--foreground);
+  }
+
+  /* FAQ accordion */
+  .faq-content {
+    transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Blob decorative */
+  .blob-primary {
+    background: radial-gradient(circle, rgba(116, 77, 44, 0.18) 0%, transparent 70%);
+    filter: blur(60px);
+  }
+
+  .blob-accent {
+    background: radial-gradient(circle, rgba(73, 34, 15, 0.15) 0%, transparent 70%);
+    filter: blur(60px);
+  }
+
+  /* Hero text reveal */
+  .reveal-clip {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  /* Nav pill glass */
+  .nav-glass {
+    background: rgba(250, 248, 243, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Section spacing helpers */
+  .section-pad {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  @media (min-width: 768px) {
+    .section-pad {
+      padding-top: 7rem;
+      padding-bottom: 7rem;
+    }
+  }
+
+  /* Text sizes */
+  .text-hero-display {
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+  }
+
+  .text-section-title {
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+  }
+
+  /* Counter number style */
+  .counter-num {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    color: var(--foreground);
+  }
+
+  /* Giving amount button */
+  .amount-btn {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 2px solid var(--border);
+    background: var(--card);
+    color: var(--foreground);
+    font-weight: 600;
+    font-size: 1.125rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+
+  .amount-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .amount-btn.selected {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  /* Frequency toggle */
+  .freq-btn {
+    transition: all 0.25s ease;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--muted-foreground);
+  }
+
+  .freq-btn.active {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  /* Input styling */
+  .form-input {
+    width: 100%;
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 0;
+    font-size: 1rem;
+    color: var(--foreground);
+    outline: none;
+    transition: border-color 0.3s ease;
+    font-family: var(--font-sans);
+  }
+
+  .form-input:focus {
+    border-color: var(--primary);
+  }
+
+  .form-input::placeholder {
+    color: var(--muted-foreground);
+  }
+
+  .form-input-box {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    color: var(--foreground);
+    outline: none;
+    transition: border-color 0.3s ease;
+    font-family: var(--font-sans);
+  }
+
+  .form-input-box:focus {
+    border-color: var(--primary);
+  }
+
+  /* Sermon filter pill */
+  .filter-pill {
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    color: var(--muted-foreground);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .filter-pill:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .filter-pill.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+}
