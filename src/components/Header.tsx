@@ -79,6 +79,7 @@ export default function Header() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
+            suppressHydrationWarning
           >
             <span
               className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
