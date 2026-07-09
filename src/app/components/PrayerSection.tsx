@@ -186,6 +186,7 @@ export default function PrayerSection() {
                 <button
                   type="submit"
                   className="w-full bg-primary text-primary-foreground py-4 text-sm font-semibold tracking-widest uppercase hover:bg-primary/90 transition-all hover:scale-[1.01] flex items-center justify-center gap-3 group"
+                  suppressHydrationWarning
                 >
                   Submit Prayer Request
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform" aria-hidden="true">
