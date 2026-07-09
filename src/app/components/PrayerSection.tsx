@@ -125,6 +125,7 @@ export default function PrayerSection() {
                     className="form-input"
                     required
                     aria-label="Your name"
+                    suppressHydrationWarning
                   />
                   <label htmlFor="prayer-name" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
                     Name
@@ -140,6 +141,7 @@ export default function PrayerSection() {
                     placeholder="your@email.com"
                     className="form-input"
                     aria-label="Email address"
+                    suppressHydrationWarning
                   />
                   <label htmlFor="prayer-email" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
                     Email (Optional)
@@ -156,6 +158,7 @@ export default function PrayerSection() {
                     className="form-input resize-none"
                     required
                     aria-label="Prayer request"
+                    suppressHydrationWarning
                   />
                   <label htmlFor="prayer-request" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
                     Your Request
