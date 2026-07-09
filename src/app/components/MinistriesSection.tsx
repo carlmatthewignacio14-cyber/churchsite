@@ -10,6 +10,7 @@ interface Ministry {
   description: string;
   image: string;
   imageAlt: string;
+  images?: { src: string; alt: string }[];
   colSpan?: string;
   rowSpan?: string;
   tag: string;
@@ -21,8 +22,14 @@ const ministries: Ministry[] = [
   name: 'Youth Ministry',
   tagline: 'Ages 12–18',
   description: 'A vibrant space where teenagers discover identity, purpose, and community. Weekly gatherings, summer camps, and mission trips.',
-  image: "/assets/images/979554fc-0945-4111-9293-4c0f6e6f0cb7-1783628703132.jpg",
-  imageAlt: 'Group of teenagers laughing and engaged together in a bright community room, casual seating, warm ambient light, energetic atmosphere',
+  image: "/assets/images/710299155_970621969219794_887923649744832117_n-1783629134755.jpg",
+  imageAlt: 'Youth ministry group photo',
+  images: [
+    { src: "/assets/images/710299155_970621969219794_887923649744832117_n-1783629134755.jpg", alt: "Youth ministry group gathering" },
+    { src: "/assets/images/710365609_970621589219832_6865443707344666283_n-1783629134773.jpg", alt: "Youth ministry activity" },
+    { src: "/assets/images/710474385_970622275886430_8079094559996432976_n-1783629134759.jpg", alt: "Youth ministry event" },
+    { src: "/assets/images/712504551_970622119219779_7872778213465183755_n-1783629134775.jpg", alt: "Youth ministry community" },
+  ],
   colSpan: 'md:col-span-2',
   rowSpan: 'md:row-span-2',
   tag: 'Youth'
@@ -90,6 +97,24 @@ function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
   return revealed;
 }
 
+function YouthPhotoGrid({ images }: { images: { src: string; alt: string }[] }) {
+  return (
+    <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-0.5">
+      {images.map((img, i) => (
+        <div key={i} className="relative overflow-hidden img-zoom-wrap">
+          <AppImage
+            src={img.src}
+            alt={img.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 50vw, 25vw"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function MinistriesSection() {
   const headingRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -129,14 +154,18 @@ export default function MinistriesSection() {
             className={`relative overflow-hidden group bento-card cursor-pointer ${m.colSpan ?? ''} ${m.rowSpan ?? ''}`}>
             
               {/* Image */}
-              <div className="img-zoom-wrap absolute inset-0">
-                <AppImage
-                src={m.image}
-                alt={m.imageAlt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw" />
-              </div>
+              {m.images ? (
+                <YouthPhotoGrid images={m.images} />
+              ) : (
+                <div className="img-zoom-wrap absolute inset-0">
+                  <AppImage
+                  src={m.image}
+                  alt={m.imageAlt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw" />
+                </div>
+              )}
 
               {/* Scrim */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
