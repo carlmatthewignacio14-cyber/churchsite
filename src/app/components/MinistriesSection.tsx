@@ -21,7 +21,7 @@ const ministries: Ministry[] = [
   name: 'Youth Ministry',
   tagline: 'Ages 12–18',
   description: 'A vibrant space where teenagers discover identity, purpose, and community. Weekly gatherings, summer camps, and mission trips.',
-  image: "https://img.rocket.new/generatedImages/rocket_gen_img_1c19eaa2b-1772100673092.png",
+  image: "/assets/images/979554fc-0945-4111-9293-4c0f6e6f0cb7-1783628703132.jpg",
   imageAlt: 'Group of teenagers laughing and engaged together in a bright community room, casual seating, warm ambient light, energetic atmosphere',
   colSpan: 'md:col-span-2',
   rowSpan: 'md:row-span-2',
