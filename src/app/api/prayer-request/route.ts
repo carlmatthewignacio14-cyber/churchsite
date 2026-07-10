@@ -112,12 +112,12 @@ export async function POST(request: NextRequest) {
     if (email) {
       try {
         const resendApiKey = process.env.RESEND_API_KEY;
-        const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@churchsite2784.builtwithrocket.new';
+        const fromEmail = 'onboarding@resend.dev';
 
         if (resendApiKey && resendApiKey !== 'your-resend-api-key-here') {
           const resend = new Resend(resendApiKey);
 
-          await resend.emails.send({
+          const emailResult = await resend.emails.send({
             from: `Church Prayer Team <${fromEmail}>`,
             to: email,
             subject: 'We Received Your Prayer Request',
@@ -157,10 +157,18 @@ export async function POST(request: NextRequest) {
               </div>
             `,
           });
+
+          if (emailResult.error) {
+            console.error('Resend API returned an error:', JSON.stringify(emailResult.error, null, 2));
+          } else {
+            console.log('Confirmation email sent successfully. ID:', emailResult.data?.id);
+          }
+        } else {
+          console.warn('Resend API key is missing or not configured — skipping confirmation email.');
         }
       } catch (emailError) {
         // Log email error but don't fail the whole request
-        console.error('Failed to send confirmation email:', emailError);
+        console.error('Failed to send confirmation email:', emailError instanceof Error ? emailError.message : emailError);
       }
     }
 
