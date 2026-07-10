@@ -48,6 +48,15 @@ module.exports = {
         sans: ['var(--font-dm-sans)', 'sans-serif'],
         display: ['var(--font-fraunces)', 'serif'],
       },
+      keyframes: {
+        'fade-in-up': {
+          '0%': { opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(6px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)', filter: 'blur(0)' },
+        },
+      },
+      animation: {
+        'fade-in-up': 'fade-in-up 1100ms cubic-bezier(0.16,1,0.3,1) both',
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],
