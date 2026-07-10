@@ -77,7 +77,7 @@ export default function HeroSection() {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10">
-        <span className="text-[10px] tracking-[0.5em] uppercase text-white/40">Scroll</span>
+        <span className="text-[10px] tracking-[0.5em] uppercase text-white/40">
         <div className="w-px h-12 bg-white/20 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full bg-accent animate-scroll-line" />
         </div>
