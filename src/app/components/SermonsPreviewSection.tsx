@@ -285,11 +285,7 @@ export default function SermonsPreviewSection() {
           })}
         </div>
 
-        {/* Helper note */}
-        <p className="mt-6 text-center text-xs text-muted-foreground/50">
-          To update videos, edit the <code className="font-mono">sundayServices</code> array in{' '}
-          <code className="font-mono">SermonsPreviewSection.tsx</code> with the new Facebook video URLs.
-        </p>
+
       </div>
     </section>
   );
