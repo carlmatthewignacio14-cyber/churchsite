@@ -178,30 +178,30 @@ export default function MinistriesSection() {
               </div>
 
               {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col items-start gap-1.5">
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col items-start gap-2">
                 
                 {/* Tagline */}
-                <span className="inline-block bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded text-xs text-white/80 uppercase tracking-widest">
+                <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-[11px] text-white/90 uppercase tracking-widest font-medium">
                   {m.tagline}
                 </span>
 
                 {/* Name Headline */}
-                <h3 className="font-display text-xl font-semibold text-white group-hover:text-accent transition-colors">
-                  <span className="inline-block bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded">
+                <h3 className="font-display text-xl font-semibold text-white group-hover:text-accent transition-colors leading-none">
+                  <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded">
                     {m.name}
                   </span>
                 </h3>
 
                 {/* Description Text */}
-                <p className="text-sm text-white/90 leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                  <span className="inline-block bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded">
+                <p className="text-sm text-white leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                  <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded">
                     {m.description}
                   </span>
                 </p>
 
                 {/* Learn More Action Button */}
                 <div className="mt-1 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                  <span className="inline-block bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-widest text-accent">
+                  <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-xs font-semibold uppercase tracking-widest text-accent">
                     Learn More
                   </span>
                 </div>
