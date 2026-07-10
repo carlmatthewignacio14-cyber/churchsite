@@ -140,41 +140,17 @@ export default function ServiceTimesSection() {
 
           {/* Right: Map placeholder */}
           <div ref={mapRef} className={`relative ${revealClass(mapRevealed)}`}>
-            <div className="relative overflow-hidden aspect-[4/3] lg:aspect-auto lg:h-full min-h-[320px] bg-muted border border-border">
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                {/* Decorative map-like grid */}
-                <svg viewBox="0 0 400 300" className="absolute inset-0 w-full h-full opacity-10" aria-hidden="true">
-                  {Array.from({ length: 8 }).map((_, i) => (
-                    <line key={`h${i}`} x1="0" y1={i * 40} x2="400" y2={i * 40} stroke="currentColor" strokeWidth="1" />
-                  ))}
-                  {Array.from({ length: 11 }).map((_, i) => (
-                    <line key={`v${i}`} x1={i * 40} y1="0" x2={i * 40} y2="300" stroke="currentColor" strokeWidth="1" />
-                  ))}
-                  <rect x="140" y="80" width="120" height="140" rx="4" fill="none" stroke="currentColor" strokeWidth="2" />
-                  <rect x="160" y="100" width="80" height="100" rx="2" fill="currentColor" opacity="0.15" />
-                </svg>
-
-                <div className="relative z-10 flex flex-col items-center gap-3">
-                  <div className="w-12 h-12 bg-primary flex items-center justify-center shadow-lg">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </div>
-                  <div className="text-center">
-                    <p className="font-display text-lg font-semibold text-foreground">Church of God of Prophecy<span className="block text-sm font-medium tracking-widest">Marikina</span></p>
-                    <p className="text-sm text-muted-foreground">33 Banaba St, Nangka, Marikina</p>
-                  </div>
-                  <a
-                    href="https://www.google.com/maps/search/?api=1&query=33+Banaba+St,+Nangka,+Marikina,+1808+Metro+Manila"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-primary text-primary-foreground px-6 py-2.5 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-colors"
-                  >
-                    Open in Maps
-                  </a>
-                </div>
-              </div>
+            <div className="relative overflow-hidden aspect-[4/3] lg:aspect-auto lg:h-full min-h-[320px] border border-border">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d965.4!2d121.1!3d14.65!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b8e5a1234567%3A0x0!2s33+Banaba+St%2C+Nangka%2C+Marikina%2C+1808+Metro+Manila!5e1!3m2!1sen!2sph!4v1700000000000!5m2!1sen!2sph&maptype=satellite"
+                width="100%"
+                height="100%"
+                style={{ position: 'absolute', inset: 0, border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Satellite map of Church of God of Prophecy Marikina at 33 Banaba St, Nangka, Marikina"
+              />
             </div>
           </div>
         </div>
