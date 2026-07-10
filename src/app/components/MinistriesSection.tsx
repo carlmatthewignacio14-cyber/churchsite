@@ -178,20 +178,34 @@ export default function MinistriesSection() {
               </div>
 
               {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 z-10 bg-black/40 backdrop-blur-md border-t border-white/10">
-                <p className="text-xs text-white/70 uppercase tracking-widest mb-1">{m.tagline}</p>
-                <h3 className="font-display text-xl font-semibold text-white mb-2 group-hover:text-accent transition-colors">
-                  {m.name}
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col items-start gap-1.5">
+                
+                {/* Tagline */}
+                <span className="inline-block bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded text-xs text-white/80 uppercase tracking-widest">
+                  {m.tagline}
+                </span>
+
+                {/* Name Headline */}
+                <h3 className="font-display text-xl font-semibold text-white group-hover:text-accent transition-colors">
+                  <span className="inline-block bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded">
+                    {m.name}
+                  </span>
                 </h3>
-                <p className="text-sm text-white/80 leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                  {m.description}
+
+                {/* Description Text */}
+                <p className="text-sm text-white/90 leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                  <span className="inline-block bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded">
+                    {m.description}
+                  </span>
                 </p>
-                <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                  <span className="text-xs font-semibold uppercase tracking-widest text-accent">Learn More</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-accent" aria-hidden="true">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+
+                {/* Learn More Action Button */}
+                <div className="mt-1 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                  <span className="inline-block bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-widest text-accent">
+                    Learn More
+                  </span>
                 </div>
+
               </div>
             </div>
           )}
