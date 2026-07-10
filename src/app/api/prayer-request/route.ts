@@ -14,15 +14,17 @@ async function getAccessToken(): Promise<string> {
     throw new Error('Missing Google OAuth credentials in environment variables');
   }
 
+  // Build the token request body
+  const params = new URLSearchParams();
+  params.append('client_id', clientId);
+  params.append('client_secret', clientSecret);
+  params.append('refresh_token', refreshToken);
+  params.append('grant_type', 'refresh_token');
+
   const response = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
-      refresh_token: refreshToken,
-      grant_type: 'refresh_token',
-    }),
+    body: params.toString(),
   });
 
   const data = await response.json();
@@ -31,13 +33,30 @@ async function getAccessToken(): Promise<string> {
     const errorCode = data.error || 'unknown_error';
     const errorDesc = data.error_description || 'No description provided';
 
+    if (errorCode === 'unauthorized_client') {
+      throw new Error(
+        'Google OAuth configuration error: The OAuth client credentials do not match the refresh token. ' +
+        'Please ensure your GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are from a "Web application" type OAuth client '+ 'in Google Cloud Console, and that the GOOGLE_REFRESH_TOKEN was generated using those same credentials. '+ 'You may need to regenerate the refresh token.'
+      );
+    }
+
     if (errorCode === 'invalid_grant') {
       throw new Error(
         'Google OAuth token is invalid or expired. Please generate a new refresh token and update the GOOGLE_REFRESH_TOKEN environment variable.'
       );
     }
 
+    if (errorCode === 'invalid_client') {
+      throw new Error(
+        'Google OAuth client credentials are invalid. Please verify your GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in the environment variables.'
+      );
+    }
+
     throw new Error(`Failed to get access token: ${errorCode} - ${errorDesc}`);
+  }
+
+  if (!data.access_token) {
+    throw new Error('No access token returned from Google OAuth');
   }
 
   return data.access_token;
