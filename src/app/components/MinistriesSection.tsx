@@ -178,15 +178,18 @@ export default function MinistriesSection() {
               </div>
 
               {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col items-start gap-2">
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col items-start overflow-hidden">
                 
+                {/* Moving Container */}
+                <div className="flex flex-col items-start gap-2 transform translate-y-[3.5rem] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+
                 {/* Tagline */}
-                <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-[11px] text-white/90 uppercase tracking-widest font-medium transform translate-y-[135px] group-hover:translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-[11px] text-white/90 uppercase tracking-widest font-medium">
                   {m.tagline}
                 </span>
 
                 {/* Name Headline */}
-                <h3 className="font-display text-xl font-semibold text-white leading-none transform translate-y-[135px] group-hover:translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                <h3 className="font-display text-xl font-semibold text-white leading-none">
                   <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded">
                     {m.name}
                   </span>
@@ -200,10 +203,15 @@ export default function MinistriesSection() {
                 </p>
 
                 {/* Learn More Action Button */}
-                <div className="mt-1 flex items-center gap-2 opacity-0 group-hover:opacity/100 transition-opacity duration-400">
-                  <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-xs font-semibold uppercase tracking-widest text-accent">
-                    Learn More
-                  </span>
+                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-1">
+                    <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-xs font-semibold uppercase tracking-widest text-accent">
+                      Learn More
+                    </span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-accent" aria-hidden="true">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </div>
+
                 </div>
 
               </div>
