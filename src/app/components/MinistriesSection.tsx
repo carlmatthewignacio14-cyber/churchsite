@@ -204,7 +204,7 @@ export default function MinistriesSection() {
 
                 {/* Learn More Action Button */}
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-1">
-                    <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-xs font-semibold uppercase tracking-widest text-accent">
+                    <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-xs font-semibold uppercase tracking-widest text-white">
                       Learn More
                     </span>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-accent" aria-hidden="true">
