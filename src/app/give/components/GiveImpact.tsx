@@ -17,7 +17,6 @@ const impacts: ImpactItem[] = [
   },
   {
     icon: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 22V12h6v10',
-    stat: '∞',
     label: 'Mission Partners',
     description: 'Local and international ministry partners funded through your generosity, reaching communities in 133 countries.',
   },
