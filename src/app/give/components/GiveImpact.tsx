@@ -12,21 +12,14 @@ interface ImpactItem {
 const impacts: ImpactItem[] = [
   {
     icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
-    stat: '1,200+',
     label: 'Families Supported',
     description: 'Meals, emergency funds, and counseling provided to Nashville families through our benevolence program annually.',
   },
   {
     icon: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 22V12h6v10',
-    stat: '14',
+    stat: '∞',
     label: 'Mission Partners',
-    description: 'Local and international ministry partners funded through your generosity, reaching communities in 8 countries.',
-  },
-  {
-    icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
-    stat: '₱2.4M',
-    label: 'Given Last Year',
-    description: 'Total giving in 2025 funded staff, facilities, missions, and community outreach — 100% reported transparently.',
+    description: 'Local and international ministry partners funded through your generosity, reaching communities in 133 countries.',
   },
 ];
 
@@ -42,7 +35,7 @@ function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
           if (entry.isIntersecting) {
             setTimeout(() => {
               if (el) {
-                el.style.transition = `opacity 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms`;
+                el.style.transition = `opacity 0.9s cubic-bezier(0.16,1,0.3,1) &#8369;{delay}ms, transform 0.9s cubic-bezier(0.16,1,0.3,1) &#8369;{delay}ms`;
                 el.style.opacity = '1';
                 el.style.transform = 'translateY(0)';
               }
