@@ -200,7 +200,7 @@ export default function MinistriesSection() {
                 </p>
 
                 {/* Learn More Action Button */}
-                <div className="mt-1 flex items-center gap-2 opacity-0 transition-opacity duration-400">
+                <div className="mt-1 flex items-center gap-2 opacity-0 group-hover:opacity/100 transition-opacity duration-400">
                   <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-xs font-semibold uppercase tracking-widest text-accent">
                     Learn More
                   </span>
