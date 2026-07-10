@@ -25,6 +25,7 @@ interface FormState {
 
 export default function GiveForm() {
   const [form, setForm] = useState<FormState>({
+    amount: null,
     customAmount: '',
     frequency: 'one-time',
     fund: 'General Fund',
@@ -112,7 +113,7 @@ export default function GiveForm() {
                       key={a}
                       type="button"
                       onClick={() => setForm({ ...form, amount: a, customAmount: '' })}
-                      className={`amount-btn &#8369;{form.amount === a && !form.customAmount ? 'selected' : ''}`}
+                      className={`amount-btn ${form.amount === a && !form.customAmount ? 'selected' : ''}`}
                     >
                       &#8369;{a}
                     </button>
