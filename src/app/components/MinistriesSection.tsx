@@ -39,15 +39,11 @@ const ministries: Ministry[] = [
   name: "Women's Ministry",
   tagline: 'Community & Growth',
   description: 'Monthly gatherings, Bible studies, and retreats for women of all ages.',
-  image: "/assets/images/555609362_772506209031372_3456085314419390911_n.jpg",
+  image: "/assets/images/695475790_952572347691423_8949784877680740857_n.jpg",
   imageAlt: 'Women ministry photo description',
   images: [
-    { src: "/assets/images/555609362_772506209031372_3456085314419390911_n.jpg", alt: "Women gathering 1" },
-    { src: "/assets/images/565930762_792422493706410_8788493751612041419_n.jpg", alt: "Women gathering 2" },
     { src: "/assets/images/695475790_952572347691423_8949784877680740857_n.jpg", alt: "Women gathering 3" }],
 
-  colSpan: 'md:col-span-2',
-  rowSpan: 'md:row-span-2',
   tag: "Women's"
 },
 {
