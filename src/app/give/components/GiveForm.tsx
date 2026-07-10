@@ -106,20 +106,20 @@ export default function GiveForm() {
                 <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-semibold">
                   Gift Amount
                 </p>
-                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-3">
+                <div className="amount-grid"> {/* grid grid-cols-3 sm:grid-cols-5 gap-2 mb-3 */}
                   {presetAmounts.map((a) => (
                     <button
                       key={a}
                       type="button"
                       onClick={() => setForm({ ...form, amount: a, customAmount: '' })}
-                      className={`amount-btn ${form.amount === a && !form.customAmount ? 'selected' : ''}`}
+                      className={`amount-btn &#8369;{form.amount === a && !form.customAmount ? 'selected' : ''}`}
                     >
-                      ${a}
+                      &#8369;{a}
                     </button>
                   ))}
                 </div>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">&#8369;</span>
                   <input
                     type="number"
                     placeholder="Custom amount"
