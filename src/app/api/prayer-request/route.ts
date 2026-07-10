@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Resend } from 'resend';
 
 const SPREADSHEET_ID = '1TRP3AgxV7mBhcNy3ymS-UY-oZAyjFuu0xOJNh89czXM';
 const SHEET_NAME = 'Sheet1';
@@ -86,6 +87,62 @@ export async function POST(request: NextRequest) {
     if (!sheetsResponse.ok) {
       const error = await sheetsResponse.text();
       throw new Error(`Google Sheets API error: ${error}`);
+    }
+
+    // Send confirmation email if email was provided
+    if (email) {
+      try {
+        const resendApiKey = process.env.RESEND_API_KEY;
+        const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@churchsite2784.builtwithrocket.new';
+
+        if (resendApiKey && resendApiKey !== 'your-resend-api-key-here') {
+          const resend = new Resend(resendApiKey);
+
+          await resend.emails.send({
+            from: `Church Prayer Team <${fromEmail}>`,
+            to: email,
+            subject: 'We Received Your Prayer Request',
+            html: `
+              <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto; color: #1a1a1a;">
+                <div style="background: #1a1a2e; padding: 32px 40px; text-align: center;">
+                  <h1 style="color: #ffffff; font-size: 22px; font-weight: 300; letter-spacing: 0.05em; margin: 0;">
+                    Your Prayer Has Been Received
+                  </h1>
+                </div>
+                <div style="padding: 40px; background: #ffffff; border: 1px solid #e5e7eb;">
+                  <p style="font-size: 16px; line-height: 1.7; color: #374151; margin-top: 0;">
+                    Dear ${name},
+                  </p>
+                  <p style="font-size: 16px; line-height: 1.7; color: #374151;">
+                    Thank you for trusting us with your heart. We have received your prayer request and our dedicated prayer team will be lifting you up before God.
+                  </p>
+                  ${!isPrivate ? `
+                  <div style="background: #f9fafb; border-left: 3px solid #6366f1; padding: 16px 20px; margin: 24px 0;">
+                    <p style="font-size: 13px; color: #6b7280; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 0.08em;">Your Request</p>
+                    <p style="font-size: 15px; color: #374151; margin: 0; line-height: 1.6; font-style: italic;">"${prayerRequest}"</p>
+                  </div>
+                  ` : ''}
+                  <p style="font-size: 16px; line-height: 1.7; color: #374151;">
+                    You are never alone. We believe in the power of prayer and are honored to stand with you.
+                  </p>
+                  <p style="font-size: 16px; line-height: 1.7; color: #374151; margin-bottom: 0;">
+                    With love and prayer,<br />
+                    <strong>The Prayer Team</strong>
+                  </p>
+                </div>
+                <div style="padding: 20px 40px; text-align: center; background: #f9fafb; border: 1px solid #e5e7eb; border-top: none;">
+                  <p style="font-size: 12px; color: #9ca3af; margin: 0;">
+                    This is an automated confirmation. Please do not reply to this email.
+                  </p>
+                </div>
+              </div>
+            `,
+          });
+        }
+      } catch (emailError) {
+        // Log email error but don't fail the whole request
+        console.error('Failed to send confirmation email:', emailError);
+      }
     }
 
     return NextResponse.json({ success: true });
