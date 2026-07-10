@@ -25,7 +25,6 @@ interface FormState {
 
 export default function GiveForm() {
   const [form, setForm] = useState<FormState>({
-    amount: 50,
     customAmount: '',
     frequency: 'one-time',
     fund: 'General Fund',
@@ -94,7 +93,7 @@ export default function GiveForm() {
                       key={f}
                       type="button"
                       onClick={() => setForm({ ...form, frequency: f })}
-                      className={`freq-btn capitalize ${form.frequency === f ? 'active' : ''}`}
+                      className={`freq-btn capitalize ₱{form.frequency === f ? 'active' : ''}`}
                     >
                       {f === 'one-time' ? 'One-Time' : 'Monthly'}
                     </button>
@@ -209,7 +208,7 @@ export default function GiveForm() {
                 {form.frequency === 'monthly' ? 'Start Monthly Giving' : 'Give Now'}
                 {effectiveAmount > 0 && (
                   <span className="bg-primary-foreground/20 px-2 py-0.5 text-xs rounded">
-                    ${effectiveAmount}
+                    ₱{effectiveAmount}
                   </span>
                 )}
               </button>
@@ -231,7 +230,7 @@ export default function GiveForm() {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Amount</span>
                   <span className="font-semibold text-foreground">
-                    {effectiveAmount > 0 ? `$${effectiveAmount}` : '—'}
+                    {effectiveAmount > 0 ? `₱₱{effectiveAmount}` : '—'}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -247,27 +246,8 @@ export default function GiveForm() {
                 <div className="pt-3 border-t border-border flex justify-between text-sm font-bold">
                   <span className="text-foreground">Total</span>
                   <span className="text-primary text-lg font-display">
-                    {effectiveAmount > 0 ? `$${effectiveAmount}` : '—'}
+                    {effectiveAmount > 0 ? `₱₱{effectiveAmount}` : '—'}
                   </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Tax info */}
-            <div className="bg-card border border-border p-5">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-accent/10 flex items-center justify-center shrink-0">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-accent" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-foreground mb-1">Tax Deductible</h4>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Church of God of Prophecy is a registered 501(c)(3) organization. All gifts are tax-deductible to the fullest extent of the law. A receipt will be emailed to you.
-                  </p>
                 </div>
               </div>
             </div>
