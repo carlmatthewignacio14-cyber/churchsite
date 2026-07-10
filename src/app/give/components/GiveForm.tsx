@@ -9,7 +9,7 @@ const funds = [
   'Building Fund',
   'Missions & Outreach',
   'Youth Ministry',
-  'Community Benevolence',
+  'Kids Ministry',
 ];
 
 interface FormState {
@@ -113,14 +113,14 @@ export default function GiveForm() {
                       key={a}
                       type="button"
                       onClick={() => setForm({ ...form, amount: a, customAmount: '' })}
-                      className={`amount-btn ${form.amount === a && !form.customAmount ? 'selected' : ''}`}
+                      className={`amount-btn ₱{form.amount === a && !form.customAmount ? 'selected' : ''}`}
                     >
-                      ${a}
+                      ₱{a}
                     </button>
                   ))}
                 </div>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">₱</span>
                   <input
                     type="number"
                     placeholder="Custom amount"

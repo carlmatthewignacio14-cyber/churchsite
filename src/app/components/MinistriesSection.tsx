@@ -20,7 +20,7 @@ const ministries: Ministry[] = [
 {
   id: 'youth',
   name: 'Youth Ministry',
-  tagline: 'Ages 12–18',
+  tagline: 'Ages 13–35',
   description: 'A vibrant space where teenagers discover identity, purpose, and community. Weekly gatherings, summer camps, and mission trips.',
   image: "/assets/images/710299155_970621969219794_887923649744832117_n-1783629134755.jpg",
   imageAlt: 'Youth ministry group photo',
