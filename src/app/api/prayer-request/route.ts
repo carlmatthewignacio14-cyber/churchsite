@@ -24,12 +24,21 @@ async function getAccessToken(): Promise<string> {
     }),
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to get access token: ${error}`);
+    const errorCode = data.error || 'unknown_error';
+    const errorDesc = data.error_description || 'No description provided';
+
+    if (errorCode === 'invalid_grant') {
+      throw new Error(
+        'Google OAuth token is invalid or expired. Please generate a new refresh token and update the GOOGLE_REFRESH_TOKEN environment variable.'
+      );
+    }
+
+    throw new Error(`Failed to get access token: ${errorCode} - ${errorDesc}`);
   }
 
-  const data = await response.json();
   return data.access_token;
 }
 
