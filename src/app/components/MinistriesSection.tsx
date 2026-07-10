@@ -168,7 +168,7 @@ export default function MinistriesSection() {
             }
 
               {/* Scrim */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-transparent" />
 
               {/* Tag */}
               <div className="absolute top-4 left-4 z-10">
