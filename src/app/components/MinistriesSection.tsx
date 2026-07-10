@@ -178,12 +178,12 @@ export default function MinistriesSection() {
               </div>
 
               {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                <p className="text-xs text-white/60 uppercase tracking-widest mb-1">{m.tagline}</p>
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-10 bg-black/40 backdrop-blur-md border-t border-white/10">
+                <p className="text-xs text-white/70 uppercase tracking-widest mb-1">{m.tagline}</p>
                 <h3 className="font-display text-xl font-semibold text-white mb-2 group-hover:text-accent transition-colors">
                   {m.name}
                 </h3>
-                <p className="text-sm text-white/70 leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                <p className="text-sm text-white/80 leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
                   {m.description}
                 </p>
                 <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
