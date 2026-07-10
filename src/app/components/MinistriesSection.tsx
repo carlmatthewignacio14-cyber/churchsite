@@ -181,12 +181,12 @@ export default function MinistriesSection() {
               <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col items-start gap-2">
                 
                 {/* Tagline */}
-                <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-[11px] text-white/90 uppercase tracking-widest font-medium">
+                <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-[11px] text-white/90 uppercase tracking-widest font-medium transform translate-y-[135px] group-hover:translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
                   {m.tagline}
                 </span>
 
                 {/* Name Headline */}
-                <h3 className="font-display text-xl font-semibold text-white transition-colors leading-none">
+                <h3 className="font-display text-xl font-semibold text-white leading-none transform translate-y-[135px] group-hover:translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
                   <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded">
                     {m.name}
                   </span>
