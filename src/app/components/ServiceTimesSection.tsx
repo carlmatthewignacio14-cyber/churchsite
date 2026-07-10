@@ -57,22 +57,28 @@ export default function ServiceTimesSection() {
   const card3Revealed = useScrollReveal(card3Ref, 450);
   const cardRevealed = [card0Revealed, card1Revealed, card2Revealed, card3Revealed];
 
+  // Force Client-Side Hydration Check to absorb all browser extension injections safely
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const revealClass = (revealed: boolean) =>
     revealed
       ? 'opacity-100 translate-y-0 blur-0 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]'
       : 'opacity-0 translate-y-7 blur-[5px]';
 
   return (
-    <section id="service-times" className="section-pad bg-background relative z-10">
+    <section id="service-times" className="section-pad bg-background relative z-10" suppressHydrationWarning>
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Section heading */}
         <div ref={headingRef} className={`mb-12 ${revealClass(headingRevealed)}`}>
           <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">
             Join Us
           </span>
-          <h2 style={{ fontFamily: "Montserrat', sans-serif" }} className="text-section-title font-regular text-foreground">
+          <h2 style={{ fontFamily: "'Montserrat', sans-serif" }} className="text-section-title font-regular text-foreground">
             Service Times<br />
-            <span className={{ fontFamily: "Gabriel Sans', sans-serif" }} className="not-italic font-bold">&amp; Location</span>
+            <span style={{ fontFamily: "'Gabriel Sans', sans-serif" }} className="not-italic font-bold">&amp; Location</span>
           </h2>
         </div>
 
@@ -111,10 +117,12 @@ export default function ServiceTimesSection() {
             <div className="bg-primary/5 border border-primary/20 p-6 mt-2">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true" suppressHydrationWarning>
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
+                  {isMounted && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true" suppressHydrationWarning>
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  )}
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">Find Us</h3>
@@ -129,9 +137,11 @@ export default function ServiceTimesSection() {
                     className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary hover:text-primary/80 transition-colors mt-3"
                   >
                     Get Directions
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true" suppressHydrationWarning>
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
+                    {isMounted && (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true" suppressHydrationWarning>
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    )}
                   </a>
                 </div>
               </div>
