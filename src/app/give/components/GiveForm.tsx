@@ -226,8 +226,7 @@ export default function GiveForm() {
               <h3 className="font-display text-lg font-semibold text-foreground mb-4">
                 Your Gift Summary
               </h3>
-               
-                </div>
+              <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Frequency</span>
                   <span className="font-semibold text-foreground capitalize">
