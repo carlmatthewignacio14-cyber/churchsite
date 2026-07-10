@@ -10,7 +10,7 @@ interface Ministry {
   description: string;
   image: string;
   imageAlt: string;
-  images?: { src: string; alt: string }[];
+  images?: {src: string;alt: string;}[];
   colSpan?: string;
   rowSpan?: string;
   tag: string;
@@ -25,11 +25,11 @@ const ministries: Ministry[] = [
   image: "/assets/images/710299155_970621969219794_887923649744832117_n-1783629134755.jpg",
   imageAlt: 'Youth ministry group photo',
   images: [
-    { src: "/assets/images/710299155_970621969219794_887923649744832117_n-1783629134755.jpg", alt: "Youth ministry group gathering" },
-    { src: "/assets/images/710365609_970621589219832_6865443707344666283_n-1783629134773.jpg", alt: "Youth ministry activity" },
-    { src: "/assets/images/710474385_970622275886430_8079094559996432976_n-1783629134759.jpg", alt: "Youth ministry event" },
-    { src: "/assets/images/712504551_970622119219779_7872778213465183755_n-1783629134775.jpg", alt: "Youth ministry community" },
-  ],
+  { src: "/assets/images/710299155_970621969219794_887923649744832117_n-1783629134755.jpg", alt: "Youth ministry group gathering" },
+  { src: "/assets/images/710365609_970621589219832_6865443707344666283_n-1783629134773.jpg", alt: "Youth ministry activity" },
+  { src: "/assets/images/710474385_970622275886430_8079094559996432976_n-1783629134759.jpg", alt: "Youth ministry event" },
+  { src: "/assets/images/712504551_970622119219779_7872778213465183755_n-1783629134775.jpg", alt: "Youth ministry community" }],
+
   colSpan: 'md:col-span-2',
   rowSpan: 'md:row-span-2',
   tag: 'Youth'
@@ -97,22 +97,22 @@ function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
   return revealed;
 }
 
-function YouthPhotoGrid({ images }: { images: { src: string; alt: string }[] }) {
+function YouthPhotoGrid({ images }: {images: {src: string;alt: string;}[];}) {
   return (
     <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-0.5">
-      {images.map((img, i) => (
-        <div key={i} className="relative overflow-hidden img-zoom-wrap">
+      {images.map((img, i) =>
+      <div key={i} className="relative overflow-hidden img-zoom-wrap">
           <AppImage
-            src={img.src}
-            alt={img.alt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 50vw, 25vw"
-          />
+          src={img.src}
+          alt={img.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 50vw, 25vw" />
+        
         </div>
-      ))}
-    </div>
-  );
+      )}
+    </div>);
+
 }
 
 export default function MinistriesSection() {
@@ -123,9 +123,9 @@ export default function MinistriesSection() {
   const gridRevealed = useScrollReveal(gridRef, 150);
 
   const revealClass = (revealed: boolean) =>
-    revealed
-      ? 'opacity-100 translate-y-0 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]'
-      : 'opacity-0 translate-y-6';
+  revealed ?
+  'opacity-100 translate-y-0 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]' :
+  'opacity-0 translate-y-6';
 
   return (
     <section id="ministries" className="section-pad bg-background border-t border-border relative z-10">
@@ -154,18 +154,18 @@ export default function MinistriesSection() {
             className={`relative overflow-hidden group bento-card cursor-pointer ${m.colSpan ?? ''} ${m.rowSpan ?? ''}`}>
             
               {/* Image */}
-              {m.images ? (
-                <YouthPhotoGrid images={m.images} />
-              ) : (
-                <div className="img-zoom-wrap absolute inset-0">
+              {m.images ?
+            <YouthPhotoGrid images={m.images} /> :
+
+            <div className="img-zoom-wrap absolute inset-0">
                   <AppImage
-                  src={m.image}
-                  alt={m.imageAlt}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw" />
+                src={m.image}
+                alt={m.imageAlt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw" />
                 </div>
-              )}
+            }
 
               {/* Scrim */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -197,6 +197,6 @@ export default function MinistriesSection() {
           )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
