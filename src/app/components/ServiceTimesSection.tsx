@@ -70,9 +70,9 @@ export default function ServiceTimesSection() {
           <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">
             Join Us
           </span>
-          <h2 style={{ fontFamily: 'Georgia, serif' }} className="text-section-title font-regular text-foreground">
+          <h2 style={{ fontFamily: "Montserrat', sans-serif" }} className="text-section-title font-regular text-foreground">
             Service Times<br />
-            <span className="not-italic font-bold">&amp; Location</span>
+            <span className={{ fontFamily: "Gabriel Sans', sans-serif" }} className="not-italic font-bold">&amp; Location</span>
           </h2>
         </div>
 
