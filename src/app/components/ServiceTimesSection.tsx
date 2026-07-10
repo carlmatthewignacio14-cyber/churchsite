@@ -123,7 +123,7 @@ export default function ServiceTimesSection() {
                     Marikina, 1808 Metro Manila
                   </p>
                   <a
-                    href="https://maps.google.com"
+                    href="https://www.google.com/maps/search/?api=1&query=33+Banaba+St,+Nangka,+Marikina,+1808+Metro+Manila"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary hover:text-primary/80 transition-colors mt-3"
@@ -166,7 +166,7 @@ export default function ServiceTimesSection() {
                     <p className="text-sm text-muted-foreground">33 Banaba St, Nangka, Marikina</p>
                   </div>
                   <a
-                    href="https://maps.google.com"
+                    href="https://www.google.com/maps/search/?api=1&query=33+Banaba+St,+Nangka,+Marikina,+1808+Metro+Manila"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-primary text-primary-foreground px-6 py-2.5 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-colors"
