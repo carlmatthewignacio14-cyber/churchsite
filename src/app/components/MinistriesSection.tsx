@@ -168,11 +168,11 @@ export default function MinistriesSection() {
             }
 
               {/* Scrim */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
               {/* Tag */}
               <div className="absolute top-4 left-4 z-10">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-accent border border-accent/40 bg-black/40 backdrop-blur-sm px-2 py-1">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-accent border border-accent/40 bg-black/20 backdrop-blur-sm px-3 py-2">
                   {m.tag}
                 </span>
               </div>
