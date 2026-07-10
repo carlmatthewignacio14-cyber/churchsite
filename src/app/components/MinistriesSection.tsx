@@ -172,7 +172,7 @@ export default function MinistriesSection() {
 
               {/* Tag */}
               <div className="absolute top-4 left-4 z-10">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-accent border border-accent/40 bg-black/20 backdrop-blur-sm px-3 py-2">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-accent border border-accent/20 bg-black/20 backdrop-blur-sm px-3 py-2">
                   {m.tag}
                 </span>
               </div>
