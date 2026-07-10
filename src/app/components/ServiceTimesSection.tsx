@@ -111,7 +111,7 @@ export default function ServiceTimesSection() {
             <div className="bg-primary/5 border border-primary/20 p-6 mt-2">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true" suppressHydrationWarning>
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                     <circle cx="12" cy="10" r="3" />
                   </svg>
@@ -129,7 +129,7 @@ export default function ServiceTimesSection() {
                     className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary hover:text-primary/80 transition-colors mt-3"
                   >
                     Get Directions
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true" suppressHydrationWarning>
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </a>
