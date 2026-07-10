@@ -27,6 +27,7 @@ export default function Footer() {
             <AppLogo size={28} />
             <span className="font-display text-base font-semibold tracking-tight text-foreground">
               Church of God of Prophecy
+              <span className="block text-sm font-medium tracking-widest">Marikina</span>
             </span>
           </Link>
 
@@ -61,13 +62,13 @@ export default function Footer() {
               </a>
             ))}
             <span className="text-xs text-muted-foreground ml-2 hidden sm:block">
-              © 2026 Church of God of Prophecy
+              © 2026 Church of God of Prophecy Marikina
             </span>
           </div>
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-6 sm:hidden">
-          © 2026 Church of God of Prophecy. All rights reserved.
+          © 2026 Church of God of Prophecy Marikina. All rights reserved.
         </p>
       </div>
     </footer>

@@ -162,7 +162,7 @@ export default function ServiceTimesSection() {
                     </svg>
                   </div>
                   <div className="text-center">
-                    <p className="font-display text-lg font-semibold text-foreground">Church of God of Prophecy</p>
+                    <p className="font-display text-lg font-semibold text-foreground">Church of God of Prophecy<span className="block text-sm font-medium tracking-widest">Marikina</span></p>
                     <p className="text-sm text-muted-foreground">33 Banaba St, Nangka, Marikina</p>
                   </div>
                   <a
