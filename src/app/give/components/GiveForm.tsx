@@ -208,7 +208,7 @@ export default function GiveForm() {
                 {form.frequency === 'monthly' ? 'Start Monthly Giving' : 'Give Now'}
                 {effectiveAmount > 0 && (
                   <span className="bg-primary-foreground/20 px-2 py-0.5 text-xs rounded">
-                    ₱{effectiveAmount}
+                    ${effectiveAmount}
                   </span>
                 )}
               </button>
@@ -246,7 +246,7 @@ export default function GiveForm() {
                 <div className="pt-3 border-t border-border flex justify-between text-sm font-bold">
                   <span className="text-foreground">Total</span>
                   <span className="text-primary text-lg font-display">
-                    {effectiveAmount > 0 ? `₱₱{effectiveAmount}` : '—'}
+                    {effectiveAmount > 0 ? `$${effectiveAmount}` : '—'}
                   </span>
                 </div>
               </div>

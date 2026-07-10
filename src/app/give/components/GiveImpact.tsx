@@ -24,7 +24,7 @@ const impacts: ImpactItem[] = [
   },
   {
     icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
-    stat: '$2.4M',
+    stat: '₱2.4M',
     label: 'Given Last Year',
     description: 'Total giving in 2025 funded staff, facilities, missions, and community outreach — 100% reported transparently.',
   },
@@ -42,7 +42,7 @@ function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
           if (entry.isIntersecting) {
             setTimeout(() => {
               if (el) {
-                el.style.transition = `opacity 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms`;
+                el.style.transition = `opacity 0.9s cubic-bezier(0.16,1,0.3,1) ₱{delay}ms, transform 0.9s cubic-bezier(0.16,1,0.3,1) ₱{delay}ms`;
                 el.style.opacity = '1';
                 el.style.transform = 'translateY(0)';
               }
