@@ -41,9 +41,6 @@ const ministries: Ministry[] = [
   description: 'Monthly gatherings, Bible studies, and retreats for women of all ages.',
   image: "/assets/images/695475790_952572347691423_8949784877680740857_n.jpg",
   imageAlt: 'Women ministry photo description',
-  images: [
-    { src: "/assets/images/695475790_952572347691423_8949784877680740857_n.jpg", alt: "Women gathering 3" }],
-
   tag: "Women's"
 },
 {
