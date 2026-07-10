@@ -93,7 +93,7 @@ export default function GiveForm() {
                       key={f}
                       type="button"
                       onClick={() => setForm({ ...form, frequency: f })}
-                      className={`freq-btn capitalize ₱{form.frequency === f ? 'active' : ''}`}
+                      className={`freq-btn capitalize ${form.frequency === f ? 'active' : ''}`}
                     >
                       {f === 'one-time' ? 'One-Time' : 'Monthly'}
                     </button>
@@ -112,14 +112,14 @@ export default function GiveForm() {
                       key={a}
                       type="button"
                       onClick={() => setForm({ ...form, amount: a, customAmount: '' })}
-                      className={`amount-btn ₱{form.amount === a && !form.customAmount ? 'selected' : ''}`}
+                      className={`amount-btn ${form.amount === a && !form.customAmount ? 'selected' : ''}`}
                     >
-                      ₱{a}
+                      ${a}
                     </button>
                   ))}
                 </div>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">₱</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">$</span>
                   <input
                     type="number"
                     placeholder="Custom amount"
@@ -230,7 +230,7 @@ export default function GiveForm() {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Amount</span>
                   <span className="font-semibold text-foreground">
-                    {effectiveAmount > 0 ? `₱₱{effectiveAmount}` : '—'}
+                    {effectiveAmount > 0 ? `$${effectiveAmount}` : '—'}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">

@@ -42,7 +42,7 @@ function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
           if (entry.isIntersecting) {
             setTimeout(() => {
               if (el) {
-                el.style.transition = `opacity 0.9s cubic-bezier(0.16,1,0.3,1) ₱{delay}ms, transform 0.9s cubic-bezier(0.16,1,0.3,1) ₱{delay}ms`;
+                el.style.transition = `opacity 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms`;
                 el.style.opacity = '1';
                 el.style.transform = 'translateY(0)';
               }
