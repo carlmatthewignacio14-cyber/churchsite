@@ -250,9 +250,9 @@ export default function GiveForm() {
             {/* Contact */}
             <div className="p-5 border border-border">
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Questions about giving? Contact our stewardship team at{' '}
-                <a href="mailto:give@churchsite.org" className="text-primary hover:underline">
-                  give@churchsite.org
+                Questions about giving? Contact our Finance team at{' '}
+                <a href="mailto:cogopmarikina@yahoo.com" className="text-primary hover:underline">
+                  cogopmarikina@yahoo.com
                 </a>
               </p>
             </div>
