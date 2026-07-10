@@ -48,7 +48,7 @@ export default function HeroSection() {
         </div>
 
         <p className={`text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-2xl mx-auto mb-12 ${itemClass('delay-[700ms]')}`}>
-          The Church of God of Prophecy Marikina is a vibrant, worldwide body of believers, united in worship.
+          The Church of God of Prophecy is a vibrant, worldwide body of believers, united in worship.
         </p>
 
         <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center ${itemClass('delay-[900ms]')}`}>
