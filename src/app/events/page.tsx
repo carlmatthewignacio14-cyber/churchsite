@@ -1,34 +1,32 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import Link from 'next/link';            
 
 const upcomingEvents = [
-{
-  id: '1',
-  title: 'Youth Fellowship with San Mateo Youth',
-  date: 'August 2, 2026',
-  time: '1:00 PM',
-  location: 'San Mateo Church',
-  description: 'An evening dedicated to equipping marriages, strengthening bonds, and sharing dinner together with our church family.'
-},
-{
-  id: '2',
-  title: 'Youth Revival 2026',
-  date: 'To Be Announced',
-  time: 'Time TBA',
-  location: 'National Camp Site',
-  description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
-},
-{
-  id: '3',
-  title: 'Overnight Retreat',
-  date: 'To Be Announced',
-  time: 'Time TBA',
-  location: 'To Be Announced',
-  description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
-}];
-
+  {
+    id: '1',
+    title: 'Youth Fellowship with San Mateo Youth',
+    date: 'August 2, 2026',
+    time: '1:00 PM',
+    location: 'San Mateo Church',
+    description: 'An evening dedicated to equipping marriages, strengthening bonds, and sharing dinner together with our church family.'
+  },
+  {
+    id: '2',
+    title: 'Youth Revival 2026',
+    date: 'To Be Announced',
+    location: 'National Camp Site',
+    description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
+  },
+  {
+     id: '3',
+    title: 'Overnight Retreat',
+    date: 'To Be Announced',
+    location: 'To Be Announced',
+    description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
+  }
+];
 
 export default function EventsPage() {
   return (
@@ -62,24 +60,21 @@ export default function EventsPage() {
           {/* Events List Stack */}
           <div className="space-y-6">
             {upcomingEvents.map((event) => (
-              <div 
-                key={event.id} 
-                className="bg-[#2d1b10]/75 backdrop-blur-md border border-white/10 p-6 md:p-8 hover:border-white/30 transition-all rounded shadow-md"
-              >
+              <div key={event.id} className="bg-card border border-border p-6 md:p-8 hover:border-primary/40 transition-all rounded shadow-sm">
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                   <div>
-                    <h2 className="font-display text-2xl font-bold text-white mb-1">
+                    <h2 className="font-display text-2xl font-bold text-foreground mb-1">
                       {event.title}
                     </h2>
-                    <p className="text-sm font-semibold uppercase tracking-wider text-white/90">
-                      {event.date} {event.time && <>&bull; {event.time}</>}
+                    <p className="text-sm font-semibold uppercase tracking-wider text-accent">
+                      {event.date} &bull; {event.time}
                     </p>
                   </div>
-                  <span className="inline-block bg-white/20 text-white-border border border-primary/20 text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto backdrop-blur-sm">
+                  <span className="inline-block bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto">
                     {event.location}
                   </span>
                 </div>
-                <p className="text-sm text-white/80 leading-relaxed font-light">
+                <p className="text-sm text-muted-foreground leading-relaxed font-light">
                   {event.description}
                 </p>
               </div>
