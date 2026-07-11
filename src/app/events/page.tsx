@@ -65,10 +65,10 @@ export default function EventsPage() {
               <div key={event.id} className="bg-gradient-to-b from-[#3a2a1d]/75 to-[#241a12]/85 backdrop-blur-md border border-white/10 p-6 md:p-8 hover:border-primary/60 transition-all rounded shadow-lg">
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                   <div>
-                    <h2 className="font-display text-2xl font-bold text-foreground mb-1">
+                    <h2 className="font-display text-2xl font-bold text-white mb-1">
                       {event.title}
                     </h2>
-                    <p className="text-sm font-semibold uppercase tracking-wider text-accent">
+                    <p className="text-sm font-semibold uppercase tracking-wider text-white">
                       {event.date} &bull; {event.time}
                     </p>
                   </div>
