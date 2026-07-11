@@ -48,7 +48,7 @@ const ministries: Ministry[] = [
   name: "Men's Ministry",
   tagline: 'Brotherhood',
   description: 'Equipping men to lead with integrity in home, work, and community.',
-  image: "https://img.rocket.new/generatedImages/rocket_gen_img_13e2643c1-1768434369566.png",
+  image: "/assets/images/728094408_988529577429033_74278605388633550_n.jpg",
   imageAlt: 'Group of men in casual clothing gathered around a table in discussion, warm indoor lighting, community hall setting',
   tag: "Men's"
 },
@@ -57,7 +57,7 @@ const ministries: Ministry[] = [
   name: 'Worship Team',
   tagline: 'Lead in Song',
   description: 'Join our music ministry — vocalists, instrumentalists, and production crew welcome.',
-  image: "https://images.unsplash.com/photo-1651975414435-26c83ce1bff3",
+  image: "/assets/images/727928138_988525360762788_1191887275324024034_n.jpg",
   imageAlt: 'Worship band performing on a church stage, colored stage lighting, musicians playing guitars and keyboards, dimly lit sanctuary',
   tag: 'Worship'
 },
