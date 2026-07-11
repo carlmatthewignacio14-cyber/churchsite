@@ -16,6 +16,7 @@ const upcomingEvents = [
     id: '2',
     title: 'Youth Revival 2026',
     date: 'To Be Announced',
+    time: 'Time TBA',
     location: 'National Camp Site',
     description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
   },
@@ -23,6 +24,7 @@ const upcomingEvents = [
      id: '3',
     title: 'Overnight Retreat',
     date: 'To Be Announced',
+    time: 'Time TBA',
     location: 'To Be Announced',
     description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
   }
@@ -60,7 +62,7 @@ export default function EventsPage() {
           {/* Events List Stack */}
           <div className="space-y-6">
             {upcomingEvents.map((event) => (
-              <div key={event.id} className="bg-card border border-border p-6 md:p-8 hover:border-primary/40 transition-all rounded shadow-sm">
+              <div key={event.id} className="bg-gradient-to-b from-[#3a2a1d]/75 to-[#241a12]/85 backdrop-blur-md border border-white/10 p-6 md:p-8 hover:border-primary/60 transition-all rounded shadow-lg">
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                   <div>
                     <h2 className="font-display text-2xl font-bold text-foreground mb-1">
@@ -74,7 +76,7 @@ export default function EventsPage() {
                     {event.location}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed font-light">
+                <p className="text-sm text-white/80 leading-relaxed font-light">
                   {event.description}
                 </p>
               </div>
