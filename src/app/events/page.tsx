@@ -16,7 +16,6 @@ const upcomingEvents = [
     id: '2',
     title: 'Youth Revival 2026',
     date: 'To Be Announced',
-    time: 'Time TBA',
     location: 'National Camp Site',
     description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
   },
@@ -24,7 +23,6 @@ const upcomingEvents = [
      id: '3',
     title: 'Overnight Retreat',
     date: 'To Be Announced',
-    time: 'Time TBA',
     location: 'To Be Announced',
     description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
   }
