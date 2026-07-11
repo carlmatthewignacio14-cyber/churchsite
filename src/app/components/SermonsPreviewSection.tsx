@@ -256,7 +256,7 @@ export default function SermonsPreviewSection() {
           >
             Watch on Facebook
             <span className="w-10 h-10 border border-primary/30 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:stroke-white transition-colors" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:stroke-white transition-colors" aria-hidden="true" suppressHydrationWarning>
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </span>
