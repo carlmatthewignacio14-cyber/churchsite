@@ -15,7 +15,7 @@ const upcomingEvents = [
   {
     id: '2',
     title: 'Youth Revival 2026',
-    date: 'To Be Announced',
+    date: 'November 2026',
     location: 'National Camp Site',
     description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
   },
