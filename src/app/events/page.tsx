@@ -1,26 +1,30 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import Link from 'next/link';            
 
-// Sample events structure — you can update these details anytime
 const upcomingEvents = [
   {
     id: '1',
-    title: 'Youth Summer Camp 2026',
-    date: 'August 14-17, 2026',
-    time: '8:00 AM onwards',
-    location: 'Main Sanctuary / Camp Site',
-    description: 'A 4-day life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship.'
+    title: 'Youth Fellowship with San Mateo Youth',
+    date: 'August 2, 2026',
+    time: '1:00 PM',
+    location: 'San Mateo Church',
+    description: 'An evening dedicated to equipping marriages, strengthening bonds, and sharing dinner together with our church family.'
   },
   {
     id: '2',
-    title: 'Couples Fellowship Night',
-    date: 'September 5, 2026',
-    time: '6:30 PM',
-    location: 'Fellowship Hall',
-    description: 'An evening dedicated to equipping marriages, strengthening bonds, and sharing dinner together with our church family.'
-  }
+    title: 'Youth Revival 2026',
+    date: 'To Be Announced',
+    location: 'National Camp Site',
+    description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
+  },
+  {
+     id: '3',
+    title: 'Overnight Retreat',
+    date: 'To Be Announced',
+    location: 'To Be Announced',
+    description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
 ];
 
 export default function EventsPage() {
