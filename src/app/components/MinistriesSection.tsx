@@ -60,7 +60,6 @@ const ministries: Ministry[] = [
   image: "/assets/images/727928138_988525360762788_1191887275324024034_n.jpg",
   imageAlt: 'Worship band performing on a church stage, colored stage lighting, musicians playing guitars and keyboards, dimly lit sanctuary',
   tag: 'Worship'
-},
 }];
 
 
