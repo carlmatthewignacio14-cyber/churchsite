@@ -1,34 +1,34 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';            
+import Link from 'next/link';
 
 const upcomingEvents = [
-  {
-    id: '1',
-    title: 'Youth Fellowship with San Mateo Youth',
-    date: 'August 2, 2026',
-    time: '1:00 PM',
-    location: 'San Mateo Church',
-    description: 'An evening dedicated to equipping marriages, strengthening bonds, and sharing dinner together with our church family.'
-  },
-  {
-    id: '2',
-    title: 'Youth Revival 2026',
-    date: 'To Be Announced',
-    time: 'Time TBA',
-    location: 'National Camp Site',
-    description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
-  },
-  {
-     id: '3',
-    title: 'Overnight Retreat',
-    date: 'To Be Announced',
-    time: 'Time TBA',
-    location: 'To Be Announced',
-    description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
-  }
-];
+{
+  id: '1',
+  title: 'Youth Fellowship with San Mateo Youth',
+  date: 'August 2, 2026',
+  time: '1:00 PM',
+  location: 'San Mateo Church',
+  description: 'An evening dedicated to equipping marriages, strengthening bonds, and sharing dinner together with our church family.'
+},
+{
+  id: '2',
+  title: 'Youth Revival 2026',
+  date: 'To Be Announced',
+  time: 'Time TBA',
+  location: 'National Camp Site',
+  description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
+},
+{
+  id: '3',
+  title: 'Overnight Retreat',
+  date: 'To Be Announced',
+  time: 'Time TBA',
+  location: 'To Be Announced',
+  description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
+}];
+
 
 export default function EventsPage() {
   return (
@@ -61,8 +61,8 @@ export default function EventsPage() {
 
           {/* Events List Stack */}
           <div className="space-y-6">
-            {upcomingEvents.map((event) => (
-              <div key={event.id} className="bg-gradient-to-b from-[#3a2a1d]/75 to-[#241a12]/85 backdrop-blur-md border border-white/10 p-6 md:p-8 hover:border-primary/60 transition-all rounded shadow-lg">
+            {upcomingEvents.map((event) =>
+            <div key={event.id} className="from-[#3a2a1d]/75 to-[#241a12]/85 backdrop-blur-md border p-6 md:p-8 hover:border-primary/60 transition-all rounded shadow-lg bg-amber-200 border-amber-100 border-solid">
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                   <div>
                     <h2 className="font-display text-2xl font-bold text-white mb-1">
@@ -80,10 +80,10 @@ export default function EventsPage() {
                   {event.description}
                 </p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
-    </main>
-  );
+    </main>);
+
 }
