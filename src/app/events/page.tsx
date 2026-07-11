@@ -61,18 +61,21 @@ export default function EventsPage() {
 
           {/* Events List Stack */}
           <div className="space-y-6">
-            {upcomingEvents.map((event) =>
-            <div key={event.id} className="from-[#3a2a1d]/75 to-[#241a12]/85 backdrop-blur-md border p-6 md:p-8 hover:border-primary/60 transition-all rounded shadow-lg bg-amber-200 border-amber-100 border-solid">
+            {upcomingEvents.map((event) => (
+              <div 
+                key={event.id} 
+                className="bg-[#2d1b10]/75 backdrop-blur-md border border-white/10 p-6 md:p-8 hover:border-white/30 transition-all rounded shadow-md"
+              >
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                   <div>
                     <h2 className="font-display text-2xl font-bold text-white mb-1">
                       {event.title}
                     </h2>
-                    <p className="text-sm font-semibold uppercase tracking-wider text-white">
-                      {event.date} &bull; {event.time}
+                    <p className="text-sm font-semibold uppercase tracking-wider text-white/90">
+                      {event.date} {event.time && <>&bull; {event.time}</>}
                     </p>
                   </div>
-                  <span className="inline-block bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto">
+                  <span className="inline-block bg-white/20 text-white-border border border-primary/20 text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto backdrop-blur-sm">
                     {event.location}
                   </span>
                 </div>
@@ -80,10 +83,10 @@ export default function EventsPage() {
                   {event.description}
                 </p>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </section>
-    </main>);
-
+    </main>
+  );
 }
