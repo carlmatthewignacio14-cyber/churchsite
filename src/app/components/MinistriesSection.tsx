@@ -63,7 +63,7 @@ const ministries: Ministry[] = [
 },
 {
   id: 'kids',
-  name: "Men's Ministry",
+  name: "Kid's Ministry",
   tagline: 'Developing Leaders, Discipling Kids',
   description: 'A fun, safe, and engaging environment where kids learn about faith through interactive Bible stories, worship, games, and creative crafts',
   image: "/assets/images/720318355_975915628579816_5709777563636170972_n.jpg",
