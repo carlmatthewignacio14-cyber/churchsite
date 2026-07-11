@@ -68,6 +68,7 @@ const ministries: Ministry[] = [
   description: 'A fun, safe, and engaging environment where kids learn about faith through interactive Bible stories, worship, games, and creative crafts',
   image: "/assets/images/720318355_975915628579816_5709777563636170972_n.jpg",
   imageAlt: 'group photo of children ministry from last VBS event',
+  colSpan: 'md:col-span-2',
   tag: 'Worship'
 }];
 
