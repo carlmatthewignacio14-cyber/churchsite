@@ -136,10 +136,9 @@ export default function MinistriesSection() {
             <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">
               Get Involved
             </span>
-            <h2 className="font-display text-section-title font-light italic text-foreground">
-              Ministries<br />
-              <span className="not-italic font-bold">&amp; Events</span>
-            </h2>
+            <h2 className="font-display text-section-title font-bold text-foreground">
+              Ministries
+             </h2>
           </div>
           <p className="text-muted-foreground max-w-sm text-sm leading-relaxed font-light">
             There&apos;s a place for everyone here. Find the ministry that fits your season of life and step in.

@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     icon: [{ url: '/favicon.ico', type: 'image/x-icon' }],
   },
   openGraph: {
-    title: 'Church of God of Prophecy Marikina — Come As You Are',
+    title: 'Church of God of Prophecy Marikina — Let Us Go To The Other Side',
     description: 'A welcoming church community. Services, sermons, events, and more.',
     images: [{ url: '/assets/images/Outline_Version-1783617673585.png', width: 1200, height: 630 }],
   },
