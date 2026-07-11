@@ -16,7 +16,7 @@ const upcomingEvents = [
     id: '2',
     title: 'Youth Revival 2026',
     date: 'To Be Announced',
-    time: 'Time TBA'
+    time: 'Time TBA',
     location: 'National Camp Site',
     description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
   },
@@ -24,7 +24,7 @@ const upcomingEvents = [
      id: '3',
     title: 'Overnight Retreat',
     date: 'To Be Announced',
-    time: 'Time TBA'
+    time: 'Time TBA',
     location: 'To Be Announced',
     description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
   }
@@ -45,7 +45,6 @@ export default function EventsPage() {
           <span className="text-xs font-bold uppercase tracking-[0.3em] text-accent">Church Events</span>
         </div>
       </div>
-
       {/* Main Body */}
       <section className="section-pad">
         <div className="container mx-auto px-4 max-w-4xl">
@@ -61,23 +60,23 @@ export default function EventsPage() {
 
           {/* Events List Stack */}
           <div className="space-y-6">
-            {upcomingEvents.map((event) => (
-              <div key={event.id} className="bg-card border border-border p-6 md:p-8 hover:border-primary/40 transition-all rounded shadow-sm">
+            {upcomingEvents?.map((event) => (
+              <div key={event?.id} className="bg-card border border-border p-6 md:p-8 hover:border-primary/40 transition-all rounded shadow-sm">
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                   <div>
                     <h2 className="font-display text-2xl font-bold text-foreground mb-1">
-                      {event.title}
+                      {event?.title}
                     </h2>
                     <p className="text-sm font-semibold uppercase tracking-wider text-accent">
-                      {event.date} &bull; {event.time}
+                      {event?.date} &bull; {event?.time}
                     </p>
                   </div>
                   <span className="inline-block bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto">
-                    {event.location}
+                    {event?.location}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed font-light">
-                  {event.description}
+                  {event?.description}
                 </p>
               </div>
             ))}
