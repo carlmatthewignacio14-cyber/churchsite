@@ -61,15 +61,6 @@ const ministries: Ministry[] = [
   imageAlt: 'Worship band performing on a church stage, colored stage lighting, musicians playing guitars and keyboards, dimly lit sanctuary',
   tag: 'Worship'
 },
-{
-  id: 'outreach',
-  name: 'Community Outreach',
-  tagline: 'Serve Nashville',
-  description: 'Food drives, homeless outreach, neighborhood cleanups, and partnerships with local nonprofits. Faith in action every week.',
-  image: "https://img.rocket.new/generatedImages/rocket_gen_img_1319ef9c3-1772984335613.png",
-  imageAlt: 'Volunteers in matching shirts sorting food donations at a bright community center, organized rows of boxes, cheerful daytime atmosphere',
-  colSpan: 'md:col-span-2',
-  tag: 'Outreach'
 }];
 
 
