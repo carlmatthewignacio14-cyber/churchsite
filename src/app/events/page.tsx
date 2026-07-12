@@ -25,6 +25,20 @@ const upcomingEvents = [
     date: 'To Be Announced',
     location: 'To Be Announced',
     description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
+  },
+  {
+     id: '4',
+    title: 'National Convention',
+    date: 'March 24-26, 2026',
+    location: 'National Property, COGOP Taytay',
+    description:
+  },
+  {
+     id: '5',
+    title: 'Leadership Training/Seminars',
+    date: 'March 26-28, 2026',
+    location: 'National Property, COGOP Taytay',
+    description:
   }
 ];
 
