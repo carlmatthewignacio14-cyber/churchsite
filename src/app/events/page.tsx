@@ -31,14 +31,14 @@ const upcomingEvents = [
     title: 'National Convention',
     date: 'March 24-26, 2026',
     location: 'National Property, COGOP Taytay',
-    description:
+    description: 'A national gathering of believers celebrating unity, faith, and the work of God across the nation.'
   },
   {
      id: '5',
     title: 'Leadership Training/Seminars',
     date: 'March 26-28, 2026',
     location: 'National Property, COGOP Taytay',
-    description:
+    description: 'Equipping leaders with the tools, knowledge, and spiritual foundation needed to serve and guide their communities effectively.'
   }
 ];
 
