@@ -5,11 +5,11 @@ import Link from 'next/link';
 
 const upcomingEvents = [
   {
-    id: '1',
-    title: 'Youth Revival 2026',
-    date: 'To Be Announced',
-    location: 'National Property, COGOP Taytay',
-    description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
+     id: '1',
+    title: 'Overnight Retreat',
+    date: 'August 1,2026',
+    location: 'To Be Announced',
+    description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
   },
   {
     id: '2',
@@ -20,11 +20,11 @@ const upcomingEvents = [
     description: 'An evening dedicated to equipping marriages, strengthening bonds, and sharing dinner together with our church family.'
   },
   {
-     id: '3',
-    title: 'Overnight Retreat',
-    date: 'August 1,2026',
-    location: 'To Be Announced',
-    description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
+    id: '3',
+    title: 'Youth Revival 2026',
+    date: 'To Be Announced',
+    location: 'National Property, COGOP Taytay',
+    description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
   },
   {
      id: '4',
