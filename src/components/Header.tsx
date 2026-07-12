@@ -58,7 +58,7 @@ export default function Header() {
               <Link
                 key={link?.href}
                 href={link?.href}
-                className="px-4 py-2 text-xs font-bold tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
+                className="px-4 py-2 text-xs font-semibold tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link?.label}
               </Link>
