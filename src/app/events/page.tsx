@@ -37,6 +37,7 @@ const upcomingEvents = [
     title: 'Leadership Training/Seminar',
     date: 'March 24-26, 2026',
     location: 'National Property, COGOP Taytay',
+  },
 ];
 
 export default function EventsPage() {
