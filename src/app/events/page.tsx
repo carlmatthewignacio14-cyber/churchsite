@@ -15,8 +15,8 @@ const upcomingEvents = [
   {
     id: '2',
     title: 'Youth Revival 2026',
-    date: 'November 2026',
-    location: 'National Camp Site',
+    date: 'To Be Announced',
+    location: 'National Property, COGOP Taytay',
     description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
   },
   {
@@ -29,17 +29,14 @@ const upcomingEvents = [
   {
      id: '4',
     title: 'National Convention',
-    date: 'March 24-26, 2026',
+    date: 'March 26-28, 2026',
     location: 'National Property, COGOP Taytay',
-    description: 'A national gathering of believers celebrating unity, faith, and the work of God across the nation.'
   },
   {
      id: '5',
-    title: 'Leadership Training/Seminars',
-    date: 'March 26-28, 2026',
+    title: 'Leadership Training/Seminar',
+    date: 'March 24-26, 2026',
     location: 'National Property, COGOP Taytay',
-    description: 'Equipping leaders with the tools, knowledge, and spiritual foundation needed to serve and guide their communities effectively.'
-  }
 ];
 
 export default function EventsPage() {
