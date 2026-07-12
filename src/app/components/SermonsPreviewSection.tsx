@@ -108,6 +108,7 @@ function FacebookIframeCard({
             strokeWidth="2"
             className="text-muted-foreground shrink-0"
             aria-hidden="true"
+            suppressHydrationWarning
           >
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
             <line x1="16" y1="2" x2="16" y2="6" />
