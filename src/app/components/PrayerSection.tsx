@@ -4,8 +4,14 @@ import React, { useRef, useState, useEffect } from 'react';
 
 function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
   const [revealed, setRevealed] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
@@ -21,9 +27,9 @@ function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [ref, delay]);
+  }, [ref, delay, mounted]);
 
-  return revealed;
+  return mounted ? revealed : false;
 }
 
 export default function PrayerSection() {
