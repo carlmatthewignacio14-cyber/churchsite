@@ -6,18 +6,18 @@ import Link from 'next/link';
 const upcomingEvents = [
   {
     id: '1',
+    title: 'Youth Revival 2026',
+    date: 'To Be Announced',
+    location: 'National Property, COGOP Taytay',
+    description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
+  },
+  {
+    id: '2',
     title: 'Youth Fellowship with San Mateo Youth',
     date: 'August 2, 2026',
     time: '1:00 PM',
     location: 'San Mateo Church',
     description: 'An evening dedicated to equipping marriages, strengthening bonds, and sharing dinner together with our church family.'
-  },
-  {
-    id: '2',
-    title: 'Youth Revival 2026',
-    date: 'To Be Announced',
-    location: 'National Property, COGOP Taytay',
-    description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
   },
   {
      id: '3',
