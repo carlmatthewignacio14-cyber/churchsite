@@ -19,6 +19,15 @@ interface SundayService {
 // ─────────────────────────────────────────────────────────────────────────────
 const sundayServices: SundayService[] = [
   {
+      
+    id: '4',
+    title: 'Crossing For One Broken Life | Mark 5:1-20',
+    date: 'July 12, 2026',
+    facebookVideoUrl: 'https://web.facebook.com/cogopmarikinaph/videos/1989221781731174/',
+    embedUrl: 'https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fweb.facebook.com%2Fcogopmarikinaph%2Fvideos%2F1989221781731174%2F&show_text=false&width=560&t=0',
+    featured: true,
+  },
+  {
     id: '1',
     title: 'Sunday Morning Service',
     date: 'July 5, 2026',
@@ -37,14 +46,6 @@ const sundayServices: SundayService[] = [
     date: 'June 14, 2026',
     facebookVideoUrl: 'https://www.facebook.com/michal.justiniano.3/videos/2235896843839500/',
     embedUrl: 'https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Fmichal.justiniano.3%2Fvideos%2F2235896843839500%2F&show_text=false&width=560&t=0',
-  },
-  {
-    id: '4',
-    title: 'Crossing For One Broken Life | Mark 5:1-20',
-    date: 'July 12, 2026',
-    facebookVideoUrl: 'https://web.facebook.com/cogopmarikinaph/videos/1989221781731174/',
-    embedUrl: 'https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fweb.facebook.com%2Fcogopmarikinaph%2Fvideos%2F1989221781731174%2F&show_text=false&width=560&t=0',
-    featured: true,
   },
 ];
 
