@@ -44,6 +44,7 @@ const sundayServices: SundayService[] = [
     date: 'July 12, 2026',
     facebookVideoUrl: 'https://web.facebook.com/cogopmarikinaph/videos/1989221781731174/',
     embedUrl: 'https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fweb.facebook.com%2Fcogopmarikinaph%2Fvideos%2F1989221781731174%2F&show_text=false&width=560&t=0',
+    featured: true,
   },
 ];
 
