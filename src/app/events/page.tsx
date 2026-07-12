@@ -22,7 +22,7 @@ const upcomingEvents = [
   {
     id: '3',
     title: 'Youth Revival 2026',
-    date: 'To Be Announced',
+    date: 'November 2026',
     location: 'National Property, COGOP Taytay',
     description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
   },
