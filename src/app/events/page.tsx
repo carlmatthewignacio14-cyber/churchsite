@@ -22,7 +22,7 @@ const upcomingEvents = [
   {
      id: '3',
     title: 'Overnight Retreat',
-    date: 'To Be Announced',
+    date: 'August 1,2026',
     location: 'To Be Announced',
     description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
   },
