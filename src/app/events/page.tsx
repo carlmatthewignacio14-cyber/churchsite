@@ -6,14 +6,14 @@ import Link from 'next/link';
 const upcomingEvents = [
   {
      id: '1',
-    title: 'Overnight Retreat',
+    title: 'Youth & Young Adult Retreat',
     date: 'August 1,2026',
     location: 'To Be Announced',
     description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
   },
   {
     id: '2',
-    title: 'Youth Fellowship with San Mateo Youth',
+    title: 'Joint Fellowship with San Mateo Youth',
     date: 'August 2, 2026',
     time: '1:00 PM',
     location: 'San Mateo Church',
