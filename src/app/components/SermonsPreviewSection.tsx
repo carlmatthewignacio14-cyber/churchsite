@@ -232,66 +232,44 @@ function FacebookVideoCard({
 
 export default function SermonsPreviewSection() {
   const headingRef = useRef<HTMLDivElement>(null);
-  const card0Ref = useRef<HTMLDivElement>(null);
-  const card1Ref = useRef<HTMLDivElement>(null);
-  const card2Ref = useRef<HTMLDivElement>(null);
-  const cardRefs = [card0Ref, card1Ref, card2Ref];
-
-  const headingRevealed = useScrollReveal(headingRef, 0);
-  const card0Revealed = useScrollReveal(card0Ref, 100);
-  const card1Revealed = useScrollReveal(card1Ref, 220);
-  const card2Revealed = useScrollReveal(card2Ref, 340);
-  const cardRevealed = [card0Revealed, card1Revealed, card2Revealed];
-
-  const revealClass = (revealed: boolean) =>
-    revealed
-      ? 'opacity-100 translate-y-0 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]'
-      : 'opacity-0 translate-y-7';
+  const sectionRef = useRef<HTMLElement>(null);
+  const isVisible = useScrollReveal(sectionRef, 0);
 
   return (
-    <section id="sermons-preview" className="section-pad bg-muted/30 border-t border-border relative z-10">
-      <div className="container mx-auto px-4 max-w-6xl">
-        {/* Header */}
-        <div
-          ref={headingRef}
-          className={`flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 ${revealClass(headingRevealed)}`}
-        >
-          <div>
-            <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">
-              Sunday Services
-            </span>
-            <h2 className="font-display text-section-title font-light italic text-foreground">
-              Recent<br />
-              <span className="not-italic font-bold">Sunday Services</span>
-            </h2>
-          </div>
-          <a
-            href="https://www.facebook.com/cogopmarikinaph"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-primary hover:text-primary/70 transition-colors group shrink-0"
-          >
-            Watch on Facebook
-            <span className="w-10 h-10 border border-primary/30 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:stroke-white transition-colors" aria-hidden="true" suppressHydrationWarning>
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </span>
-          </a>
+    <section 
+      ref={sectionRef} 
+      className={`py-16 bg-background transition-all duration-700 ease-out ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+    >
+      <div className="container mx-auto px-4">
+        {/* Section Header */}
+        <div ref={headingRef} className="text-center mb-12">
+          <h2 className="text-3xl font-display font-bold tracking-tight text-foreground sm:text-4xl mb-4">
+            Recent Sermons & Services
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Watch our latest live streams and worship services directly from Facebook.
+          </p>
         </div>
 
-        {/* Service Video Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {sundayServices.map((service, i) => {
-            const isFeatured = !!service.featured && i === 0;
+        {/* Dynamic Responsive Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sundayServices.map((service) => {
+            const isFeatured = !!service.featured;
+
             return (
-              <div
-                key={service.id}
-                ref={cardRefs[i]}
-                className={`group relative overflow-hidden bg-card border border-border bento-card ${
-                  isFeatured ? 'md:col-span-2' : ''
-                } ${revealClass(cardRevealed[i])}`}
+              <div 
+                key={service.id} 
+                className={`bg-card border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 ${
+                  isFeatured ? 'md:col-span-2 lg:col-span-1' : ''
+                }`}
               >
+                {/* 
+                  CRITICAL FIX: This conditional statement dynamically checks your data array.
+                  If an item contains an embedUrl, it serves the interactive layout.
+                  Otherwise, it serves the original external link layout.
+                */}
                 {service.embedUrl ? (
                   <FacebookIframeCard service={service} isFeatured={isFeatured} />
                 ) : (
@@ -301,8 +279,6 @@ export default function SermonsPreviewSection() {
             );
           })}
         </div>
-
-
       </div>
     </section>
   );

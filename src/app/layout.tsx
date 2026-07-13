@@ -26,7 +26,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  title: 'Church of God of Prophecy | Marikina — A Community of Faith & Welcome',
+  title: 'Church of God of Prophecy | Marikina',
   description:
     'Join Church of God of Prophecy Marikina for Sunday services, sermons, events, and ministries. New visitors always welcome. Find service times, give online, and request prayer.',
   icons: {
