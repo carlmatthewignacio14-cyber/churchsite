@@ -27,20 +27,20 @@ const sundayServices: SundayService[] = [
   },
   {
     id: '1',
-    title: 'Sunday Morning Service',
+    title: 'They Came To The Other Side | Mark 5:1',
     date: 'July 5, 2026',
     facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1822311055408975/',
     featured: false,
   },
   {
     id: '2',
-    title: 'Sunday Morning Service',
+    title: 'Anchored Fathers, Anchored Families | Hebrews 6:19',
     date: 'June 21, 2026',
     facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/4263437017240191/',
   },
   {
     id: '3',
-    title: 'Sunday Morning Service',
+    title: 'From Panic To Prayer | Acts 27',
     date: 'June 14, 2026',
     facebookVideoUrl: 'https://www.facebook.com/michal.justiniano.3/videos/2235896843839500/',
     embedUrl: 'https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Fmichal.justiniano.3%2Fvideos%2F2235896843839500%2F&show_text=false&width=560&t=0',
