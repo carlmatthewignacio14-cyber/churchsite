@@ -25,8 +25,8 @@ export default function SermonsHero() {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <AppImage
-          src="https://images.unsplash.com/photo-1547603881-07d335ae2863"
-          alt="Misty mountain valley at dawn, deep shadows, muted blue-grey tones, quiet forested ridgeline, atmospheric low-light landscape"
+          src="/assets/images/sermonsheropic.jpg"
+          alt="church podium photo"
           fill
           priority
           className="object-cover"
