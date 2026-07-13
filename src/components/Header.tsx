@@ -113,7 +113,7 @@ export default function Header() {
             key={link?.href}
             href={link?.href}
             onClick={() => setMenuOpen(false)}
-            className="font-display text-4xl font-light italic text-foreground hover:text-primary transition-colors"
+            className="font-display text-4xl font-bold not-italic text-white hover:text-primary transition-colors"
           >
             {link?.label}
           </Link>
