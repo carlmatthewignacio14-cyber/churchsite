@@ -85,7 +85,7 @@ export default function AllSlidesArchivePage() {
         {/* Header section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-display font-bold text-gray-900 mb-4">
-            All Sermon Presentations & Slides Archive
+            All Sermons Archive
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Browse through our complete collection of weekly presentation templates and study guides.
