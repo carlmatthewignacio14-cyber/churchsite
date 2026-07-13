@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next link';
+import Link from 'next/link';
 
 interface PowerPointSlide {
   id: string;
@@ -149,6 +149,7 @@ export default function SermonSlidesSection() {
             </svg>
           </Link>
         </div>
+      )}
 
       </div>
     </section>
