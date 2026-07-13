@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface SundayService {
   id: string;
@@ -275,11 +276,9 @@ export default function SermonsPreviewSection() {
 
         {/* See More Option Button Wrapper */}
         <div className="flex justify-center mt-4">
-          <a
-            href="https://www.facebook.com/cogopmarikinaph/videos/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border-2 border-[#1877F2] text-[#1877F2] px-8 py-3.5 text-sm font-semibold tracking-wider uppercase rounded-lg hover:bg-[#1877F2] hover:text-white transition-all duration-200 transform hover:scale-[1.02]"
+          <Link
+            href="/sermons"
+            className="inline-flex items-center gap-2 border-2 border-primary text-primary px-8 py-3.5 text-sm font-semibold tracking-wider uppercase rounded-lg hover:bg-primary hover:text-primary-foreground transition-all duration-200 transform hover:scale-[1.02]"
           >
             See More Sermons
             <svg
@@ -296,7 +295,7 @@ export default function SermonsPreviewSection() {
               <line x1="5" y1="12" x2="19" y2="12" />
               <polyline points="12 5 19 12 12 19" />
             </svg>
-          </a>
+          </Link>
         </div>
         
       </div>
