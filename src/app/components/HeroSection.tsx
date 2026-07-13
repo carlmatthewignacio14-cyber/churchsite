@@ -55,15 +55,6 @@ export default function HeroSection() {
           </Link>
         </div>
 
-        {/* Service time pill */}
-        <div className="mt-10 inline-flex items-center gap-3 border border-white/20 bg-white/10 backdrop-blur-md px-5 py-3">
-          <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-          <span className="text-xs text-white/90 font-medium tracking-wider uppercase">
-            Sundays 8:00 AM · 33 Banaba St, Nangka, Marikina, 1808 Metro Manila
-          </span>
-        </div>
-      </div>
-
       {/* Scroll Indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10">
         <span className="text-[10px] tracking-[0.5em] uppercase text-white/40"></span>
