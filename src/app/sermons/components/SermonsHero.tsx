@@ -37,7 +37,7 @@ export default function SermonsHero() {
 
       {/* Content */}
       <div ref={headRef} className="relative z-10 container mx-auto px-4 max-w-6xl pb-16 pt-40">
-        <span className="text-xs font-semibold tracking-[0.5em] uppercase text-accent block mb-4">
+        <span className="text-xs font-semibold tracking-[0.5em] uppercase text-white block mb-4">
           Sermon Library
         </span>
         <h1 className="font-display text-hero-display font-light italic text-white leading-none">
