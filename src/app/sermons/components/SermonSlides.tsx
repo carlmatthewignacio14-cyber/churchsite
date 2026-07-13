@@ -19,7 +19,7 @@ const sermonSlides: PowerPointSlide[] = [
     speaker: 'Pastor Albert Garao',
     embedUrl: 'https://docs.google.com/presentation/d/1Odq5kOh-UUvBvvrI0R0wYfgA0Dc9Zhus/edit?usp=drive_link&ouid=105615319819982595182&rtpof=true&sd=true',
     downloadUrl: 'https://drive.google.com/uc?export=download&id=1Odq5kOh-UUvBvvrI0R0wYfgA0Dc9Zhus', 
-    imageUrl: 'https://docs.google.com/presentation/d/1Odq5kOh-UUvBvvrI0R0wYfgA0Dc9Zhus/edit?usp=drive_link&ouid=105615319819982595182&rtpof=true&sd=true',
+    imageUrl: 'https://docs.google.com/presentation/d/1Odq5kOh-UUvBvvrI0R0wYfgA0Dc9Zhus/export?format=png',
   },
   {
     id: '2',
@@ -27,7 +27,7 @@ const sermonSlides: PowerPointSlide[] = [
     speaker: 'Pastor Albert Garao',
     embedUrl: 'https://docs.google.com/presentation/d/1PcZ3HGOmHp43VQTEFpKgRNoDJm9h5E6Y/edit?usp=drive_link&ouid=105615319819982595182&rtpof=true&sd=true',
     downloadUrl: 'https://drive.google.com/uc?export=download&id=1PcZ3HGOmHp43VQTEFpKgRNoDJm9h5E6Y', 
-    imageUrl: 'https://docs.google.com/presentation/d/1PcZ3HGOmHp43VQTEFpKgRNoDJm9h5E6Y/edit?usp=drive_link&ouid=105615319819982595182&rtpof=true&sd=true',
+    imageUrl: 'https://docs.google.com/presentation/d/1PcZ3HGOmHp43VQTEFpKgRNoDJm9h5E6Y/export?format=png',
   },
   {
     id: '3',
@@ -35,7 +35,7 @@ const sermonSlides: PowerPointSlide[] = [
     speaker: 'Pastor Albert Garao',
     embedUrl: 'https://docs.google.com/presentation/d/1PZjPyLV6ZtCipf1zKoO-otbDTcZ7yE1d/edit?usp=drive_link&ouid=105615319819982595182&rtpof=true&sd=true',
     downloadUrl: 'https://drive.google.com/uc?export=download&id=1PZjPyLV6ZtCipf1zKoO-otbDTcZ7yE1d', 
-    imageUrl: 'https://docs.google.com/presentation/d/1PZjPyLV6ZtCipf1zKoO-otbDTcZ7yE1d/edit?usp=drive_link&ouid=105615319819982595182&rtpof=true&sd=true',
+    imageUrl: 'https://docs.google.com/presentation/d/1PZjPyLV6ZtCipf1zKoO-otbDTcZ7yE1d/export?format=png',
   },
   {
     id: '4',
@@ -43,7 +43,7 @@ const sermonSlides: PowerPointSlide[] = [
     speaker: 'Pastor Albert Garao',
     embedUrl: 'https://docs.google.com/presentation/d/18gKdf3F9_pO8tUQFO4CGWZ_uhFxN5MhT/edit?usp=drive_link&ouid=105615319819982595182&rtpof=true&sd=true',
     downloadUrl: 'https://drive.google.com/uc?export=download&id=18gKdf3F9_pO8tUQFO4CGWZ_uhFxN5MhT', 
-    imageUrl: 'https://docs.google.com/presentation/d/18gKdf3F9_pO8tUQFO4CGWZ_uhFxN5MhT/edit?usp=drive_link&ouid=105615319819982595182&rtpof=true&sd=true',
+    imageUrl: 'https://docs.google.com/presentation/d/18gKdf3F9_pO8tUQFO4CGWZ_uhFxN5MhT/export?format=png',
   }
 ];
 
