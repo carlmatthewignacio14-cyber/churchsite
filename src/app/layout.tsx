@@ -30,7 +30,13 @@ export const metadata: Metadata = {
   description:
     'Join Church of God of Prophecy Marikina for Sunday services, sermons, events, and ministries. New visitors always welcome. Find service times, give online, and request prayer.',
   icons: {
-    icon: [{ url: '/logo.png', type: 'image/x-icon' }],
+    icon: [
+      { 
+        url: '/logo.png', 
+        type: 'image/png', 
+        sizes: 'any' 
+      }
+    ],
   },
   openGraph: {
     title: 'Church of God of Prophecy Marikina',
