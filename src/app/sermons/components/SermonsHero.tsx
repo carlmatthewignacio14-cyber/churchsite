@@ -25,7 +25,7 @@ export default function SermonsHero() {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <AppImage
-          src="/assets/images/sermonsherophoto.jpg"
+          src="/assets/images/sermonsherophoto.png"
           alt="church podium photo"
           fill
           priority
