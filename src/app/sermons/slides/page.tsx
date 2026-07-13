@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link'
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -57,6 +58,30 @@ export default function AllSlidesArchivePage() {
       <Header />
       
       <section className="py-32 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div className="mb-8">
+          <Link
+            href="/sermons"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors group"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="transition-transform duration-200 group-hover:-translate-x-1"
+            >
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Back to Sermons
+          </Link>
+        </div>
+
         {/* Header section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-display font-bold text-gray-900 mb-4">
