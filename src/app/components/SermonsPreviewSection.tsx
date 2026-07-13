@@ -253,23 +253,16 @@ export default function SermonsPreviewSection() {
           </p>
         </div>
 
-        {/* Dynamic Responsive Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Video Responsive Layout Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {sundayServices.map((service) => {
             const isFeatured = !!service.featured;
 
             return (
-              <div 
-                key={service.id} 
-                className={`bg-card border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 ${
-                  isFeatured ? 'md:col-span-2 lg:col-span-1' : ''
-                }`}
+              <div
+                key={service.id}
+                className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
               >
-                {/* 
-                  CRITICAL FIX: This conditional statement dynamically checks your data array.
-                  If an item contains an embedUrl, it serves the interactive layout.
-                  Otherwise, it serves the original external link layout.
-                */}
                 {service.embedUrl ? (
                   <FacebookIframeCard service={service} isFeatured={isFeatured} />
                 ) : (
@@ -279,6 +272,33 @@ export default function SermonsPreviewSection() {
             );
           })}
         </div>
+
+        {/* See More Option Button Wrapper */}
+        <div className="flex justify-center mt-4">
+          <a
+            href="https://www.facebook.com/cogopmarikinaph/videos/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 border-2 border-[#1877F2] text-[#1877F2] px-8 py-3.5 text-sm font-semibold tracking-wider uppercase rounded-lg hover:bg-[#1877F2] hover:text-white transition-all duration-200 transform hover:scale-[1.02]"
+          >
+            See More Sermons
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mt-0.5"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        </div>
+        
       </div>
     </section>
   );
