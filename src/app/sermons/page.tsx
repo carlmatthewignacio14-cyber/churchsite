@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import SermonsHero from '@/app/sermons/components/SermonsHero';
 import SermonsGrid from '@/app/sermons/components/SermonsGrid';
 import FeaturedSeries from '@/app/sermons/components/FeaturedSeries';
-import SermonSlidesSection from '@/app/sermons/components/SermonSlides';
+import SermonSlides from '@/app/sermons/components/SermonSlides';
 
 export default function SermonsPage() {
   return (
