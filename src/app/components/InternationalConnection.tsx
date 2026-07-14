@@ -15,6 +15,12 @@ export default function InternationalConnection() {
       description: 'Read the White Wing Messenger archive, download global press updates, and stream international assemblies.',
       url: 'https://cogop.org/news/',
       badge: 'Global Media'
+    },
+    {
+      title: 'Official International History',
+      description: 'Trace our global movement back to its 1886 roots in North Carolina and its formal 1903 assembly structure under pioneer ministers.',
+      url: 'https://cogop.org/our-history/',
+      badge: 'Our Heritage'
     }
   ];
 
