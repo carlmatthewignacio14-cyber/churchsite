@@ -6,21 +6,6 @@ import Footer from '@/components/Footer';
 import InternationalConnection from '../components/InternationalConnection';
 
 export default function AboutPage() {
-  const coreValues = [
-    {
-      title: 'Scriptural Foundation',
-      description: 'We hold a steadfast commitment to the Bible as the infallible Word of God, using it as our ultimate blueprint for daily living, doctrine, and church fellowship.'
-    },
-    {
-      title: 'Covenant Fellowship',
-      description: 'Our history is deeply rooted in covenant love. We function not as a cold organization, but as a warm, mutually supportive spiritual family.'
-    },
-    {
-      title: 'Practical Ministry',
-      description: 'Following our historical roots of community care, we focus intensely on real-world local initiatives—raising leaders, supporting families, and sharing hope.'
-    }
-  ];
-
   const pastoralTeam = [
   { name: 'Pstr. Albert Garao', role: 'Lead Pastor', bio: 'Dedicated to shepherding the Marikina community and teaching the word of God with clarity and passion.', image: '/assets/images/1.png' },
   { name: 'Pstr. Allan Canonigo', role: 'Associate Pastor', bio: 'Passionately overseeing our discipleship frameworks, young leader training programs, and community ministries.', image: '/assets/images/2.png' },
@@ -61,28 +46,72 @@ export default function AboutPage() {
         </div>
       </section>
       
-      {/* 2. Our Local Core Values Grid */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">What We Stand For</h2>
-          <p className="text-sm text-muted-foreground mt-2">
-            The foundational pillars shaping our church family locally and worldwide.
-          </p>
-        </div>
+      {/* 2. Official Foundation & Global Belief Section */}
+      <section className="py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-card border border-border p-8 md:p-12 rounded-3xl shadow-sm">
+          
+          <div className="text-center mb-8">
+            <span className="text-xs font-bold text-primary uppercase tracking-widest bg-primary/5 px-3 py-1 rounded-full">
+              What We Believe
+            </span>
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl mt-3 text-card-foreground">
+              Our Foundation: The Bible
+            </h2>
+            <p className="text-base font-semibold text-primary/80 mt-1">
+              The Supreme Authority of Scripture
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {coreValues.map((value, index) => (
-            <div key={index} className="bg-card border border-border p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-4 font-bold text-sm">
-                0{index + 1}
-              </div>
-              <h3 className="text-lg font-bold mb-2">{value.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{value.description}</p>
-            </div>
-          ))}
+          <div className="text-muted-foreground text-sm sm:text-base leading-relaxed space-y-6">
+            <p>
+              The Church of God of Prophecy is built on the belief in <strong className="text-card-foreground">“the whole Bible rightly divided.”</strong> We affirm the Bible as God’s inspired, inerrant, and infallible Word—His written revelation to humanity and our ultimate guide in matters of faith, doctrine, practice, and discipline.
+            </p>
+
+            {/* Core Pill Bullet Points */}
+            <ul className="space-y-3 pt-2">
+              <li className="flex items-start">
+                <svg className="w-5 h-5 text-primary shrink-0 mr-3 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span className="text-sm">The Bible is our highest authority, free from man-made creeds or traditions.</span>
+              </li>
+              <li className="flex items-start">
+                <svg className="w-5 h-5 text-primary shrink-0 mr-3 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span className="text-sm">Early pioneers embraced the New Testament as their only rule of faith and practice.</span>
+              </li>
+              <li className="flex items-start">
+                <svg className="w-5 h-5 text-primary shrink-0 mr-3 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span className="text-sm">Doctrinal decisions are made in unity by the International Assembly.</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Direct Link Call-to-Action */}
+          <div className="mt-10 pt-8 border-t border-border/60 text-center">
+            <p className="text-xs text-muted-foreground mb-4">
+              To read the complete foundation, historical covenants, and specific ministries, visit our global network directory.
+            </p>
+            <a 
+              href="https://cogop.org/what-we-believe/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="inline-flex items-center justify-center bg-primary text-primary-foreground font-semibold text-sm px-6 py-3 rounded-xl shadow transition-colors hover:bg-primary/95"
+            >
+              Read Full Beliefs on International Website
+              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg>
+            </a>
+          </div>
+
         </div>
       </section>
 
+      {/* 3. Leadership Team Section */}
       <section className="py-16 bg-gray-50 border-t border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
