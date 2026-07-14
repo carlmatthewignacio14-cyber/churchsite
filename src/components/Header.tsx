@@ -61,8 +61,7 @@ export default function Header() {
                 href={link?.href}
                 className={`px-4 py-2 text-xs font-semibold tracking-widest uppercase transition-colors duration-500 ${
                   scrolled 
-                    ? 'text-gray-900 hover:text-gray-600' 
-                    : 'text-white hover:text-white/70'
+                    ? 'text-gray-900 hover:text-gray-600' :'text-white hover:text-white/70'
                 }`}
               >
                 {link?.label}

@@ -28,7 +28,6 @@ export default function InternationalConnection() {
     <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
       {/* Background Graphic Accents */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/40 via-slate-900 to-black pointer-events-none" />
-      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
@@ -46,25 +45,25 @@ export default function InternationalConnection() {
 
         {/* Global Informational Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {globalPortals.map((portal, index) => (
+          {globalPortals?.map((portal, index) => (
             <div 
               key={index}
               className="bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm p-8 rounded-2xl flex flex-col justify-between hover:border-blue-500/40 transition-all duration-300 group"
             >
               <div>
                 <span className="inline-block text-[10px] font-bold tracking-widest uppercase text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded mb-4">
-                  {portal.badge}
+                  {portal?.badge}
                 </span>
                 <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
-                  {portal.title}
+                  {portal?.title}
                 </h3>
                 <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                  {portal.description}
+                  {portal?.description}
                 </p>
               </div>
 
               <a
-                href={portal.url}
+                href={portal?.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white bg-slate-700 hover:bg-blue-600 px-4 py-3 rounded-lg transition-all text-center justify-center"
