@@ -27,20 +27,43 @@ export default function AboutPage() {
       <Header />
 
       {/* 1. Hero Section Banner */}
-      <section className="relative pt-32 pb-20 bg-gray-50 border-b border-border text-center">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-xs font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1.5 rounded-full">
-            Our Story
-          </span>
-          <h1 className="text-4xl font-display font-bold tracking-tight sm:text-5xl mt-4 mb-6">
-            About Our Church
-          </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            Discover the rich historical heritage, global reach, and local ministry heartbeat of Church of God of Prophecy Marikina.
-          </p>
+      <section className="relative pt-32 pb-20 bg-gray-50 border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Left Column: Text Content */}
+            <div className="text-center lg:text-left">
+              <span className="text-xs font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1.5 rounded-full">
+                Our Story
+              </span>
+              <h1 className="text-4xl font-display font-bold tracking-tight sm:text-5xl mt-4 mb-6 text-gray-900 leading-tight">
+                About Our Church
+              </h1>
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0">
+                Discover the rich historical heritage, global reach, and local ministry heartbeat of Church of God of Prophecy Marikina. We are dedicated to providing a place where families can grow in faith and fellowship together.
+              </p>
+            </div>
+
+            {/* Right Column: Church Photo Frame */}
+            <div className="relative aspect-[4/3] w-full bg-gray-200 rounded-2xl overflow-hidden shadow-md border border-gray-200">
+              <img
+                /* 
+                  🌟 CHOOSE YOUR IMAGE PATH BELOW:
+                  Change this file string to whichever photo you want to feature as your cover:
+                  - Use '/assets/images/congregation-photo-1783621144580.png' for your group photo
+                  - Or replace it with your church facade image file name!
+                */
+                src="/assets/images/church.png"
+                alt="Church of God of Prophecy Marikina front photo"
+                className="absolute inset-0 h-full w-full object-cover object-center transform hover:scale-[1.02] transition-transform duration-300"
+              />
+            </div>
+
+          </div>
+
         </div>
       </section>
-
       {/* 2. Our Local Core Values Grid */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
