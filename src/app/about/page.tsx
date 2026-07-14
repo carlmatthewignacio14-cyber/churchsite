@@ -21,6 +21,13 @@ export default function AboutPage() {
     }
   ];
 
+  const pastoralTeam = [
+  { name: 'Pastor Albert Garao', role: 'Lead Pastor', bio: 'Dedicated to shepherding the Marikina community and teaching the word of God with clarity and passion.', image: '/assets/images/pastoral-placeholder.png' },
+  { name: 'Pastor Allan Canonigo', role: 'Associate Pastor', bio: 'Passionately overseeing our discipleship frameworks, young leader training programs, and community ministries.', image: '/assets/images/pastoral-placeholder.png' },
+  { name: 'Pastor Jisel Baliguat', role: 'Newly Annointed Associate Pastor/National Youth Directress', bio: 'Serving locally and leading youth nationwide, she uses her extensive international experience to equip the next generation.', image: '/assets/images/pastoral-placeholder.png' },
+  { name: 'Pastor Roderick Justiniano', role: 'Newly Annointed Associate Pastor', bio: 'He leverages his music ministry and pastoral experience to support church operations and empower various local congregations.', image: '/assets/images/pastoral-placeholder.png' },
+];
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Universal Website Header */}
@@ -76,11 +83,51 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="py-16 bg-gray-50 border-t border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-gray-900">
+              Our Leadership Team
+            </h2>
+            <p className="text-sm text-muted-foreground mt-2">
+              The pastors and ministry leaders serving our Marikina church family.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {pastoralTeam.map((pastor, index) => (
+              <div 
+                key={index} 
+                className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm flex flex-col items-center text-center justify-between hover:shadow-md transition-all duration-300"
+              >
+                <div className="flex flex-col items-center">
+                  {/* Rounded Profile Avatar Circle Frame */}
+                  <div className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center mb-4 shrink-0">
+                    <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                  </div>
+                  
+                  <h3 className="font-bold text-base text-gray-900 leading-tight">
+                    {pastor.name}
+                  </h3>
+                  <span className="text-[10px] font-bold text-primary uppercase tracking-widest mt-1 mb-3 block px-2.5 py-1 bg-primary/5 rounded">
+                    {pastor.role}
+                  </span>
+                </div>
+                
+                <p className="text-gray-600 text-xs leading-relaxed max-w-xs border-t border-gray-100 pt-3 mt-1">
+                  {pastor.bio}
+                </p>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
       {/* 3. The Global International Connection Portal */}
-      {/* 
-        This automatically embeds your dark slate global movement layout section 
-        perfectly into the middle of your new page layout context!
-      */}
       <InternationalConnection />
 
       {/* Universal Website Footer */}
