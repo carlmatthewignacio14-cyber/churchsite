@@ -3,7 +3,7 @@
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import InternationalConnection from '@/components/InternationalConnection';
+import InternationalConnection from '../components/InternationalConnection';
 
 export default function AboutPage() {
   const coreValues = [
