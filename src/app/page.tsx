@@ -6,6 +6,7 @@ import ServiceTimesSection from '@/app/components/ServiceTimesSection';
 import SermonsPreviewSection from '@/app/components/SermonsPreviewSection';
 import MinistriesSection from '@/app/components/MinistriesSection';
 import PrayerSection from '@/app/components/PrayerSection';
+import InternationConnection from '@/app/components/InternationalConnection',
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <HeroSection />
       <ServiceTimesSection />
       <SermonsPreviewSection />
+      <InternationalConnection />
       <MinistriesSection />
       <PrayerSection />
       <Footer />
