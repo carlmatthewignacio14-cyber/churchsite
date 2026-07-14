@@ -22,10 +22,10 @@ export default function AboutPage() {
   ];
 
   const pastoralTeam = [
-  { name: 'Pastor Albert Garao', role: 'Lead Pastor', bio: 'Dedicated to shepherding the Marikina community and teaching the word of God with clarity and passion.', image: '/assets/images/1.png' },
-  { name: 'Pastor Allan Canonigo', role: 'Associate Pastor', bio: 'Passionately overseeing our discipleship frameworks, young leader training programs, and community ministries.', image: '/assets/images/2.png' },
-  { name: 'Pastor Jisel Baliguat', role: 'Newly Annointed Associate Pastor/National Youth Directress', bio: 'Serving locally and leading youth nationwide, she uses her extensive international experience to equip the next generation.', image: '/assets/images/3.png' },
-  { name: 'Pastor Roderick Justiniano', role: 'Newly Annointed Associate Pastor', bio: 'He leverages his music ministry and pastoral experience to support church operations and empower various local congregations.', image: '/assets/images/4.png' },
+  { name: 'Pstr. Albert Garao', role: 'Lead Pastor', bio: 'Dedicated to shepherding the Marikina community and teaching the word of God with clarity and passion.', image: '/assets/images/1.png' },
+  { name: 'Pstr. Allan Canonigo', role: 'Associate Pastor', bio: 'Passionately overseeing our discipleship frameworks, young leader training programs, and community ministries.', image: '/assets/images/2.png' },
+  { name: 'Pstr. Jisel Baliguat', role: 'Newly Annointed Associate Pastor/National Youth Directress', bio: 'Serving locally and leading youth nationwide, she uses her extensive international experience to equip the next generation.', image: '/assets/images/3.png' },
+  { name: 'Pstr. Roderick Justiniano', role: 'Newly Annointed Associate Pastor', bio: 'He leverages his music ministry and pastoral experience to support church operations and empower various local congregations.', image: '/assets/images/4.png' },
 ];
 
   return (
