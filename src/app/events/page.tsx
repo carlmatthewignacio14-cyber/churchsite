@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';     
 import AppImage from '@/components/ui/AppImage';
 
@@ -8,7 +8,7 @@ const upcomingEvents = [
   {
      id: '1',
     title: 'Youth & Young Adult Retreat',
-    date: 'August 1,2026',
+    date: 'August 1, 2026',
     location: 'To Be Announced',
     description: 'Trade the noise for one day of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
   },
@@ -53,7 +53,7 @@ const recentActivities = [
       "/assets/images/Kids/719899913_980170131598311_8797661167248034957_n.jpg",
       "/assets/images/Kids/718390437_980169761598348_163547424691377825_n.jpg",
       "/assets/images/Kids/719770734_980165031598821_4483992461419628859_n.jpg",
-      "/assets/images/Kids/721701268_27500390399578723_4956249103010568414_n.jpg" // Fallback placeholder 5th image (Replace with your actual asset path)
+      "/assets/images/Kids/721701268_27500390399578723_4956249103010568414_n.jpg", // Fallback placeholder 5th image (Replace with your actual asset path)
     ],
     imageAlt: 'Kids Assembly slideshow image'
   },
@@ -198,12 +198,12 @@ function ActivityImageSlider({ images, altText }: { images: string[]; altText: s
       </button>
 
       {/* Pagination Active Sync Indicator Dots */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10 bg-black/30 backdrop-blur-sm px-2 py-1.5 rounded-full">
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1.5 z-10">
         {images.map((_, i) => (
           <button
             key={i}
             onClick={(e) => { e.preventDefault(); scrollToImage(i); }}
-            className={`w-2 h-2 rounded-full transition-all ${i === currentIndex ? 'bg-white scale-110 w-4' : 'bg-white/50'}`}
+            className={`w-2 h-2 rounded-full transition-all ${currentIndex === i ? 'bg-white w-4' : 'bg-white/50'}`}
             aria-label={`Go to slide ${i + 1}`}
           />
         ))}
@@ -212,7 +212,7 @@ function ActivityImageSlider({ images, altText }: { images: string[]; altText: s
   );
 }
 
-export default function EventsPage() {
+export default function EventsAndActivities() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Navigation Header Link */}
