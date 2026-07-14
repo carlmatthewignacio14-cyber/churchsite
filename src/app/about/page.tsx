@@ -101,23 +101,36 @@ export default function AboutPage() {
                 key={index} 
                 className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm flex flex-col items-center text-center justify-between hover:shadow-md transition-all duration-300"
               >
-                <div className="flex flex-col items-center">
-                  {/* Rounded Profile Avatar Circle Frame */}
-                  <div className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center mb-4 shrink-0">
-                    <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                    </svg>
+                <div className="flex flex-col items-center w-full">
+                  {/* Rounded Profile Avatar Frame Container */}
+                  <div className="w-24 h-24 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center mb-4 shrink-0 relative shadow-inner">
+                    {pastor.image ? (
+                      /* 🌟 UPDATED: Dynamic image element triggers if image url path is defined */
+                      <img 
+                        src={pastor.image} 
+                        alt={pastor.name} 
+                        className="w-full h-full object-cover object-center absolute inset-0"
+                        onError={(e) => {
+                          // Safeguard fallback if image extension or path name is slightly incorrect
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                      </svg>
+                    )}
                   </div>
                   
                   <h3 className="font-bold text-base text-gray-900 leading-tight">
                     {pastor.name}
                   </h3>
-                  <span className="text-[10px] font-bold text-primary uppercase tracking-widest mt-1 mb-3 block px-2.5 py-1 bg-primary/5 rounded">
+                  <span className="text-[10px] font-bold text-primary uppercase tracking-widest mt-1 mb-3 inline-block px-2.5 py-1 bg-primary/5 rounded leading-normal">
                     {pastor.role}
                   </span>
                 </div>
                 
-                <p className="text-gray-600 text-xs leading-relaxed max-w-xs border-t border-gray-100 pt-3 mt-1">
+                <p className="text-gray-600 text-xs leading-relaxed w-full border-t border-gray-100 pt-3 mt-1">
                   {pastor.bio}
                 </p>
               </div>
@@ -134,4 +147,3 @@ export default function AboutPage() {
       <Footer />
     </main>
   );
-}
