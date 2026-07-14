@@ -9,7 +9,7 @@ const upcomingEvents = [
     title: 'Youth & Young Adult Retreat',
     date: 'August 1,2026',
     location: 'To Be Announced',
-    description: 'Trade the noise for one night of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
+    description: 'Trade the noise for one day of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
   },
   {
     id: '2',
@@ -17,7 +17,7 @@ const upcomingEvents = [
     date: 'August 2, 2026',
     time: '1:00 PM',
     location: 'San Mateo Church',
-    description: 'An evening dedicated to equipping marriages, strengthening bonds, and sharing dinner together with our church family.'
+    description: 'Join us for a simple Joint Youth Fellowship as two local youth ministries come together to connect, share a time of worship, and build encouraging friendships.'
   },
   {
     id: '3',
@@ -28,14 +28,14 @@ const upcomingEvents = [
   },
   {
      id: '4',
-    title: 'National Convention',
-    date: 'March 26-28, 2026',
+    title: 'Leadership Training/Seminar',
+    date: 'March 24-26, 2026',
     location: 'National Property, COGOP Taytay',
   },
   {
      id: '5',
-    title: 'Leadership Training/Seminar',
-    date: 'March 24-26, 2026',
+    title: 'National Convention',
+    date: 'March 26-28, 2026',
     location: 'National Property, COGOP Taytay',
   },
 ];
