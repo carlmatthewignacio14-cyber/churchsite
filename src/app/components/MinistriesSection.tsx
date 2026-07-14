@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
+import Link from 'next/link';
 import AppImage from '@/components/ui/AppImage';
 
 interface Ministry {
@@ -153,11 +154,12 @@ export default function MinistriesSection() {
 
         {/* Bento Grid */}
         <div ref={gridRef} className={`grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[280px] ${revealClass(gridRevealed)}`}>
-          {ministries.map((m) =>
-          <div
-            key={m.id}
-            className={`relative overflow-hidden group bento-card cursor-pointer ${m.colSpan ?? ''} ${m.rowSpan ?? ''}`}>
-            
+          {ministries.map((m) => (
+          <Link
+              key={m.id}
+              href={`#recent-activities`}
+              className={`relative block overflow-hidden group bento-card cursor-pointer ${m.colSpan ?? ''} ${m.rowSpan ?? ''}`}
+            >
               {/* Image */}
               {m.images ?
             <YouthPhotoGrid images={m.images} /> :
@@ -208,22 +210,21 @@ export default function MinistriesSection() {
                 </p>
 
                 {/* Learn More Action Button */}
-                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-1">
-                    <span className="inline-block bg-black/65 backdrop-blur-md px-2.5 py-1 rounded text-xs font-semibold uppercase tracking-widest text-white">
-                      Learn More
+                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-1">
+                    <span className="text-[11px] font-bold text-white uppercase tracking-wider bg-primary px-2.5 py-1 rounded flex items-center gap-1 shadow-sm">
+                      Learn More & Events
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
                     </span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-accent" aria-hidden="true">
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
                   </div>
 
                 </div>
-
               </div>
-            </div>
-          )}
+            </Link>
+          ))}
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }
