@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import InternationalConnection from '../components/InternationalConnection';
 
-export default function AboutPage() {
+export default function AboutUsPage() {
   const pastoralTeam = [
   { name: 'Pstr. Albert Garao', role: 'Lead Pastor', bio: 'Dedicated to shepherding the Marikina community and teaching the word of God with clarity and passion.', image: '/assets/images/1.png' },
   { name: 'Pstr. Allan Canonigo', role: 'Associate Pastor', bio: 'Passionately overseeing our discipleship frameworks, young leader training programs, and community ministries.', image: '/assets/images/2.png' },
