@@ -11,7 +11,8 @@ interface PowerPointSlide {
   speaker: string;
   embedUrl: string;       
   downloadUrl: string;   
-  imageUrl: string;      
+  imageUrl: string;    
+  viewUrl: string;
 }
 
 const allSermonSlides: PowerPointSlide[] = [
@@ -22,6 +23,7 @@ const allSermonSlides: PowerPointSlide[] = [
     embedUrl: 'https://docs.google.com/presentation/d/1Odq5kOh-UUvBvvrI0R0wYfgA0Dc9Zhus/preview',
     downloadUrl: 'https://drive.google.com/uc?export=download&id=1Odq5kOh-UUvBvvrI0R0wYfgA0Dc9Zhus', 
     imageUrl: 'https://docs.google.com/presentation/d/1Odq5kOh-UUvBvvrI0R0wYfgA0Dc9Zhus/export?format=png',
+    viewUrl: 'https://docs.google.com/presentation/d/1Odq5kOh-UUvBvvrI0R0wYfgA0Dc9Zhus/edit?usp=sharing',
   },
   {
     id: '2',
@@ -30,6 +32,7 @@ const allSermonSlides: PowerPointSlide[] = [
     embedUrl: 'https://docs.google.com/presentation/d/1PcZ3HGOmHp43VQTEFpKgRNoDJm9h5E6Y/preview',
     downloadUrl: 'https://drive.google.com/uc?export=download&id=1PcZ3HGOmHp43VQTEFpKgRNoDJm9h5E6Y', 
     imageUrl: 'https://docs.google.com/presentation/d/1PcZ3HGOmHp43VQTEFpKgRNoDJm9h5E6Y/export?format=png',
+    viewUrl: 'https://docs.google.com/presentation/d/1PcZ3HGOmHp43VQTEFpKgRNoDJm9h5E6Y/edit?usp=sharing',
   },
   {
     id: '3',
@@ -38,6 +41,7 @@ const allSermonSlides: PowerPointSlide[] = [
     embedUrl: 'https://docs.google.com/presentation/d/1PZjPyLV6ZtCipf1zKoO-otbDTcZ7yE1d/preview',
     downloadUrl: 'https://drive.google.com/uc?export=download&id=1PZjPyLV6ZtCipf1zKoO-otbDTcZ7yE1d', 
     imageUrl: 'https://docs.google.com/presentation/d/1PZjPyLV6ZtCipf1zKoO-otbDTcZ7yE1d/export?format=png',
+    viewUrl: 'https://docs.google.com/presentation/d/1PZjPyLV6ZtCipf1zKoO-otbDTcZ7yE1d/edit?usp=sharing',
   },
   {
     id: '4',
@@ -46,6 +50,7 @@ const allSermonSlides: PowerPointSlide[] = [
     embedUrl: 'https://docs.google.com/presentation/d/18gKdf3F9_pO8tUQFO4CGWZ_uhFxN5MhT/preview',
     downloadUrl: 'https://drive.google.com/uc?export=download&id=18gKdf3F9_pO8tUQFO4CGWZ_uhFxN5MhT', 
     imageUrl: 'https://docs.google.com/presentation/d/18gKdf3F9_pO8tUQFO4CGWZ_uhFxN5MhT/export?format=png',
+    viewUrl: 'https://docs.google.com/presentation/d/18gKdf3F9_pO8tUQFO4CGWZ_uhFxN5MhT/edit?usp=sharing',
   },
   // Add item 3, 4, 5, etc., infinitely down here...
 ];
@@ -53,6 +58,27 @@ const allSermonSlides: PowerPointSlide[] = [
 export default function AllSlidesArchivePage() {
   const [activeViewerId, setActiveViewerId] = React.useState<string | null>(null);
 
+  const handleShare = async (title: string, url: string) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: title,
+          text: `Check out these sermon slides: "${title}"`,
+          url: url,
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('Presentation share link copied to clipboard!');
+      } catch (err) {
+        console.error('Failed to copy link', err);
+      }
+    }
+  };
+  
   return (
     <main className="min-h-screen bg-gray-50">
       <Header />
@@ -119,9 +145,30 @@ export default function AllSlidesArchivePage() {
                     <button onClick={() => setActiveViewerId(isViewing ? null : slide.id)} className="w-full sm:w-auto text-center border text-xs font-semibold px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50">
                       {isViewing ? 'Close Preview' : 'View Slides'}
                     </button>
-                    <a href={slide.downloadUrl} className="w-full sm:w-auto text-center bg-gray-900 hover:bg-gray-800 text-white text-xs font-semibold px-4 py-2.5 rounded-lg flex-1">
-                      Download
-                    </a>
+                    <div className="flex items-center gap-2 w-full sm:flex-1">
+                      <a 
+                        href={slide.downloadUrl} 
+                        className="text-center bg-gray-900 hover:bg-gray-800 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors flex-1"
+                      >
+                        Download
+                      </a>
+
+                      <button
+                        onClick={() => handleShare(slide.title, slide.viewUrl)}
+                        className="p-2.5 border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-center shrink-0"
+                        title="Share Presentation"
+                        aria-label="Share Presentation"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="18" cy="5" r="3" />
+                          <circle cx="6" cy="12" r="3" />
+                          <circle cx="18" cy="17" r="3" />
+                          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                        </svg>
+                      </button>
+                    </div>
+
                   </div>
                 </div>
               </div>
