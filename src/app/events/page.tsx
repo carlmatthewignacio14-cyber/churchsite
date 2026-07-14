@@ -235,20 +235,7 @@ export default function EventsAndActivities() {
             <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
               Upcoming Events
             </h1>
-           {upcomingEvents?.map((event) => ({event?.title}
-            {/* Fixed: Standard JSX Expression layout rendering string interpolation formats safely */}
-            {event?.date}{event?.time &&  • ${event.time}}
-            📍 {event?.location}
-            {event?.description && (
-            {event?.description}
-            
-            )}
-            
-            ))}
-            {/* Recent Activities Layout Module */}
-          );
-         }
-
+          </div>
           {/* Events List Stack */}
           <div className="space-y-6">
             {upcomingEvents?.map((event) => (
