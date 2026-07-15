@@ -155,11 +155,8 @@ export default function MinistriesSection() {
         {/* Bento Grid */}
         <div ref={gridRef} className={`grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[280px] ${revealClass(gridRevealed)}`}>
           {ministries.map((m) => (
-          <Link
-              key={m.id}
-              href={`/events?ministry=${m.id}`}
-              className={`relative block overflow-hidden group bento-card cursor-pointer ${m.colSpan ?? ''} ${m.rowSpan ?? ''}`}
-            >
+          <div key={m.id} className="relative block overflow-hidden group bento-card">
+            
               {/* Image */}
               {m.images ?
             <YouthPhotoGrid images={m.images} /> :
@@ -210,14 +207,15 @@ export default function MinistriesSection() {
                 </p>
 
                 {/* Learn More Action Button */}
-                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-1">
-                    <span className="text-[11px] font-bold text-white uppercase tracking-wider bg-primary px-2.5 py-1 rounded flex items-center gap-1 shadow-sm">
-                      Learn More & Events
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  <div className="flex items-center gap-2 opacity-100 group-hover:opacity-100">
+                      <span className="text-[11px] font-bold text-white uppercase tracking-wider">
+                        Learn More & Events
+                      </span>
+                      <svg className="w-3 h-3 text-white fill-none stroke-current stroke-[2.5]" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7-7.5M21 12H3" />
                       </svg>
-                    </span>
-                  </div>
+                    </div>
+                  </Link>  
 
                 </div>
               </div>
