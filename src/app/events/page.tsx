@@ -224,7 +224,7 @@ function EventsContent() {
       const element = document.getElementById(ministryFilter.toLowerCase());
       if (element) {
         setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 300); // Small delay allows the browser structure to render completely first
       }
     }
