@@ -223,7 +223,7 @@ export default function MinistriesSection() {
                </div>
              </div>
           ))}
-        
+            
     </section>
   );
 }
