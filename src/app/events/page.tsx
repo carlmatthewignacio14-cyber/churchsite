@@ -217,16 +217,6 @@ function EventsContent() {
   const searchParams = useSearchParams();
   const ministryFilter = searchParams ? searchParams.get('ministry') : null;
 
-  const filteredUpcoming = upcomingEvents.filter((event) => {
-    if (!ministryFilter) return true;
-    return event.id?.toLowerCase().includes(ministryFilter.toLowerCase());
-  });
-
-  const filteredRecent = recentActivities.filter((activity) => {
-    if (!ministryFilter) return true;
-    return activity.id?.toLowerCase().includes(ministryFilter.toLowerCase());
-  });
-
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Navigation Header Link */}
@@ -242,41 +232,6 @@ function EventsContent() {
         </div>
       </div>
 
-      {/* Main Body */}
-      <section className="section-pad">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="mb-12 text-center md:text-left">
-            <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">Calendar</span>
-            <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
-              Upcoming Events
-            </h1>
-          </div>
-          {/* Events List Stack */}
-          <div className="space-y-6">
-            {filteredUpcoming?.map((event) => (
-              <div key={event?.id} className="bg-card border border-border p-6 md:p-8 hover:border-primary/40 transition-all rounded shadow-sm">
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
-                  <div>
-                    <h2 className="font-display text-2xl font-bold text-foreground mb-1">
-                      {event?.title}
-                    </h2>
-                    <p className="text-sm font-semibold uppercase tracking-wider text-accent">
-                      {event?.date}{(event as any)?.time ? ` \u2022 ${(event as any).time}` : ''}
-                    </p>
-                  </div>
-                  <span className="inline-block bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto">
-                    {event?.location}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed font-light">
-                  {event?.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Recent Activities Section */}
       <section className="section-pad mt-16">
         <div className="container mx-auto px-4 max-w-4xl">
@@ -290,7 +245,10 @@ function EventsContent() {
           {/* Activities Stack */}
           <div className="space-y-8">
             {filteredRecent.map((activity) => (
-              <div key={activity.id} className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl flex flex-col md:flex-row gap-6 text-stone-100">
+              <div 
+                key={activity.id} 
+                id={activity.id}
+                className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl flex flex-col md:flex-row gap-6 text-stone-100">
                 
                 {/* Text Content */}
                 <div className="flex-1 flex flex-col justify-between">
@@ -316,7 +274,44 @@ function EventsContent() {
                     />
                   </div>
                 )}
-
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Main Body */}
+      <section className="section-pad">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="mb-12 text-center md:text-left">
+            <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">Calendar</span>
+            <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
+              Upcoming Events
+            </h1>
+          </div>
+          {/* Events List Stack */}
+          <div className="space-y-6">
+            {filteredUpcoming?.map((event) => (
+              <div 
+                key={event?.id} 
+                id={event.id} 
+                className="bg-card border border-border p-6 md:p-8 hover:border-primary/40 transition-all rounded shadow-sm">
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
+                  <div>
+                    <h2 className="font-display text-2xl font-bold text-foreground mb-1">
+                      {event?.title}
+                    </h2>
+                    <p className="text-sm font-semibold uppercase tracking-wider text-accent">
+                      {event?.date}{(event as any)?.time ? ` \u2022 ${(event as any).time}` : ''}
+                    </p>
+                  </div>
+                  <span className="inline-block bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto">
+                    {event?.location}
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed font-light">
+                  {event?.description}
+                </p>
               </div>
             ))}
           </div>
@@ -324,7 +319,6 @@ function EventsContent() {
       </section>
     </main>
   );
-}
 
 export default function EventsAndActivities() {
   return (
