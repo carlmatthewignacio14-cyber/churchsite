@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
-import Link from 'next/link';
+
 import AppImage from '@/components/ui/AppImage';
 
 interface Ministry {
@@ -11,7 +11,7 @@ interface Ministry {
   description: string;
   image: string;
   imageAlt: string;
-  images?: {src: string;alt: string;}[];
+  images?: {src: string; alt: string;}[];
   colSpan?: string;
   rowSpan?: string;
   tag: string;
@@ -217,4 +217,10 @@ export default function MinistriesSection() {
                    </div>
                  </div>
                </div>
-             ))}
+             </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
