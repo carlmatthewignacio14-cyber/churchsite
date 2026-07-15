@@ -275,7 +275,7 @@ export default function EventsAndActivities() {
         {/* Activities Stack */}
         <div className="space-y-8">
           {recentActivities.map((activity) => (
-            <div key={activity.id} className="group border border-border bg-card p-6 transition-all duration-300 hover:border-primary/40 rounded-shadow flex flex-col md:flex-row gap-6">
+            <div key={activity.id} className="group border border-amber-900/20 bg-amber-950/10 backdrop-blur-md p-6 transition-all duration-300 hover:border-amber-700/40 rounded-shadow flex flex-col md:flex-row gap-6">
               
               {/* Text Content */}
               <div className="flex-1 flex flex-col justify-between">
