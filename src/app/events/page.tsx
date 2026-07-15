@@ -7,7 +7,7 @@ import { useSearchParams } from 'next/compat/router';
 
 const upcomingEvents = [
   {
-     id: 'youth-retreat',
+    id: 'youth-retreat',
     title: 'Youth & Young Adult Retreat',
     date: 'August 1, 2026',
     location: 'To Be Announced',
@@ -29,13 +29,13 @@ const upcomingEvents = [
     description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
   },
   {
-     id: 'general-seminar',
+    id: 'general-seminar',
     title: 'Leadership Training/Seminar',
     date: 'March 24-26, 2026',
     location: 'National Property, COGOP Taytay',
   },
   {
-     id: 'general-convention',
+    id: 'general-convention',
     title: 'National Convention',
     date: 'March 26-28, 2026',
     location: 'National Property, COGOP Taytay',
