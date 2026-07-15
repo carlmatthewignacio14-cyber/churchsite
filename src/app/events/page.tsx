@@ -217,6 +217,19 @@ function EventsContent() {
   const searchParams = useSearchParams();
   const ministryFilter = searchParams ? searchParams.get('ministry') : null;
 
+  // Automatically scroll directly to the matching element when the page loads
+  React.useEffect(() => {
+    if (ministryFilter) {
+      // Looks for a card container holding id="youth" or id="kids"
+      const element = document.getElementById(ministryFilter.toLowerCase());
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300); // Small delay allows the browser structure to render completely first
+      }
+    }
+  }, [ministryFilter]);
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Navigation Header Link */}
@@ -244,7 +257,7 @@ function EventsContent() {
 
           {/* Activities Stack */}
           <div className="space-y-8">
-            {filteredRecent.map((activity) => (
+            recentActivities?.map((activity) => (
               <div 
                 key={activity.id} 
                 id={activity.id}
@@ -291,7 +304,7 @@ function EventsContent() {
           </div>
           {/* Events List Stack */}
           <div className="space-y-6">
-            {filteredUpcoming?.map((event) => (
+            upcomingEvents?.map((event) => (
               <div 
                 key={event?.id} 
                 id={event.id} 
