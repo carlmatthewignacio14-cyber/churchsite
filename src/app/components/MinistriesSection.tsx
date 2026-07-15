@@ -213,16 +213,11 @@ export default function MinistriesSection() {
                       </span>
                       <svg className="w-3 h-3 text-white fill-none stroke-current stroke-[2.5]" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7-7.5M21 12H3" />
-                      </svg>
-                    </div>
-                  </Link>  
-
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+                     </svg>
+                  </div>
+                </Link> 
+        
+              </div> 
+            
+          ))
+        }
