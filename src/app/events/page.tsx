@@ -251,7 +251,7 @@ function EventsContent() {
           <div className="mb-12 text-center md:text-left">
             <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-2">Highlights</span>
             <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
-              Recent Activities
+              Recent Events
             </h1>
           </div>
 
