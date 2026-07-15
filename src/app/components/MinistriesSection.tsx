@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
+import Link from 'next/link';
 
 import AppImage from '@/components/ui/AppImage';
 
@@ -155,7 +156,7 @@ export default function MinistriesSection() {
         {/* Bento Grid */}
         <div ref={gridRef} className={`grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[280px] ${revealClass(gridRevealed)}`}>
           {ministries.map((m) => (
-          <div key={m.id} className="relative block overflow-hidden group bento-card">
+          <div key={m.id} className={`relative block overflow-hidden group bento-card ${m.colSpan || ''} ${m.rowSpan || ''}`}>
             
               {/* Image */}
               {m.images ?
@@ -209,11 +210,11 @@ export default function MinistriesSection() {
                 {/* Learn More Action Button */}
                   <Link 
                     href={`/events?ministry=${m.id.toLowerCase()}#${m.id.toLowerCase()}`}
-                    className="absolute bottom-4 left-4 z-20 inline-block"
+                    className="inline-block mt-1"
                   >
-                    <div className="flex items-center gap-2 opacity-100 group-hover:opacity-100">
+                    <div className="flex items-center gap-2">
                       <span className="text-[11px] font-bold text-white uppercase tracking-wider">
-                        Learn More & Events
+                        Learn More &amp; Events
                       </span>
                       <svg className="w-3 h-3 text-white fill-none stroke-current stroke-[2.5]" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7-7.5M21 12H3" />
@@ -222,6 +223,7 @@ export default function MinistriesSection() {
                   </Link>
                </div>
              </div>
+          </div>
           ))}
          </div>
        </div>      
