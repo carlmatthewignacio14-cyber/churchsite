@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, Suspense } from 'react';
 import Link from 'next/link';     
 import AppImage from '@/components/ui/AppImage';
 import { useSearchParams } from 'next/navigation';
@@ -54,7 +54,7 @@ const recentActivities = [
       "/assets/images/Kids/719899913_980170131598311_8797661167248034957_n.jpg",
       "/assets/images/Kids/718390437_980169761598348_163547424691377825_n.jpg",
       "/assets/images/Kids/719770734_980165031598821_4483992461419628859_n.jpg",
-      "/assets/images/Kids/721701268_27500390399578723_4956249103010568414_n.jpg", // Fallback placeholder 5th image (Replace with your actual asset path)
+      "/assets/images/Kids/721701268_27500390399578723_4956249103010568414_n.jpg",
     ],
     imageAlt: 'Kids Assembly slideshow image'
   },
@@ -67,7 +67,7 @@ const recentActivities = [
     images: [
       "/assets/images/District/707399020_1438841498285651_2690131130065843927_n.jpg",
       "/assets/images/District/707153926_1438840578285743_2340465144644025303_n.jpg",
-      "/assets/images/District/706237648_1439256391577495_2635213993647306165_n.jpg",
+      "/assets/images/District/706237648_1439256391577495_2635213993747306165_n.jpg",
       "/assets/images/District/706144051_1439256464910821_4066407894083042304_n.jpg",
       "/assets/images/District/705682173_1438834988286302_1448315427997597443_n.jpg"
     ],
@@ -213,11 +213,10 @@ function ActivityImageSlider({ images, altText }: { images: string[]; altText: s
   );
 }
 
-export default function EventsAndActivities() {
+function EventsContent() {
   const searchParams = useSearchParams();
   const ministryFilter = searchParams ? searchParams.get('ministry') : null;
 
-  // 2. ADD THESE FILTER FUNCTIONS RIGHT BELOW THEM:
   const filteredUpcoming = upcomingEvents.filter((event) => {
     if (!ministryFilter) return true;
     return event.id?.toLowerCase().includes(ministryFilter.toLowerCase());
@@ -227,7 +226,7 @@ export default function EventsAndActivities() {
     if (!ministryFilter) return true;
     return activity.id?.toLowerCase().includes(ministryFilter.toLowerCase());
   });
-  
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Navigation Header Link */}
@@ -242,6 +241,7 @@ export default function EventsAndActivities() {
           <span className="text-xs font-bold uppercase tracking-[0.3em] text-accent">Church Events</span>
         </div>
       </div>
+
       {/* Main Body */}
       <section className="section-pad">
         <div className="container mx-auto px-4 max-w-4xl">
@@ -253,7 +253,7 @@ export default function EventsAndActivities() {
           </div>
           {/* Events List Stack */}
           <div className="space-y-6">
-            {upcomingEvents?.map((event) => (
+            {filteredUpcoming?.map((event) => (
               <div key={event?.id} className="bg-card border border-border p-6 md:p-8 hover:border-primary/40 transition-all rounded shadow-sm">
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                   <div>
@@ -261,7 +261,7 @@ export default function EventsAndActivities() {
                       {event?.title}
                     </h2>
                     <p className="text-sm font-semibold uppercase tracking-wider text-accent">
-                      {event?.date} &bull; {event?.time}
+                      {event?.date}{(event as any)?.time ? ` \u2022 ${(event as any).time}` : ''}
                     </p>
                   </div>
                   <span className="inline-block bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto">
@@ -287,41 +287,53 @@ export default function EventsAndActivities() {
             </h1>
           </div>
 
-        {/* Activities Stack */}
-        <div className="space-y-8">
-          {recentActivities.map((activity) => (
-            <div key={activity.id} className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl flex flex-col md:flex-row gap-6 text-stone-100">
-              
-              {/* Text Content */}
-              <div className="flex-1 flex flex-col justify-between">
-                <div>
-                  <h2 className="font-display text-2xl font-bold text-amber-100 mb-1">
-                    {activity.title}
-                  </h2>
-                  <p className="text-xs text-amber-400 font-semibold tracking-wider uppercase mb-3">
-                    {activity.date} {activity.location ? `| ${activity.location}` : ''}
-                  </p>
-                  <p className="text-sm text-stone-300 leading-relaxed font-light">
-                    {activity.description}
-                  </p>
+          {/* Activities Stack */}
+          <div className="space-y-8">
+            {filteredRecent.map((activity) => (
+              <div key={activity.id} className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl flex flex-col md:flex-row gap-6 text-stone-100">
+                
+                {/* Text Content */}
+                <div className="flex-1 flex flex-col justify-between">
+                  <div>
+                    <h2 className="font-display text-2xl font-bold text-amber-100 mb-1">
+                      {activity.title}
+                    </h2>
+                    <p className="text-xs text-amber-400 font-semibold tracking-wider uppercase mb-3">
+                      {activity.date} {activity.location ? `| ${activity.location}` : ''}
+                    </p>
+                    <p className="text-sm text-stone-300 leading-relaxed font-light">
+                      {activity.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              
-              {/* Slider (This passes your data into the component above) */}
-              {activity.images && activity.images.length > 0 && (
-                <div className="w-full md:w-80 shrink-0 overflow-hidden rounded-xl">
-                  <ActivityImageSlider 
-                    images={activity.images} 
-                    altText={activity.imageAlt || activity.title} 
-                  />
-                </div>
-              )}
+                
+                {/* Slider */}
+                {activity.images && activity.images.length > 0 && (
+                  <div className="w-full md:w-80 shrink-0 overflow-hidden rounded-xl">
+                    <ActivityImageSlider 
+                      images={activity.images} 
+                      altText={activity.imageAlt || activity.title} 
+                    />
+                  </div>
+                )}
 
-            </div>
-          ))}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
     </main>
+  );
+}
+
+export default function EventsAndActivities() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-muted-foreground text-sm">Loading events...</div>
+      </div>
+    }>
+      <EventsContent />
+    </Suspense>
   );
 }
