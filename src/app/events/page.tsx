@@ -332,6 +332,7 @@ function EventsContent() {
       </section>
     </main>
   );
+}
 
 export default function EventsAndActivities() {
   return (
