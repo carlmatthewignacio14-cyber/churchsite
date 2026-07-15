@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, Suspense } from 'react';
+import React, { useState, useRef, Suspense, useEffect } from 'react';
 import Link from 'next/link';     
 import AppImage from '@/components/ui/AppImage';
 import { useSearchParams } from 'next/navigation';

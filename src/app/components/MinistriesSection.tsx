@@ -215,6 +215,6 @@ export default function MinistriesSection() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7-7.5M21 12H3" />
                      </svg>
                    </div>
-                 </Link>
+                 </div>
                </div>
              ))}
