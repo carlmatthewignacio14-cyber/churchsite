@@ -157,7 +157,7 @@ export default function MinistriesSection() {
           {ministries.map((m) => (
           <Link
               key={m.id}
-              href={`/events#${m.id}`}
+              href={`/events?ministry=${m.id}`}
               className={`relative block overflow-hidden group bento-card cursor-pointer ${m.colSpan ?? ''} ${m.rowSpan ?? ''}`}
             >
               {/* Image */}
