@@ -261,6 +261,52 @@ export default function EventsAndActivities() {
           </div>
         </div>
       </section>
+
+      {/* Recent Activities Section */}
+      <section className="section-pad mt-16">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="mb-12 text-center md:text-left">
+            <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-2">Highlights</span>
+            <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
+              Recent Activities
+            </h1>
+          </div>
+
+        {/* Activities Stack */}
+        <div className="space-y-8">
+          {recentActivities.map((activity) => (
+            <div key={activity.id} className="group border border-border bg-card p-6 transition-all duration-300 hover:border-primary/40 rounded-shadow flex flex-col md:flex-row gap-6">
+              
+              {/* Text Content */}
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <h2 className="font-display text-2xl font-bold text-foreground mb-1">
+                    {activity.title}
+                  </h2>
+                  <p className="text-xs text-accent font-semibold tracking-wider uppercase mb-3">
+                    {activity.date} {activity.location ? `| ${activity.location}` : ''}
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed font-light">
+                    {activity.description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Slider (This passes your data into the component above) */}
+              {activity.images && activity.images.length > 0 && (
+                <div className="w-full md:w-80 shrink-0 overflow-hidden rounded-xl">
+                  <ActivityImageSlider 
+                    images={activity.images} 
+                    altText={activity.imageAlt || activity.title} 
+                  />
+                </div>
+              )}
+
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
     </main>
   );
 }
