@@ -1,79 +1,87 @@
-'use client';
+import React from 'react';
 
-import React, { useRef, useEffect } from 'react';
-import AppImage from '@/components/ui/AppImage';
+interface Series {
+  id: number;
+  title: string;
+  description: string;
+  sermonCount: number;
+  imageUrl: string;
+  alt: string;
+}
+
+/* 
+  FUTURE EDITING ZONE:
+  When you want to add new series in the future, just change the text, 
+  sermon count, and image paths inside this array!
+*/
+const series: Series[] = [
+  {
+    id: 1,
+    title: 'Walking in Faith',
+    description: 'A journey through the foundations of Christian faith and what it means to trust God in every season of life.',
+    sermonCount: 6,
+    imageUrl: '/assets/images/sermonsherophoto.png',
+    alt: 'Open Bible on a wooden table with soft light streaming through a window',
+  },
+  {
+    id: 2,
+    title: 'Rooted in Love',
+    description: "Exploring the depth of God's love and how it transforms our relationships, families, and communities.",
+    sermonCount: 5,
+    imageUrl: '/assets/images/congregation-photo-1783621144580.png',
+    alt: 'Church congregation gathered together in worship with hands raised',
+  },
+  {
+    id: 3,
+    title: 'The Great Commission',
+    description: 'Unpacking the call to go and make disciples of all nations and what that looks like in our everyday lives.',
+    sermonCount: 4,
+    imageUrl: '/assets/images/720318355_975915628579816_5709777563636170972_n.jpg',
+    alt: 'Church members serving and ministering to the community outdoors',
+  },
+];
 
 export default function FeaturedSeries() {
-  const ref = useRef<HTMLDivElement>(null);
+  // ─── CURRENTLY HIDDEN ───
+  // Change "return null;" to "return (" when you are ready to show this section again!
+  return null;
 
-  useEffect(() => {
-    const el = ref?.current;
-    if (!el) return;
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            if (el) {
-              el.style.transition = 'opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1)';
-              el.style.opacity = '1';
-              el.style.transform = 'translateY(0)';
-            }
-            observer.unobserve(el);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    observer?.observe(el);
-    return () => observer?.disconnect();
-  }, []);
-
+  /* 
   return (
-    <section className="bg-primary relative overflow-hidden">
-      <div ref={ref} className="container mx-auto px-4 max-w-6xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
-          {/* Text Side */}
-          <div className="py-16 lg:py-20 lg:pr-12 flex flex-col justify-center">
-            <span className="text-xs font-semibold tracking-[0.5em] uppercase text-accent block mb-4">
-              Current Series
-            </span>
-            <h2 className="font-display text-4xl md:text-5xl font-light italic text-primary-foreground mb-4 leading-tight">
-              Anchored<br />
-              <span className="not-italic font-bold">in Grace</span>
-            </h2>
-            <p className="text-primary-foreground/70 leading-relaxed mb-8 max-w-md">
-              A 6-week journey through Philippians, discovering how to experience peace, contentment, and joy — even in life&apos;s hardest seasons. New message every Sunday.
-            </p>
-            <div className="flex items-center gap-6">
-              <div>
-                <span className="text-2xl font-display font-light text-primary-foreground">6</span>
-                <span className="text-xs uppercase tracking-widest text-primary-foreground/50 ml-2">Parts</span>
-              </div>
-              <div className="w-px h-8 bg-primary-foreground/20" />
-              <div>
-                <span className="text-2xl font-display font-light text-primary-foreground">Philippians</span>
-                <span className="text-xs uppercase tracking-widest text-primary-foreground/50 ml-2">Book</span>
-              </div>
-            </div>
-          </div>
+    <section className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Featured Series</h2>
+          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+            Dive deeper into our curated sermon series designed to grow your faith and strengthen your walk with God.
+          </p>
+        </div>
 
-          {/* Image Side */}
-          <div className="relative min-h-[280px] lg:min-h-0">
-            <div className="img-zoom-wrap absolute inset-0">
-              <AppImage
-                src="https://images.unsplash.com/photo-1623080882579-050db1182f51"
-                alt="Church congregation with hands raised in worship, warm stage lighting, atmospheric dim sanctuary, blue-toned ambient light"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw" />
-              
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {series.map((item) => (
+            <div
+              key={item.id}
+              className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
+            >
+              <div className="relative h-48 w-full overflow-hidden">
+                <img
+                  src={item.imageUrl}
+                  alt={item.alt}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h3>
+                <p className="text-gray-600 text-sm mb-4 leading-relaxed">{item.description}</p>
+                <span className="inline-block text-xs font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
+                  {item.sermonCount} Sermons
+                </span>
+              </div>
             </div>
-            <div className="absolute inset-0 bg-primary/40" />
-          </div>
+          ))}
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
+  */
 }

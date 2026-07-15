@@ -4,8 +4,14 @@ import React, { useRef, useState, useEffect } from 'react';
 
 function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
   const [revealed, setRevealed] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
@@ -21,9 +27,9 @@ function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [ref, delay]);
+  }, [ref, delay, mounted]);
 
-  return revealed;
+  return mounted ? revealed : false;
 }
 
 export default function PrayerSection() {
@@ -34,6 +40,8 @@ export default function PrayerSection() {
 
   const [mounted, setMounted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: '', email: '', request: '', private: false });
 
   useEffect(() => {
@@ -47,9 +55,30 @@ export default function PrayerSection() {
       ? 'opacity-100 translate-y-0 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]'
       : 'opacity-0 translate-y-6';
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/prayer-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit prayer request');
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -125,6 +154,7 @@ export default function PrayerSection() {
                     className="form-input"
                     required
                     aria-label="Your name"
+                    suppressHydrationWarning
                   />
                   <label htmlFor="prayer-name" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
                     Name
@@ -140,6 +170,7 @@ export default function PrayerSection() {
                     placeholder="your@email.com"
                     className="form-input"
                     aria-label="Email address"
+                    suppressHydrationWarning
                   />
                   <label htmlFor="prayer-email" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
                     Email (Optional)
@@ -156,6 +187,7 @@ export default function PrayerSection() {
                     className="form-input resize-none"
                     required
                     aria-label="Prayer request"
+                    suppressHydrationWarning
                   />
                   <label htmlFor="prayer-request" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
                     Your Request
@@ -180,14 +212,33 @@ export default function PrayerSection() {
                   <span className="text-sm text-muted-foreground">Keep this request private (prayer team only)</span>
                 </label>
 
+                {error && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded">
+                    {error}
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full bg-primary text-primary-foreground py-4 text-sm font-semibold tracking-widest uppercase hover:bg-primary/90 transition-all hover:scale-[1.01] flex items-center justify-center gap-3 group"
+                  disabled={loading}
+                  className="w-full bg-primary text-primary-foreground py-4 text-sm font-semibold tracking-widest uppercase hover:bg-primary/90 transition-all hover:scale-[1.01] flex items-center justify-center gap-3 group disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  suppressHydrationWarning
                 >
-                  Submit Prayer Request
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform" aria-hidden="true">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                  {loading ? (
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="animate-spin" aria-hidden="true">
+                        <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                      </svg>
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      Submit Prayer Request
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </>
+                  )}
                 </button>
               </form>
             )}

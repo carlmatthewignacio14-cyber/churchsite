@@ -25,8 +25,8 @@ export default function SermonsHero() {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <AppImage
-          src="https://images.unsplash.com/photo-1547603881-07d335ae2863"
-          alt="Misty mountain valley at dawn, deep shadows, muted blue-grey tones, quiet forested ridgeline, atmospheric low-light landscape"
+          src="/assets/images/sermonsherophoto.png"
+          alt="church podium photo"
           fill
           priority
           className="object-cover"
@@ -37,7 +37,7 @@ export default function SermonsHero() {
 
       {/* Content */}
       <div ref={headRef} className="relative z-10 container mx-auto px-4 max-w-6xl pb-16 pt-40">
-        <span className="text-xs font-semibold tracking-[0.5em] uppercase text-accent block mb-4">
+        <span className="text-xs font-semibold tracking-[0.5em] uppercase text-white block mb-4">
           Sermon Library
         </span>
         <h1 className="font-display text-hero-display font-light italic text-white leading-none">

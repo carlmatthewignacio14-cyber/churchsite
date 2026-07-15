@@ -1,5 +1,5 @@
 {
-  "name": "church-of-god-of-prophecy-marikina-marikina",
+  "name": "church-of-god-of-prophecy-marikina",
   "version": "0.1.0",
   "private": true,
   "rocketCritical": {
@@ -51,6 +51,8 @@
   "dependencies": {
     "@dhiwise/component-tagger": "^1.0.15",
     "@heroicons/react": "^2.2.0",
+    "@supabase/ssr": "0.12.0",
+    "@supabase/supabase-js": "2.110.2",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
     "gsap": "^3.12.5",
@@ -58,7 +60,8 @@
     "react": "19.0.3",
     "react-dom": "19.0.3",
     "recharts": "^2.15.2",
-    "lucide-react": "^1.7.0"
+    "lucide-react": "^1.7.0",
+    "resend": "6.17.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

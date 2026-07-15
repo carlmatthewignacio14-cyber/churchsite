@@ -41,7 +41,7 @@ const AppImage = memo(function AppImage({
     ...props
 }: AppImageProps) {
     const [imageSrc, setImageSrc] = useState(src);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [hasError, setHasError] = useState(false);
 
     const isExternalUrl = useMemo(() => typeof imageSrc === 'string' && imageSrc.startsWith('http'), [imageSrc]);
@@ -101,6 +101,7 @@ const AppImage = memo(function AppImage({
                     fill
                     sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
                     style={{ objectFit: 'cover' }}
+                    suppressHydrationWarning
                     {...props}
                 />
             </div>
@@ -113,6 +114,7 @@ const AppImage = memo(function AppImage({
             width={width || 400}
             height={height || 300}
             sizes={sizes}
+            suppressHydrationWarning
             {...props}
         />
     );

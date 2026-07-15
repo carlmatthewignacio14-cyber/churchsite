@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface SundayService {
   id: string;
@@ -18,32 +19,38 @@ interface SundayService {
 // facebookVideoUrl: the direct link to the Facebook video post (for card links)
 // ─────────────────────────────────────────────────────────────────────────────
 const sundayServices: SundayService[] = [
-  {
-    id: '1',
-    title: 'Sunday Morning Service',
-    date: 'July 5, 2026',
-    facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1822311055408975/',
+   {
+    id: '4',
+    title: 'Crossing For One Broken Life | Mark 5:1-20',
+    date: 'July 12, 2026',
+    facebookVideoUrl: 'https://web.facebook.com/cogopmarikinaph/videos/1989221781731174/',
     featured: true,
   },
   {
-    id: '2',
-    title: 'Sunday Morning Service',
-    date: 'June 21, 2026',
-    facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/4263437017240191/',
+    id: '1',
+    title: 'They Came To The Other Side | Mark 5:1',
+    date: 'July 5, 2026',
+    facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1822311055408975/',
+    featured: false,
   },
   {
-    id: '3',
-    title: 'Sunday Morning Service',
-    date: 'June 14, 2026',
-    facebookVideoUrl: 'https://www.facebook.com/michal.justiniano.3/videos/2235896843839500/',
-    embedUrl: 'https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Fmichal.justiniano.3%2Fvideos%2F2235896843839500%2F&show_text=false&width=560&t=0',
+    id: '2',
+    title: 'Anchored Fathers, Anchored Families | Hebrews 6:19',
+    date: 'June 21, 2026',
+    facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/4263437017240191/',
   },
 ];
 
 function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
   const [revealed, setRevealed] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
@@ -59,9 +66,9 @@ function useScrollReveal(ref: React.RefObject<HTMLElement | null>, delay = 0) {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [ref, delay]);
+  }, [ref, delay, mounted]);
 
-  return revealed;
+  return mounted ? revealed : false;
 }
 
 function FacebookIframeCard({
@@ -101,6 +108,7 @@ function FacebookIframeCard({
             strokeWidth="2"
             className="text-muted-foreground shrink-0"
             aria-hidden="true"
+            suppressHydrationWarning
           >
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
             <line x1="16" y1="2" x2="16" y2="6" />
@@ -147,6 +155,7 @@ function FacebookVideoCard({
               fill="#1877F2"
               className="w-14 h-14 opacity-30"
               aria-hidden="true"
+              suppressHydrationWarning
             >
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
             </svg>
@@ -161,6 +170,7 @@ function FacebookVideoCard({
               fill="white"
               className="w-6 h-6 ml-1"
               aria-hidden="true"
+              suppressHydrationWarning
             >
               <path d="M8 5v14l11-7z" />
             </svg>
@@ -191,6 +201,7 @@ function FacebookVideoCard({
               strokeWidth="2"
               className="text-muted-foreground shrink-0"
               aria-hidden="true"
+              suppressHydrationWarning
             >
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
               <line x1="16" y1="2" x2="16" y2="6" />
@@ -203,7 +214,7 @@ function FacebookVideoCard({
 
         {/* Watch on Facebook button */}
         <span className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-[#1877F2] border border-[#1877F2]/30 px-3 py-1.5 group-hover:bg-[#1877F2] group-hover:text-white group-hover:border-[#1877F2] transition-all duration-200 whitespace-nowrap">
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 shrink-0" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 shrink-0" aria-hidden="true" suppressHydrationWarning>
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
           </svg>
           Watch on Facebook
@@ -215,65 +226,36 @@ function FacebookVideoCard({
 
 export default function SermonsPreviewSection() {
   const headingRef = useRef<HTMLDivElement>(null);
-  const card0Ref = useRef<HTMLDivElement>(null);
-  const card1Ref = useRef<HTMLDivElement>(null);
-  const card2Ref = useRef<HTMLDivElement>(null);
-  const cardRefs = [card0Ref, card1Ref, card2Ref];
-
-  const headingRevealed = useScrollReveal(headingRef, 0);
-  const card0Revealed = useScrollReveal(card0Ref, 100);
-  const card1Revealed = useScrollReveal(card1Ref, 220);
-  const card2Revealed = useScrollReveal(card2Ref, 340);
-  const cardRevealed = [card0Revealed, card1Revealed, card2Revealed];
-
-  const revealClass = (revealed: boolean) =>
-    revealed
-      ? 'opacity-100 translate-y-0 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]'
-      : 'opacity-0 translate-y-7';
+  const sectionRef = useRef<HTMLElement>(null);
+  const isVisible = useScrollReveal(sectionRef, 0);
 
   return (
-    <section id="sermons-preview" className="section-pad bg-muted/30 border-t border-border relative z-10">
-      <div className="container mx-auto px-4 max-w-6xl">
-        {/* Header */}
-        <div
-          ref={headingRef}
-          className={`flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 ${revealClass(headingRevealed)}`}
-        >
-          <div>
-            <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">
-              Sunday Services
-            </span>
-            <h2 className="font-display text-section-title font-light italic text-foreground">
-              Recent<br />
-              <span className="not-italic font-bold">Sunday Services</span>
-            </h2>
-          </div>
-          <a
-            href="https://www.facebook.com/cogopmarikinaph"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-primary hover:text-primary/70 transition-colors group shrink-0"
-          >
-            Watch on Facebook
-            <span className="w-10 h-10 border border-primary/30 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:stroke-white transition-colors" aria-hidden="true">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </span>
-          </a>
+    <section 
+      ref={sectionRef} 
+      className={`py-16 bg-background transition-all duration-700 ease-out ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+    >
+      <div className="container mx-auto px-4">
+        {/* Section Header */}
+        <div ref={headingRef} className="text-center mb-12">
+          <h2 className="text-3xl font-display font-bold tracking-tight text-foreground sm:text-4xl mb-4">
+            Recent Sermons & Services
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Watch our latest live streams and worship services directly from Facebook.
+          </p>
         </div>
 
-        {/* Service Video Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {sundayServices.map((service, i) => {
-            const isFeatured = !!service.featured && i === 0;
+        {/* Video Responsive Layout Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {sundayServices.map((service) => {
+            const isFeatured = !!service.featured;
+
             return (
               <div
                 key={service.id}
-                ref={cardRefs[i]}
-                className={`group relative overflow-hidden bg-card border border-border bento-card ${
-                  isFeatured ? 'md:col-span-2' : ''
-                } ${revealClass(cardRevealed[i])}`}
+                className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
               >
                 {service.embedUrl ? (
                   <FacebookIframeCard service={service} isFeatured={isFeatured} />
@@ -285,11 +267,30 @@ export default function SermonsPreviewSection() {
           })}
         </div>
 
-        {/* Helper note */}
-        <p className="mt-6 text-center text-xs text-muted-foreground/50">
-          To update videos, edit the <code className="font-mono">sundayServices</code> array in{' '}
-          <code className="font-mono">SermonsPreviewSection.tsx</code> with the new Facebook video URLs.
-        </p>
+        {/* See More Option Button Wrapper */}
+        <div className="flex justify-center mt-4">
+          <Link
+            href="/sermons"
+            className="inline-flex items-center gap-2 border-2 border-primary text-primary px-8 py-3.5 text-sm font-semibold tracking-wider uppercase rounded-lg hover:bg-primary hover:text-primary-foreground transition-all duration-200 transform hover:scale-[1.02]"
+          >
+            See More Sermons
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mt-0.5"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </Link>
+        </div>
+        
       </div>
     </section>
   );

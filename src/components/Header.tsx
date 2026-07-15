@@ -6,6 +6,7 @@ import AppLogo from '@/components/ui/AppLogo';
 
 const navLinks = [
   { label: 'Home', href: '/' },
+  { label: 'About Us', href: '/aboutus' },
   { label: 'Sermons', href: '/sermons' },
   { label: 'Events', href: '/events' },
   { label: 'Give', href: '/give' },
@@ -46,8 +47,9 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 min-w-0" aria-label="Church of God of Prophecy Home">
             <AppLogo size={32} />
-            <span className={`font-display text-lg font-semibold tracking-tight hidden sm:block whitespace-nowrap transition-colors duration-500 ${scrolled ? 'text-gray-900' : 'text-white'}`}>
+            <span className={`font-display text-base sm:text-lg font-semibold tracking-tight transition-colors duration-500 ${scrolled ? 'text-gray-900' : 'text-white'}`}>
               Church of God of Prophecy
+              <span className="block text-sm font-medium tracking-widest">Marikina</span>
             </span>
           </Link>
 
@@ -57,7 +59,10 @@ export default function Header() {
               <Link
                 key={link?.href}
                 href={link?.href}
-                className="px-4 py-2 text-xs font-semibold tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
+                className={`px-4 py-2 text-xs font-semibold tracking-widest uppercase transition-colors duration-500 ${
+                  scrolled 
+                    ? 'text-gray-900 hover:text-gray-600' :'text-white hover:text-white/70'
+                }`}
               >
                 {link?.label}
               </Link>
@@ -80,6 +85,7 @@ export default function Header() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
+            suppressHydrationWarning
           >
             <span
               className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
