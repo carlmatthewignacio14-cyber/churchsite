@@ -207,15 +207,19 @@ export default function MinistriesSection() {
                 </p>
 
                 {/* Learn More Action Button */}
-                  <div className="flex items-center gap-2 opacity-100 group-hover:opacity-100">
+                  <Link 
+                    href={`/events?ministry=${m.id.toLowerCase()}#${m.id.toLowerCase()}`}
+                    className="absolute bottom-4 left-4 z-20 inline-block"
+                  >
+                    <div className="flex items-center gap-2 opacity-100 group-hover:opacity-100">
                       <span className="text-[11px] font-bold text-white uppercase tracking-wider">
                         Learn More & Events
                       </span>
                       <svg className="w-3 h-3 text-white fill-none stroke-current stroke-[2.5]" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7-7.5M21 12H3" />
-                     </svg>
-                   </div>
-                 </div>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7-7.5M21 12H3" />
+                      </svg>
+                    </div>
+                  </Link>
                </div>
              </div>
           ))}
