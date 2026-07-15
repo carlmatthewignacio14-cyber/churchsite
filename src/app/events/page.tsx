@@ -275,23 +275,23 @@ export default function EventsAndActivities() {
         {/* Activities Stack */}
         <div className="space-y-8">
           {recentActivities.map((activity) => (
-            <div key={activity.id} className="group border border-amber-900/20 bg-amber-950/10 backdrop-blur-md p-6 transition-all duration-300 hover:border-amber-700/40 rounded-shadow flex flex-col md:flex-row gap-6">
+            <div key={activity.id} className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl flex flex-col md:flex-row gap-6 text-stone-100">
               
               {/* Text Content */}
               <div className="flex-1 flex flex-col justify-between">
                 <div>
-                  <h2 className="font-display text-2xl font-bold text-foreground mb-1">
+                  <h2 className="font-display text-2xl font-bold text-amber-100 mb-1">
                     {activity.title}
                   </h2>
-                  <p className="text-xs text-accent font-semibold tracking-wider uppercase mb-3">
+                  <p className="text-xs text-amber-400 font-semibold tracking-wider uppercase mb-3">
                     {activity.date} {activity.location ? `| ${activity.location}` : ''}
                   </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed font-light">
+                  <p className="text-sm text-stone-300 leading-relaxed font-light">
                     {activity.description}
                   </p>
                 </div>
               </div>
-
+              
               {/* Slider (This passes your data into the component above) */}
               {activity.images && activity.images.length > 0 && (
                 <div className="w-full md:w-80 shrink-0 overflow-hidden rounded-xl">
