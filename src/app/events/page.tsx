@@ -257,7 +257,7 @@ function EventsContent() {
 
           {/* Activities Stack */}
           <div className="space-y-8">
-            recentActivities?.map((activity) => (
+            {recentActivities?.map((activity) => (
               <div 
                 key={activity.id} 
                 id={activity.id}
@@ -304,7 +304,7 @@ function EventsContent() {
           </div>
           {/* Events List Stack */}
           <div className="space-y-6">
-            upcomingEvents?.map((event) => (
+            {upcomingEvents?.map((event) => (
               <div 
                 key={event?.id} 
                 id={event.id} 
@@ -332,6 +332,18 @@ function EventsContent() {
       </section>
     </main>
   );
+
+export default function EventsAndActivities() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-muted-foreground text-sm">Loading events...</div>
+      </div>
+    }>
+      <EventsContent />
+    </Suspense>
+  );
+}
 
 export default function EventsAndActivities() {
   return (
