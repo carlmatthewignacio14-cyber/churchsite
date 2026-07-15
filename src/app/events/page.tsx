@@ -345,15 +345,3 @@ export default function EventsAndActivities() {
     </Suspense>
   );
 }
-
-export default function EventsAndActivities() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-muted-foreground text-sm">Loading events...</div>
-      </div>
-    }>
-      <EventsContent />
-    </Suspense>
-  );
-}
