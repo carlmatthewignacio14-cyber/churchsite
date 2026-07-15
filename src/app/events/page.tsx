@@ -3,17 +3,18 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';     
 import AppImage from '@/components/ui/AppImage';
+import { useSearchParams } from 'next/compat/router';
 
 const upcomingEvents = [
   {
-     id: '1',
+     id: 'youth-retreat',
     title: 'Youth & Young Adult Retreat',
     date: 'August 1, 2026',
     location: 'To Be Announced',
     description: 'Trade the noise for one day of rest, worship, and real connection. Come fill your cup, share stories by the fire, and leave spiritually renewed.'
   },
   {
-    id: '2',
+    id: 'youth-fellowship',
     title: 'Joint Fellowship with San Mateo Youth',
     date: 'August 2, 2026',
     time: '1:00 PM',
@@ -21,20 +22,20 @@ const upcomingEvents = [
     description: 'Join us for a simple Joint Youth Fellowship as two local youth ministries come together to connect, share a time of worship, and build encouraging friendships.'
   },
   {
-    id: '3',
+    id: 'youth-revival',
     title: 'Youth Revival 2026',
     date: 'November 2026',
     location: 'National Property, COGOP Taytay',
     description: 'A life-changing encounter for teenagers and young adults. Join us for powerful worship sessions, games, and fellowship with our international youths.'
   },
   {
-     id: '4',
+     id: 'general-seminar',
     title: 'Leadership Training/Seminar',
     date: 'March 24-26, 2026',
     location: 'National Property, COGOP Taytay',
   },
   {
-     id: '5',
+     id: 'general-convention',
     title: 'National Convention',
     date: 'March 26-28, 2026',
     location: 'National Property, COGOP Taytay',
@@ -213,6 +214,20 @@ function ActivityImageSlider({ images, altText }: { images: string[]; altText: s
 }
 
 export default function EventsAndActivities() {
+  const searchParams = useSearchParams();
+  const ministryFilter = searchParams ? searchParams.get('ministry') : null;
+
+  // 2. ADD THESE FILTER FUNCTIONS RIGHT BELOW THEM:
+  const filteredUpcoming = upcomingEvents.filter((event) => {
+    if (!ministryFilter) return true;
+    return event.id?.toLowerCase().includes(ministryFilter.toLowerCase());
+  });
+
+  const filteredRecent = recentActivities.filter((activity) => {
+    if (!ministryFilter) return true;
+    return activity.id?.toLowerCase().includes(ministryFilter.toLowerCase());
+  });
+  
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Navigation Header Link */}
