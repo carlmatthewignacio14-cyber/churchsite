@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';     
 import AppImage from '@/components/ui/AppImage';
-import { useSearchParams } from 'next/compat/router';
+import { useSearchParams } from 'next/navigation';
 
 const upcomingEvents = [
   {
