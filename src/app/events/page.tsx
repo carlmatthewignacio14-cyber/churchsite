@@ -155,7 +155,7 @@ function ActivityImageSlider({ images, altText }: { images: string[]; altText: s
   };
 
   return (
-    <div className="relative w-full md:w-80 h-64 md:h-auto shrink-0 bg-neutral-900 group select-none">
+  <div className="relative w-full md:w-80 h-64 md:h-64 shrink-0 bg-neutral-900 group select-none">
       {/* Horizontally scrollable container with snap zones */}
       <div 
         ref={scrollContainerRef}
