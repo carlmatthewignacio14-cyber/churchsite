@@ -149,7 +149,9 @@ export default function ContactPage() {
                       required
                       value={formData.email} 
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"placeholder="juan@example.com"/>
+                      className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"placeholder="juan@example.com"
+                      />
+                    </div>
 
                     {/* Phone Number */}
                     <input 
@@ -160,6 +162,7 @@ export default function ContactPage() {
                       className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
                       placeholder="0912 345 6789"
                       />
+                    </div>
 
                     {/* Prayer Requests or Notes (Optional) */}
                     <textarea
@@ -169,10 +172,20 @@ export default function ContactPage() {
                       className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors resize-none"
                       placeholder="Tell us a little bit about yourself..."
                       />
-                    Submit Information
+                    <button 
+                      type="submit"
+                      className="w-full mt-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-stone-950 font-semibold tracking-wide text-xs py-2.5 px-4 rounded-xl shadow-lg transition-all duration-300"
+                    >
+                      Submit Information
+                    </button>
+      </button>
+    </form>
+  )}
+</div>
 
-                  )
-
-
-            );
-          }
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
