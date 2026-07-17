@@ -6,9 +6,10 @@ import AppLogo from '@/components/ui/AppLogo';
 
 const navLinks = [
   { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/aboutus' },
   { label: 'Sermons', href: '/sermons' },
   { label: 'Events', href: '/events' },
+  { label: 'About Us', href: '/aboutus' },
+  { label: 'Contact Us', href: '/contact' },
   { label: 'Give', href: '/give' },
 ];
 
