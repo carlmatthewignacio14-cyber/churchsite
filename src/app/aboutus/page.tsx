@@ -14,7 +14,7 @@ export default function AboutUsPage() {
   { name: 'Bro. Jeric Urbano', role: 'Mens Ministry Leader', bio: 'Discipling and uniting men in faith, community, and service.', image: '/assets/images/mensleader.png' },
   { name: 'Sis.. Nora Dela Cruz', role: 'Womens Ministry Leader', bio: 'Cultivating deep faith and authentic sisterhood through intentional mentorship and shared grace.', image: '/assets/images/womensleader.png' },
   { name: 'Sis. Zhaila Emnas', role: 'Youth Leader', bio: 'Inspiring the next generation to pursue Christ, build real community, and live out their faith boldly through meaningful fellowship and active service.', image: '/assets/images/' },
-  { name: 'Sis. Lia Fernando', role: 'Kids Ministry Directress', bio: 'Guiding young hearts to know Jesus, build a strong foundation of faith, and discover joy in serving God through creative learning and meaningful fellowship.', image: '/assets/images/kidsleader.png' },
+  { name: 'Sis. Lia Fernando', role: 'Kids Ministry Directress', bio: 'Guiding young hearts to know Jesus, build a strong foundation of faith, and discover joy in serving God through creative learning and meaningful fellowship.', image: '/assets/images/kidsleader.jpg' },
 ];
 
   return (
