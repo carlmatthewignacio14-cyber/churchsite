@@ -130,54 +130,65 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1">Full Name</label>
-                    <input 
-                      type="text" 
-                      required
-                      value={formData.fullName}
-                      onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                      className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
-                      placeholder="Juan Dela Cruz"
-                    />
-                  </div>
+              {/* Full Name Field */}
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1">Full Name</label>
+                <input 
+                  type="text" 
+                  required
+                  value={formData.fullName}
+                  onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                  className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
+                  placeholder="Juan Dela Cruz"
+                />
+              </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1">Email Address</label>
-                    <input 
-                      type="email" 
-                      required
-                      value={formData.email} 
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"placeholder="juan@example.com"
-                      />
-                    </div>
+              {/* Email Address Field */}
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1">Email Address</label>
+                <input 
+                  type="email" 
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
+                  placeholder="juan@example.com"
+                />
+              </div>
 
-                    {/* Phone Number */}
-                    <input 
-                      type="tel"
-                      required
-                      value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
-                      placeholder="0912 345 6789"
-                      />
-                    </div>
+              {/* Phone Number Field */}
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1">Phone Number</label>
+                <input 
+                  type="tel" 
+                  required
+                  value={formData.phone}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
+                  placeholder="0912 345 6789"
+                />
+              </div>
 
-                    {/* Prayer Requests or Notes (Optional) */}
-                    <textarea
-                      rows={2}
-                      value={formData.notes}
-                      onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                      className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors resize-none"
-                      placeholder="Tell us a little bit about yourself..."
-                      />
-                    <button 
-                      type="submit"
-                      className="w-full mt-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-stone-950 font-semibold tracking-wide text-xs py-2.5 px-4 rounded-xl shadow-lg transition-all duration-300"
-                    >
-                      Submit Information
-                    </button>
+              {/* Prayer Requests Field */}
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1">Prayer Requests or Notes (Optional)</label>
+                <textarea 
+                  rows={2}
+                  value={formData.notes}
+                  onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                  className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors resize-none"
+                  placeholder="Tell us a little bit about yourself..."
+                />
+              </div>
+
+              {/* Submit Button */}
+              <button 
+                type="submit"
+                className="w-full mt-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-stone-950 font-semibold tracking-wide text-xs py-2.5 px-4 rounded-xl shadow-lg transition-all duration-300"
+              >
+                Submit Information
+              </button>
+            </form>
       </button>
     </form>
   )}
