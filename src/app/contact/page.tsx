@@ -189,8 +189,6 @@ export default function ContactPage() {
                 Submit Information
               </button>
             </form>
-      </button>
-    </form>
   )}
 </div>
 
