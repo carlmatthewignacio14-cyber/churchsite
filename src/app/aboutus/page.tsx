@@ -15,6 +15,7 @@ export default function AboutUsPage() {
   { name: 'Sis.. Nora Dela Cruz', role: 'Womens Ministry Leader', bio: 'Cultivating deep faith and authentic sisterhood through intentional mentorship and shared grace.', image: '/assets/images/womensleader.png' },
   { name: 'Sis. Zhaila Emnas', role: 'Youth Leader', bio: 'Inspiring the next generation to pursue Christ, build real community, and live out their faith boldly through meaningful fellowship and active service.', image: '/assets/images/' },
   { name: 'Sis. Lia Fernando', role: 'Kids Ministry Directress', bio: 'Guiding young hearts to know Jesus, build a strong foundation of faith, and discover joy in serving God through creative learning and meaningful fellowship.', image: '/assets/images/kidsleader.jpg' },
+  { name: 'Sis. Jahrlyn Dela Cruz', role: 'Multimedia Leader', bio: 'Bringing church services to life by managing audio-visual production, directing live broadcasts, and creating engaging graphics for our digital platforms.', image: '/assets/images/' },
 ];
 
   return (
