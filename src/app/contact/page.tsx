@@ -171,7 +171,7 @@ export default function ContactPage() {
                       />
                     Submit Information
 
-                  )}
+                  )
 
 
             );
