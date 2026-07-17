@@ -140,6 +140,7 @@ export default function ContactPage() {
                   onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                   className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
                   placeholder="Juan Dela Cruz"
+                  suppressHydrationWarning
                 />
               </div>
 
@@ -153,6 +154,7 @@ export default function ContactPage() {
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
                   placeholder="juan@example.com"
+                  suppressHydrationWarning
                 />
               </div>
 
@@ -166,6 +168,7 @@ export default function ContactPage() {
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
                   placeholder="0912 345 6789"
+                  suppressHydrationWarning
                 />
               </div>
 
