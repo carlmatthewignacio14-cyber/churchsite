@@ -187,6 +187,7 @@ export default function ContactPage() {
               {/* Submit Button */}
               <button 
                 type="submit"
+                suppressHydrationWarning
                 className="w-full mt-2 bg-gradient-to-r bg-primary text-primary-foreground hover:bg-primary/90 hover:from-amber-500 hover:to-amber-600 text-stone-950 font-semibold tracking-wide text-xs py-2.5 px-4 rounded-xl shadow-lg transition-all duration-300"
               >
                 Submit Information
