@@ -105,7 +105,7 @@ const recentActivities = [
   {
     id: 'youth',
     title: 'RealTalk BootCamp 2025',
-    date: 'December 26-29, 2026',
+    date: 'December 26-29, 2025',
     location: 'Retreat Center, La Union',
     description: 'The noise is gone, but the impact remains. Relive how we tackled tough questions and built real community at Realtalk.',
     images: [
