@@ -62,7 +62,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             
             {/* Left/Middle Panels: Exact Layout Elements matching your Image */}
-            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 text-stone-100">
               
               {/* Card 1: Physical Address */}
               <div className="bg-card border border-border p-6 hover:border-primary/40 transition-all rounded shadow-sm flex flex-col items-center">
@@ -138,7 +138,7 @@ export default function ContactPage() {
                   required
                   value={formData.fullName}
                   onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                  className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
+                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl"
                   placeholder="Juan Dela Cruz"
                   suppressHydrationWarning
                 />
@@ -152,7 +152,7 @@ export default function ContactPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
+                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl"
                   placeholder="juan@example.com"
                   suppressHydrationWarning
                 />
@@ -166,7 +166,7 @@ export default function ContactPage() {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors"
+                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl"
                   placeholder="0912 345 6789"
                   suppressHydrationWarning
                 />
@@ -179,7 +179,7 @@ export default function ContactPage() {
                   rows={2}
                   value={formData.notes}
                   onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                  className="w-full bg-stone-950/80 border border-stone-800 focus:border-amber-600/50 rounded-xl px-3 py-2.5 text-xs text-stone-100 placeholder-stone-700 focus:outline-none transition-colors resize-none"
+                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl"
                   placeholder="Tell us a little bit about yourself..."
                 />
               </div>
@@ -188,7 +188,7 @@ export default function ContactPage() {
               <button 
                 type="submit"
                 suppressHydrationWarning
-                className="w-full mt-2 bg-gradient-to-r bg-primary text-primary-foreground hover:bg-primary/90 hover:from-amber-500 hover:to-amber-600 text-stone-950 font-semibold tracking-wide text-xs py-2.5 px-4 rounded-xl shadow-lg transition-all duration-300"
+                className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl"
               >
                 Submit Information
               </button>
