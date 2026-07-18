@@ -11,9 +11,11 @@ export default function ContactPage() {
     notes: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
     // Replace with your active Google Apps Script web app URL
     const GOOGLE_SCRIPT_URL = 'https://google.com';
@@ -33,6 +35,8 @@ export default function ContactPage() {
     } catch (error) {
       console.error('Failed to submit entry to Google Sheets:', error);
       alert('Something went wrong. Please try submitting again or reach out directly.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -175,11 +179,19 @@ export default function ContactPage() {
                       className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all resize-none"
                       placeholder="Tell us a little bit about yourself..."
                       />
-                    Submit Information
-              </button>
-            </form>
-  )}
-</div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#8B5E3C] hover:bg-[#6B4A2E] text-white font-bold uppercase tracking-wider py-4 px-8 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    suppressHydrationWarning
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Submit Information'}
+                  </button>
+                </form>
+              )}
+            </div>
 
           </div>
         </div>
