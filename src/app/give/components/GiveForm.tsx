@@ -22,7 +22,7 @@ interface FormState {
   lastName: string;
   email: string;
   note: string;
-  paymentMethod: 'card' | 'gcash' | 'inperson';
+  paymentMethod: 'gcash' | 'inperson';
 }
 
 export default function GiveForm() {
@@ -35,7 +35,7 @@ export default function GiveForm() {
     lastName: '',
     email: '',
     note: '',
-    paymentMethod: 'card',
+    paymentMethod: 'gcash',
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -63,7 +63,7 @@ export default function GiveForm() {
               Your gift of <strong className="text-[#1E1611]">₱{effectiveAmount}</strong> to the{' '}
               <strong className="text-[#1E1611]">{form.fund}</strong> via{' '}
               <span className="capitalize text-[#1E1611] font-semibold">
-                {form.paymentMethod === 'card' ? 'Online Card' : form.paymentMethod}
+                {form.paymentMethod === 'gcash' ? 'Gcash' : form.paymentMethod}
               </span>{' '}
               has been documented.
             </p>
@@ -143,7 +143,6 @@ export default function GiveForm() {
                 </p>
                 <div className="grid grid-cols-3 gap-2 bg-[#E6DDD4]/40 p-1 border border-[#D1C4B6] rounded-none">
                   {([
-                    { id: 'card', label: 'Online Card' },
                     { id: 'gcash', label: 'GCash' },
                     { id: 'inperson', label: 'In-Person' },
                   ] as const).map((method) => (
@@ -243,17 +242,6 @@ export default function GiveForm() {
               </button>
             </form>
           </div>
-
-          {/* Right Side: Conditional Dynamic Information Panels */}
-          <div className="lg:col-span-2 space-y-6">
-            {form.paymentMethod === 'card' && (
-              <div className="bg-[#FAF8F5] border border-[#E6DDD4] p-6 shadow-sm">
-                <h3 className="font-serif text-lg font-bold text-[#1E1611] mb-3">Online Cards</h3>
-                <p className="text-sm text-[#5A4F43] leading-relaxed">
-                  Upon clicking submit, you will be securely routed through our automated SSL checkout terminal to complete your Visa or Mastercard transfer.
-                </p>
-              </div>
-            )}
 
             {form.paymentMethod === 'gcash' && (
               <div className="bg-[#FAF8F5] border border-[#E6DDD4] p-6 shadow-sm">
