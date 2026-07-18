@@ -102,7 +102,7 @@ export default function GiveImpact() {
           <p className="text-sm text-muted-foreground max-w-xl">
             Church of God of Prophecy publishes a full annual financial report available to all members and donors. We are committed to being good stewards of every gift entrusted to us.
           </p>
-          <button className="shrink-0 border border-primary text-primary px-6 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all">
+          <button suppressHydrationWarning className="shrink-0 border border-primary text-primary px-6 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all">
             View Annual Report
           </button>
         </div>
