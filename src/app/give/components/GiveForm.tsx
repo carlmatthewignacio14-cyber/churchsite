@@ -246,17 +246,38 @@ export default function GiveForm() {
           {/* Info Side */}
           <div className="lg:col-span-2 space-y-4">
             {form.paymentMethod === 'gcash' && (
-              <div className="bg-[#FAF8F5] border border-[#E6DDD4] p-6 shadow-sm">
-                <h3 className="font-serif text-lg font-bold text-[#1E1611] mb-3">GCash Transfer</h3>
-                <p className="text-sm text-[#5A4F43] leading-relaxed mb-3">
-                  Send your tithes directly to our registered mobile wallet credentials:
-                </p>
-                <div className="text-sm text-[#1E1611] space-y-1">
-                  <p><span className="font-semibold">Merchant:</span> COGOP MARIKINA</p>
-                  <p><span className="font-semibold">Number:</span> 09859397919</p>
-                </div>
-              </div>
-            )}
+  <div className="space-y-4">
+    <h3 className="text-xl font-serif font-bold text-[#1E1611]">GCash Transfer</h3>
+    <p className="text-xs text-[#5A4F43] leading-relaxed">
+      Please scan our official QR code using your GCash app or manually send your gift to the mobile credentials listed below.
+    </p>
+    
+    <div className="p-4 bg-white border border-[#D1C4B6] rounded-none text-center flex flex-col items-center">
+      {/* 📸 Official GCash QR Asset Rendering Box */}
+      <div className="w-44 h-44 relative bg-[#FAF8F5] border border-[#E6DDD4] p-2 flex items-center justify-center mb-4">
+        <img 
+          src="/assets/images/gcash-qr.png" 
+          alt="Official COGOP Marikina GCash QR Code"
+          className="w-full h-full object-contain"
+        />
+      </div>
+
+      <div className="w-full text-left font-sans text-xs space-y-2 border-t border-[#E6DDD4] pt-3 text-[#1E1611]">
+        <p className="flex justify-between">
+          <span className="text-[#706053] font-bold uppercase tracking-wider">Account Name:</span>
+          <span className="font-semibold">COGOP MARIKINA</span>
+        </p>
+        <p className="flex justify-between">
+          <span className="text-[#706053] font-bold uppercase tracking-wider">Mobile Number:</span>
+          <span className="font-mono font-bold text-[#5A3E29]">09859397919</span>
+        </p>
+      </div>
+    </div>
+    <p className="text-[10px] text-[#706053] italic leading-tight">
+      *Tip: If browsing via a phone, you can screenshot the QR code above and upload it directly into your GCash app scanner panel.
+    </p>
+  </div>
+)}
 
             {form.paymentMethod === 'inperson' && (
               <div className="bg-[#FAF8F5] border border-[#E6DDD4] p-6 shadow-sm">
