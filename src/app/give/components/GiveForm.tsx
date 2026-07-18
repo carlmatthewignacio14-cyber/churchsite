@@ -243,6 +243,8 @@ export default function GiveForm() {
             </form>
           </div>
 
+          {/* Info Side */}
+          <div className="lg:col-span-2 space-y-4">
             {form.paymentMethod === 'gcash' && (
               <div className="bg-[#FAF8F5] border border-[#E6DDD4] p-6 shadow-sm">
                 <h3 className="font-serif text-lg font-bold text-[#1E1611] mb-3">GCash Transfer</h3>
