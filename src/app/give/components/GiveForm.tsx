@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const presetAmounts =;
+const presetAmounts = [100, 200, 500, 1000, 2000];
 
 const funds = [
   'General Fund',
@@ -61,7 +61,11 @@ export default function GiveForm() {
             <h2 className="font-serif text-3xl font-bold text-[#1E1611]">Thank You!</h2>
             <p className="text-[#5A4F43] leading-relaxed max-w-sm text-sm">
               Your gift of <strong className="text-[#1E1611]">₱{effectiveAmount}</strong> to the{' '}
-              <strong className="text-[#1E1611]">{form.fund}</strong> via <span className="capitalize text-[#1E1611] font-semibold">{form.paymentMethod === 'card' ? 'Online Card' : form.paymentMethod}</span> has been documented.
+              <strong className="text-[#1E1611]">{form.fund}</strong> via{' '}
+              <span className="capitalize text-[#1E1611] font-semibold">
+                {form.paymentMethod === 'card' ? 'Online Card' : form.paymentMethod}
+              </span>{' '}
+              has been documented.
             </p>
             <button
               onClick={() => setSubmitted(false)}
@@ -79,7 +83,7 @@ export default function GiveForm() {
     <section className="py-16 bg-[#F4EFEA] relative z-10 font-sans text-[#1E1611]">
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start">
-          
+
           {/* Form Side */}
           <div className="lg:col-span-3 bg-[#FAF8F5] border border-[#E6DDD4] rounded-none p-8 md:p-10 shadow-sm">
             <h2 className="font-serif text-2xl font-bold text-[#1E1611] mb-8">
@@ -99,8 +103,8 @@ export default function GiveForm() {
                       type="button"
                       onClick={() => setForm({ ...form, frequency: f })}
                       className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all rounded-none ${
-                        form.frequency === f 
-                          ? 'bg-[#5A3E29] text-white shadow-sm' 
+                        form.frequency === f
+                          ? 'bg-[#5A3E29] text-white shadow-sm'
                           : 'text-[#706053] hover:text-[#1E1611]'
                       }`}
                     >
@@ -122,8 +126,8 @@ export default function GiveForm() {
                       type="button"
                       onClick={() => setForm({ ...form, amount: a, customAmount: '' })}
                       className={`py-3 border text-center font-semibold text-sm transition-all rounded-none ${
-                        form.amount === a && !form.customAmount 
-                          ? 'border-[#8B5E3C] bg-[#5A3E29] text-white' 
+                        form.amount === a && !form.customAmount
+                          ? 'border-[#8B5E3C] bg-[#5A3E29] text-white'
                           : 'border-[#D1C4B6] bg-white text-[#706053] hover:bg-[#FAF8F5]'
                       }`}
                     >
@@ -154,15 +158,15 @@ export default function GiveForm() {
                   {([
                     { id: 'card', label: 'Online Card' },
                     { id: 'gcash', label: 'GCash' },
-                    { id: 'inperson', label: 'In-Person' }
+                    { id: 'inperson', label: 'In-Person' },
                   ] as const).map((method) => (
                     <button
                       key={method.id}
                       type="button"
                       onClick={() => setForm({ ...form, paymentMethod: method.id })}
                       className={`text-xs py-3 font-bold uppercase tracking-wider transition-all rounded-none ${
-                        form.paymentMethod === method.id 
-                          ? 'bg-[#5A3E29] text-white shadow-sm' 
+                        form.paymentMethod === method.id
+                          ? 'bg-[#5A3E29] text-white shadow-sm'
                           : 'text-[#706053] hover:text-[#1E1611]'
                       }`}
                     >
@@ -234,31 +238,55 @@ export default function GiveForm() {
                   rows={3}
                   className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] focus:outline-none placeholder-[#A39485] resize-none"
                 />
-                
-                {/* Submit Button */}
-                  {form.frequency === 'monthly' ? 'Start Monthly Giving' : 'Complete Donation'}
+              </div>
 
-                {/* Right Side: Conditional Dynamic Information Panels */}
-                  {form.paymentMethod === 'card' && (
-                  Online Cards
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full bg-[#5A3E29] hover:bg-[#3D2A1A] text-white font-bold uppercase tracking-widest text-sm py-4 transition-colors rounded-none"
+              >
+                {form.frequency === 'monthly' ? 'Start Monthly Giving' : 'Complete Donation'}
+              </button>
+            </form>
+          </div>
+
+          {/* Right Side: Conditional Dynamic Information Panels */}
+          <div className="lg:col-span-2 space-y-6">
+            {form.paymentMethod === 'card' && (
+              <div className="bg-[#FAF8F5] border border-[#E6DDD4] p-6 shadow-sm">
+                <h3 className="font-serif text-lg font-bold text-[#1E1611] mb-3">Online Cards</h3>
+                <p className="text-sm text-[#5A4F43] leading-relaxed">
                   Upon clicking submit, you will be securely routed through our automated SSL checkout terminal to complete your Visa or Mastercard transfer.
+                </p>
+              </div>
+            )}
 
-              )}
-
-                  {form.paymentMethod === 'gcash' && (
-                  GCash Transfer
+            {form.paymentMethod === 'gcash' && (
+              <div className="bg-[#FAF8F5] border border-[#E6DDD4] p-6 shadow-sm">
+                <h3 className="font-serif text-lg font-bold text-[#1E1611] mb-3">GCash Transfer</h3>
+                <p className="text-sm text-[#5A4F43] leading-relaxed mb-3">
                   Send your tithes directly to our registered mobile wallet credentials:
-                  
-                  Merchant: COGOP MARIKINA
-                  Number: 09859397919
-              )}
+                </p>
+                <div className="text-sm text-[#1E1611] space-y-1">
+                  <p><span className="font-semibold">Merchant:</span> COGOP MARIKINA</p>
+                  <p><span className="font-semibold">Number:</span> 09859397919</p>
+                </div>
+              </div>
+            )}
 
-                  {form.paymentMethod === 'inperson' && (
-                  In-Person Drop
+            {form.paymentMethod === 'inperson' && (
+              <div className="bg-[#FAF8F5] border border-[#E6DDD4] p-6 shadow-sm">
+                <h3 className="font-serif text-lg font-bold text-[#1E1611] mb-3">In-Person Drop</h3>
+                <p className="text-sm text-[#5A4F43] leading-relaxed mb-3">
                   You can secure offering envelopes directly from our ushers at the sanctuary lobby entrance during our Sunday worship assemblies.
-                  📍 33 Banaba St, Nangka, Marikina City
+                </p>
+                <p className="text-sm text-[#1E1611] font-semibold">📍 33 Banaba St, Nangka, Marikina City</p>
+              </div>
+            )}
+          </div>
 
-              )}
-
-          );
-      }
+        </div>
+      </div>
+    </section>
+  );
+}
