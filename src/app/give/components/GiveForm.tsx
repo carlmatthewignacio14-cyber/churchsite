@@ -236,6 +236,7 @@ export default function GiveForm() {
               {/* Submit Button */}
               <button
                 type="submit"
+                suppressHydrationWarning
                 className="w-full bg-[#5A3E29] hover:bg-[#3D2A1A] text-white font-bold uppercase tracking-widest text-sm py-4 transition-colors rounded-none"
               >
                 {form.frequency === 'monthly' ? 'Start Monthly Giving' : 'Complete Donation'}
