@@ -119,27 +119,12 @@ export default function GiveForm() {
                 <p className="text-xs uppercase tracking-widest text-[#706053] mb-3 font-bold">
                   Gift Amount
                 </p>
-                <div className="grid grid-cols-5 gap-2 mb-3">
-                  {presetAmounts.map((a) => (
-                    <button
-                      key={a}
-                      type="button"
-                      onClick={() => setForm({ ...form, amount: a, customAmount: '' })}
-                      className={`py-3 border text-center font-semibold text-sm transition-all rounded-none ${
-                        form.amount === a && !form.customAmount
-                          ? 'border-[#8B5E3C] bg-[#5A3E29] text-white'
-                          : 'border-[#D1C4B6] bg-white text-[#706053] hover:bg-[#FAF8F5]'
-                      }`}
-                    >
-                      ₱{a}
-                    </button>
-                  ))}
-                </div>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#706053] text-sm font-semibold">₱</span>
                   <input
                     type="number"
-                    placeholder="Custom amount"
+                    placeholder="Enter amount"
+                    required 
                     value={form.customAmount}
                     onChange={(e) => setForm({ ...form, customAmount: e.target.value, amount: null })}
                     className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none pl-7 pr-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all"
