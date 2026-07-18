@@ -13,10 +13,10 @@ export default function AboutUsPage() {
   { name: 'Pstr. Roderick Justiniano', role: 'Newly Annointed Associate Pastor', bio: 'He leverages his music ministry and pastoral experience to support church operations and empower various local congregations.', image: '/assets/images/4.png' },
   { name: 'Bro. Jeric Urbano', role: 'Mens Ministry Leader', bio: 'Guiding men to anchor their lives in Scripture, mentor the next generation, and step up as pillars of strength in the church and home.', image: '/assets/images/mensleader.png' },
   { name: 'Sis. Nora Dela Cruz', role: 'Womens Ministry Leader', bio: 'Cultivating deep faith and authentic sisterhood through intentional mentorship and shared grace.', image: '/assets/images/womensleader.png' },
-  { name: 'Sis. Zhaila Emnas', role: 'Youth Leader', bio: 'Inspiring the next generation to pursue Christ, build real community, and live out their faith boldly through meaningful fellowship and active service.', image: '/assets/images/youthleader.png' },
+  { name: 'Sis. Zhaila Emnas', role: 'Youth Leader', bio: 'Inspiring the next generation to pursue Christ, build real community, and live out their faith boldly through meaningful fellowship and active service.', image: '/assets/images/youthleader.jpg' },
   { name: 'Sis. Lia Fernando', role: 'Kids Ministry Directress', bio: 'Guiding young hearts to know Jesus, build a strong foundation of faith, and discover joy in serving God through creative learning and meaningful fellowship.', image: '/assets/images/kidsleader.jpg' },
-  { name: 'Sis. Jahrlyn Dela Cruz', role: 'Multimedia Leader', bio: 'Bringing church services to life by managing audio-visual production, directing live broadcasts, and creating engaging graphics for our digital platforms.', image: '/assets/images/medialeader.png' },
-  { name: 'Bro. David Glenn Justiniano', role: 'Music Ministry Leader', bio: 'Leading our church family into meaningful worship by cultivating musical excellence and deep connection with God.', image: '/assets/images/musicleader.png' },
+  { name: 'Sis. Jahrlyn Dela Cruz', role: 'Multimedia Leader', bio: 'Bringing church services to life by managing audio-visual production, directing live broadcasts, and creating engaging graphics for our digital platforms.', image: '/assets/images/medialeader.jpg' },
+  { name: 'Bro. David Glenn Justiniano', role: 'Music Ministry Leader', bio: 'Leading our church family into meaningful worship by cultivating musical excellence and deep connection with God.', image: '/assets/images/musicleader.jpg' },
 ];
 
   return (
