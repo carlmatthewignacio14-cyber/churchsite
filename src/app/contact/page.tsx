@@ -37,160 +37,145 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen bg-[#F4EFEA] text-[#1E1611] font-sans selection:bg-[#8B5E3C]/20">
       {/* Navigation Header Link */}
-      <div className="border-b border-stone-800 bg-stone-900/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="container mx-auto px-4 max-w-6xl h-16 flex items-center justify-between">
-          <Link href="/" className="text-sm font-semibold uppercase tracking-widest text-muted-foreground hover:text-amber-400 transition-colors flex items-center gap-2">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+      <div className="border-b border-[#E6DDD4] bg-[#FAF8F5]/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="container mx-auto px-4 max-w-6xl h-20 flex items-center justify-between">
+          <Link href="/" className="text-xs font-bold uppercase tracking-widest text-[#706053] hover:text-[#1E1611] transition-colors flex items-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
-            Back to Home
+            Home
           </Link>
-          <span className="text-xs font-bold uppercase tracking-[0.3em] text-amber-500">Connect</span>
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#8B5E3C]">Connect With Us</span>
         </div>
       </div>
 
-      <section className="py-16">
-        <div className="container mx-auto px-4 max-w-6xl">
-          
-          <div className="mb-12 text-center md:text-left">
-            <span className="text-xs font-semibold tracking-[0.4em] uppercase text-amber-500 block mb-2">Get In Touch</span>
-            <h1 className="text-4xl font-bold tracking-tight text-foreground">Contact Us</h1>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <section className="py-20">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
             
-            {/* Left/Middle Panels: Exact Layout Elements matching your Image */}
-            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 text-stone-100">
-              
-              {/* Card 1: Physical Address */}
-              <div className="bg-card border border-border p-6 hover:border-primary/40 transition-all rounded shadow-sm flex flex-col items-center">
-                <div className="text-amber-500 mb-4 bg-amber-500/10 p-3 rounded-full">
-                  <svg className="w-6 h-6 transform rotate-45" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">Physical Address</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed font-light">
-                  Church of God of Prophecy | Marikina<br />
-                  33 Banaba St, Nangka,<br />
-                  Marikina, 1808 Metro Manila
+            {/* Left Column: Core Header Info & Church Details */}
+            <div className="space-y-10">
+              <div>
+                <span className="text-xs font-bold tracking-[0.3em] uppercase text-[#8B5E3C] block mb-3">We're Here For You</span>
+                <h1 className="text-5xl font-serif font-bold tracking-tight text-[#1E1611] leading-none mb-6">
+                  Contact Us
+                </h1>
+                <p className="text-base text-[#5A4F43] leading-relaxed font-normal">
+                  Our team reads every message and lifts up our community. Whether you have a question about our ministries, services, or need support — you are never alone.
                 </p>
               </div>
 
-              {/* Card 3: Email Address */}
-              <div className="bg-card border border-border p-6 hover:border-primary/40 transition-all rounded shadow-sm flex flex-col items-center">
-                <div className="text-amber-500 mb-4 bg-amber-500/10 p-3 rounded-full">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">Email Address</h3>
-                <p className="text-xs text-muted-foreground font-light hover:text-amber-400 transition-colors">
-                  <a href="mailto:info@cogop.org">cogopmarikina@yahoo.com</a>
-                </p>
-              </div>
-
-              {/* Card 4: Phone Numbers */}
-              <div className="bg-card border border-border p-6 hover:border-primary/40 transition-all rounded shadow-sm flex flex-col items-center">
-                <div className="text-amber-500 mb-4 bg-amber-500/10 p-3 rounded-full">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.622l4.22 4.22a.75.75 0 001.06 0l2.22-2.22a.75.75 0 011.06 0l4.22 4.22a.75.75 0 010 1.06l-2.22 2.22a.75.75 0 000 1.06l4.22 4.22a.75.75 0 001.06 0l2.22-2.22a.75.75 0 011.06 0l4.22 4.22" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-foreground mb-3">Phone</h3>
-                
-                <div className="space-y-3 w-full text-xs text-muted-foreground font-light">
-                  <div>
-                    <span className="block text-amber-200/70 font-medium">Church Secretary</span>
-                    <a href="tel:423-559-5100" className="hover:text-amber-400">+63 951 739 8678</a>
+              {/* Exact Information Grid Layout Icons matching the template */}
+              <div className="space-y-6 pt-4">
+                {/* Info 1: Physical Location */}
+                <div className="flex items-start gap-4">
+                  <div className="text-[#8B5E3C] pt-1">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25s-7.5-4.108-7.5-11.25a7.5 7.5 0 1115 0z" />
+                    </svg>
                   </div>
+                  <p className="text-sm text-[#5A4F43] leading-relaxed">
+                    <strong className="block text-[#1E1611] font-semibold mb-0.5">Physical Address</strong>
+                    33 Banaba St, Nangka, Marikina, 1808 Metro Manila
+                  </p>
+                </div>
+
+                {/* Info 2: Email Routing */}
+                <div className="flex items-start gap-4">
+                  <div className="text-[#8B5E3C] pt-1">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-[#5A4F43] leading-relaxed">
+                    <strong className="block text-[#1E1611] font-semibold mb-0.5">Email Address</strong>
+                    <a href="mailto:cogopmarikina@yahoo.com" className="hover:underline text-[#8B5E3C]">cogopmarikina@yahoo.com</a>
+                  </p>
+                </div>
+
+                {/* Info 3: Telephone Directory */}
+                <div className="flex items-start gap-4">
+                  <div className="text-[#8B5E3C] pt-1">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.622l4.22 4.22a.75.75 0 001.06 0l2.22-2.22a.75.75 0 011.06 0l4.22 4.22a.75.75 0 010 1.06l-2.22 2.22a.75.75 0 000 1.06l4.22 4.22a.75.75 0 001.06 0l2.22-2.22a.75.75 0 011.06 0l4.22 4.22" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-[#5A4F43] leading-relaxed">
+                    <strong className="block text-[#1E1611] font-semibold mb-0.5">Church Secretary</strong>
+                    <a href="tel:+639517398678" className="hover:underline text-[#8B5E3C]">+63 951 739 8678</a>
+                  </p>
                 </div>
               </div>
-
             </div>
 
-            {/* Right Panel: Integrated Newcomer Form Module */}
-            <div className="w-full bg-card border border-border p-6 hover:border-primary/40 transition-all rounded shadow-sm">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-foreground mb-1">Are you new here?</h2>
-                <p className="text-xs text-muted-foreground font-light">Share your details to connect directly with us.</p>
+            {/* Right Column: Clean White Form Box (Matching "Share Your Request") */}
+            <div className="w-full bg-[#FAF8F5] border border-[#E6DDD4] rounded-sm p-8 md:p-10 shadow-sm">
+              <div className="mb-8">
+                <h2 className="text-2xl font-serif font-bold text-[#1E1611] mb-2">Share Your Info</h2>
+                <p className="text-sm text-[#706053] font-light">Are you new here? Share your details to connect directly with us.</p>
               </div>
 
               {submitted ? (
-                <div className="text-center py-10 border border-amber-600/30 rounded-xl bg-amber-950/20 p-4">
-                  <span className="inline-block bg-amber-500/10 p-2.5 rounded-full text-amber-400 mb-3">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <div className="text-center py-12 bg-[#F4EFEA] border border-[#E6DDD4] rounded-sm p-6">
+                  <span className="inline-block bg-[#8B5E3C]/10 p-3 rounded-full text-[#8B5E3C] mb-3">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                   </span>
-                  <h3 className="text-base font-bold text-amber-200">Welcome to the Family!</h3>
-                  <p className="text-xs text-mueted-foreground mt-2 font-light">Your information was successfully logged into our data archives.</p>
+                  <h3 className="text-lg font-bold text-[#1E1611]">Welcome to the Family!</h3>
+                  <p className="text-xs text-[#706053] mt-2">Your information has been securely logged into our database.</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Full Name Field */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Full Name</label>
-                <input 
-                  type="text" 
-                  required
-                  value={formData.fullName}
-                  onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl"
-                  placeholder="Juan Dela Cruz"
-                  suppressHydrationWarning
-                />
-              </div>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#706053] mb-2">Name</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={formData.fullName}
+                      onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                      className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all"
+                      placeholder="Your Name"
+                    />
+                  </div>
 
-              {/* Email Address Field */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Email Address</label>
-                <input 
-                  type="email" 
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl"
-                  placeholder="juan@example.com"
-                  suppressHydrationWarning
-                />
-              </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#706053] mb-2">Email Address</label>
+                    <input 
+                      type="email" 
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all"
+                      placeholder="Your Email"
+                    />
+                  </div>
 
-              {/* Phone Number Field */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Phone Number</label>
-                <input 
-                  type="tel" 
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl"
-                  placeholder="0912 345 6789"
-                  suppressHydrationWarning
-                />
-              </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#706053] mb-2">Phone Number</label>
+                    <input 
+                      type="tel" 
+                      required
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all"
+                      placeholder="Your Phone Number"
+                    />
+                  </div>
 
-              {/* Prayer Requests Field */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Prayer Requests or Notes (Optional)</label>
-                <textarea 
-                  rows={2}
-                  value={formData.notes}
-                  onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl"
-                  placeholder="Tell us a little bit about yourself..."
-                />
-              </div>
-
-              {/* Submit Button */}
-              <button 
-                type="submit"
-                suppressHydrationWarning
-                className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl"
-              >
-                Submit Information
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#706053] mb-2">Prayer Requests or Notes (Optional)</label>
+                    <textarea 
+                      rows={4}
+                      value={formData.notes}
+                      onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                      className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all resize-none"
+                      placeholder="Tell us a little bit about yourself..."
+                      />
+                    Submit Information
               </button>
             </form>
   )}
