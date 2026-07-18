@@ -256,7 +256,7 @@ export default function GiveForm() {
       {/* 📸 Official GCash QR Asset Rendering Box */}
       <div className="w-44 h-44 relative bg-[#FAF8F5] border border-[#E6DDD4] p-2 flex items-center justify-center mb-4">
         <img 
-          src="/assets/images/gcash-qr.png" 
+          src="/assets/images/gcash-qr.jpg" 
           alt="Official COGOP Marikina GCash QR Code"
           className="w-full h-full object-contain"
         />
