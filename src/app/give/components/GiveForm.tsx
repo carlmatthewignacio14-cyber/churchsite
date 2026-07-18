@@ -102,6 +102,7 @@ export default function GiveForm() {
                       key={f}
                       type="button"
                       onClick={() => setForm({ ...form, frequency: f })}
+                      suppressHydrationWarning
                       className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all rounded-none ${
                         form.frequency === f
                           ? 'bg-[#5A3E29] text-white shadow-sm'
@@ -149,6 +150,7 @@ export default function GiveForm() {
                       key={method.id}
                       type="button"
                       onClick={() => setForm({ ...form, paymentMethod: method.id })}
+                      suppressHydrationWarning
                       className={`text-xs py-3 font-bold uppercase tracking-wider transition-all rounded-none ${
                         form.paymentMethod === method.id
                           ? 'bg-[#5A3E29] text-white shadow-sm'
