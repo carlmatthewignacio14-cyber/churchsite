@@ -131,6 +131,7 @@ export default function GiveForm() {
                     className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none pl-7 pr-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all"
                     min="1"
                     aria-label="Custom giving amount"
+                    suppressHydrationWarning
                   />
                 </div>
               </div>
@@ -174,6 +175,7 @@ export default function GiveForm() {
                   onChange={(e) => setForm({ ...form, fund: e.target.value })}
                   className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] focus:outline-none transition-all appearance-none cursor-pointer"
                   aria-label="Select fund"
+                  suppressHydrationWarning
                 >
                   {funds.map((f) => (
                     <option key={f} value={f}>{f}</option>
@@ -194,6 +196,7 @@ export default function GiveForm() {
                     onChange={(e) => setForm({ ...form, firstName: e.target.value })}
                     className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] focus:outline-none placeholder-[#A39485]"
                     required
+                    suppressHydrationWarning
                   />
                   <input
                     type="text"
@@ -202,6 +205,7 @@ export default function GiveForm() {
                     onChange={(e) => setForm({ ...form, lastName: e.target.value })}
                     className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] focus:outline-none placeholder-[#A39485]"
                     required
+                    suppressHydrationWarning
                   />
                 </div>
                 <div className="mt-4">
@@ -212,6 +216,7 @@ export default function GiveForm() {
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] focus:outline-none placeholder-[#A39485]"
                     required
+                    suppressHydrationWarning
                   />
                 </div>
               </div>
@@ -224,6 +229,7 @@ export default function GiveForm() {
                   onChange={(e) => setForm({ ...form, note: e.target.value })}
                   rows={3}
                   className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] focus:outline-none placeholder-[#A39485] resize-none"
+                  suppressHydrationWarning
                 />
               </div>
 
