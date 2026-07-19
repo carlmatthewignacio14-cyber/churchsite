@@ -52,8 +52,8 @@ export default function PrayerSection() {
     !mounted
       ? ''
       : revealed
-      ? 'opacity-100 translate-y-0 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]'
-      : 'opacity-0 translate-y-6';
+        ? 'opacity-100 translate-y-0 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]'
+        : 'opacity-0 translate-y-6';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,11 +143,23 @@ export default function PrayerSection() {
           </div>
 
           {/* Right: Form */}
-          <div ref={rightRef} className={`bg-card border border-border p-8 md:p-10 ${revealClass(rightRevealed)}`}>
+          <div
+            ref={rightRef}
+            className={`bg-card border border-border p-8 md:p-10 ${revealClass(rightRevealed)}`}
+          >
             {submitted ? (
               <div className="flex flex-col items-center justify-center text-center py-12 gap-4">
                 <div className="w-16 h-16 bg-primary/10 flex items-center justify-center mb-2">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true">
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    className="text-primary"
+                    aria-hidden="true"
+                  >
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </div>
