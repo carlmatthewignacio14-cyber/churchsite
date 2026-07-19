@@ -216,7 +216,10 @@ export default function PrayerSection() {
                     aria-label="Email address"
                     suppressHydrationWarning
                   />
-                  <label htmlFor="prayer-email" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
+                  <label
+                    htmlFor="prayer-email"
+                    className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground"
+                  >
                     Email (Optional)
                   </label>
                 </div>
@@ -233,7 +236,10 @@ export default function PrayerSection() {
                     aria-label="Prayer request"
                     suppressHydrationWarning
                   />
-                  <label htmlFor="prayer-request" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
+                  <label
+                    htmlFor="prayer-request"
+                    className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground"
+                  >
                     Your Request
                   </label>
                 </div>
@@ -245,7 +251,9 @@ export default function PrayerSection() {
                     role="checkbox"
                     aria-checked={form.private}
                     tabIndex={0}
-                    onKeyDown={(e) => e.key === 'Enter' && setForm({ ...form, private: !form.private })}
+                    onKeyDown={(e) =>
+                      e.key === 'Enter' && setForm({ ...form, private: !form.private })
+                    }
                   >
                     {form.private && (
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" aria-hidden="true">
