@@ -153,7 +153,10 @@ export default function MinistriesSection() {
       : 'opacity-0 translate-y-6';
 
   return (
-    <section id="ministries" className="section-pad bg-background border-t border-border relative z-10">
+    <section
+      id="ministries"
+      className="section-pad bg-background border-t border-border relative z-10"
+    >
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div

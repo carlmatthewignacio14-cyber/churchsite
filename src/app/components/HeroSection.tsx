@@ -35,7 +35,10 @@ export default function HeroSection() {
       <div className="relative z-10 px-4 max-w-5xl mx-auto pt-32 pb-24">
         <div
           className="animate-fade-in-up"
-          style={{ animationDelay: '400ms', animationFillMode: 'both' }}
+          style={{
+            animationDelay: '400ms',
+            animationFillMode: 'both',
+          }}
         >
           <h1 className="font-aktiv-grotesk-ex text-hero-display font-light italic text-white mb-4 leading-none">
             LET US GO TO<br />

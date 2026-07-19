@@ -82,7 +82,10 @@ export default function PrayerSection() {
   };
 
   return (
-    <section id="prayer" className="section-pad bg-muted/30 border-t border-border relative z-10 overflow-hidden">
+    <section
+      id="prayer"
+      className="section-pad bg-muted/30 border-t border-border relative z-10 overflow-hidden"
+    >
       {/* Decorative blob */}
       <div className="absolute top-0 right-0 w-96 h-96 blob-primary opacity-30 pointer-events-none" />
 
@@ -98,19 +101,38 @@ export default function PrayerSection() {
               <span className="not-italic font-bold">Prayer Request</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-8 max-w-md">
-              Our prayer team reads every request and lifts each one before God. You are never alone — share what&apos;s on your heart.
+              Our prayer team reads every request and lifts each one before God. You are never alone
+              — share what&apos;s on your heart.
             </p>
 
             {/* Commitments */}
             <div className="space-y-4">
               {[
-                { icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', text: 'All requests are kept confidential' },
-                { icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', text: 'Our dedicated prayer team prays weekly' },
-                { icon: 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z', text: 'Personal follow-up available on request' },
+                {
+                  icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
+                  text: 'All requests are kept confidential',
+                },
+                {
+                  icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+                  text: 'Our dedicated prayer team prays weekly',
+                },
+                {
+                  icon: 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
+                  text: 'Personal follow-up available on request',
+                },
               ].map((item) => (
                 <div key={item.text} className="flex items-start gap-3">
                   <div className="w-8 h-8 bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      className="text-primary"
+                      aria-hidden="true"
+                    >
                       <path d={item.icon} />
                     </svg>
                   </div>
