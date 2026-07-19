@@ -1,8 +1,13 @@
+import { imageHosts } from './image-hosts.config.mjs';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     unoptimized: true,
-    qualities: [85],
+    remotePatterns: imageHosts,
+  },
+  webpack: (config) => {
+    return config;
   },
 };
 
