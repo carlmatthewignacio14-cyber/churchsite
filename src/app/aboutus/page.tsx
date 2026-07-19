@@ -121,7 +121,9 @@ export default function AboutUsPage() {
           <div className="text-muted-foreground text-sm sm:text-base leading-relaxed space-y-6">
             <p>
               The Church of God of Prophecy is built on the belief in{' '}
-              <strong className="text-card-foreground">&quot;the whole Bible rightly divided.&quot;</strong>{' '}
+              <strong className="text-card-foreground">
+                &quot;the whole Bible rightly divided.&quot;
+              </strong>{' '}
               We affirm the Bible as God&apos;s inspired, inerrant, and infallible Word—His written
               revelation to humanity and our ultimate guide in matters of faith, doctrine, practice,
               and discipline.
@@ -249,7 +251,9 @@ export default function AboutUsPage() {
                     )}
                   </div>
 
-                  <h3 className="font-bold text-base text-gray-900 leading-tight">{pastor?.name}</h3>
+                  <h3 className="font-bold text-base text-gray-900 leading-tight">
+                    {pastor?.name}
+                  </h3>
                   <span className="text-[10px] font-bold text-primary uppercase tracking-widest mt-1 mb-3 inline-block px-2.5 py-1 bg-primary/5 rounded leading-normal">
                     {pastor?.role}
                   </span>
