@@ -33,18 +33,27 @@ export default function HeroSection() {
 
       {/* Hero Content */}
       <div className="relative z-10 px-4 max-w-5xl mx-auto pt-32 pb-24">
-        <div className="animate-fade-in-up" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
+        <div
+          className="animate-fade-in-up"
+          style={{ animationDelay: '400ms', animationFillMode: 'both' }}
+        >
           <h1 className="font-aktiv-grotesk-ex text-hero-display font-light italic text-white mb-4 leading-none">
             LET US GO TO<br />
             <span className="not-italic font-bold">THE OTHER SIDE</span>
           </h1>
         </div>
 
-        <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-2xl mx-auto mb-12 animate-fade-in-up" style={{ animationDelay: '700ms', animationFillMode: 'both' }}>
+        <p
+          className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-2xl mx-auto mb-12 animate-fade-in-up"
+          style={{ animationDelay: '700ms', animationFillMode: 'both' }}
+        >
           The Church of God of Prophecy is a vibrant, worldwide body of believers, united in worship.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up" style={{ animationDelay: '900ms', animationFillMode: 'both' }}>
+        <div
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up"
+          style={{ animationDelay: '900ms', animationFillMode: 'both' }}
+        >
           <Link
             href="#service-times"
             className="bg-primary text-primary-foreground px-10 py-4 text-sm font-semibold tracking-widest uppercase hover:bg-primary/90 transition-all hover:scale-105"

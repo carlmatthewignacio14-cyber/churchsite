@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
               JSON.stringify(emailResult.error, null, 2)
             );
           } else {
-            console.log('Confirmation email sent successfully. ID:', emailResult.data?.id);
+            console.info('Confirmation email sent successfully. ID:', emailResult.data?.id);
           }
         } else {
           console.warn(
