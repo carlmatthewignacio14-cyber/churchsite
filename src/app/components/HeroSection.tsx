@@ -41,7 +41,8 @@ export default function HeroSection() {
           }}
         >
           <h1 className="font-aktiv-grotesk-ex text-hero-display font-light italic text-white mb-4 leading-none">
-            LET US GO TO<br />
+            LET US GO TO
+            <br />
             <span className="not-italic font-bold">THE OTHER SIDE</span>
           </h1>
         </div>

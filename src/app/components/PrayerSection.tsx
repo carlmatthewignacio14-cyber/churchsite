@@ -163,12 +163,17 @@ export default function PrayerSection() {
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </div>
-                <h3 className="font-display text-2xl font-semibold text-foreground">Prayer Received</h3>
+                <h3 className="font-display text-2xl font-semibold text-foreground">
+                  Prayer Received
+                </h3>
                 <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
                   Thank you for trusting us with your heart. Our team will be praying for you.
                 </p>
                 <button
-                  onClick={() => { setSubmitted(false); setForm({ name: '', email: '', request: '', private: false }); }}
+                  onClick={() => {
+                    setSubmitted(false);
+                    setForm({ name: '', email: '', request: '', private: false });
+                  }}
                   className="mt-4 text-xs font-semibold uppercase tracking-widest text-primary hover:text-primary/70 transition-colors"
                 >
                   Submit Another Request
@@ -176,7 +181,9 @@ export default function PrayerSection() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                <h3 className="font-display text-xl font-semibold text-foreground mb-6">Share Your Request</h3>
+                <h3 className="font-display text-xl font-semibold text-foreground mb-6">
+                  Share Your Request
+                </h3>
 
                 <div className="relative">
                   <input
@@ -190,7 +197,10 @@ export default function PrayerSection() {
                     aria-label="Your name"
                     suppressHydrationWarning
                   />
-                  <label htmlFor="prayer-name" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
+                  <label
+                    htmlFor="prayer-name"
+                    className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground"
+                  >
                     Name
                   </label>
                 </div>
