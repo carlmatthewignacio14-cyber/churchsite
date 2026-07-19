@@ -1,44 +1,25 @@
-import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 function getProjectRef(): string {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
   return url.match(/https:\/\/([^.]+)\./)?.[1] ?? '';
 }
 
-function injectTokenFromHeader(request: NextRequest): void {
+export function middleware(request: NextRequest) {
+  const response = NextResponse.next({ request });
+
+  // Inject x-sb-token header into cookie if present and no auth cookie exists
   const token = request.headers.get('x-sb-token');
-  if (!token) return;
-  const hasCookie = request.cookies.getAll().some((c) => c.name.includes('auth-token'));
-  if (hasCookie) return;
-  request.cookies.set(`sb-${getProjectRef()}-auth-token`, token);
-}
-
-export async function middleware(request: NextRequest) {
-  injectTokenFromHeader(request);
-  let supabaseResponse = NextResponse.next({ request });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value);
-            supabaseResponse.cookies.set(name, value, options);
-          });
-        },
-      },
+  if (token) {
+    const projectRef = getProjectRef();
+    const cookieName = `sb-${projectRef}-auth-token`;
+    const hasCookie = request.cookies.getAll().some((c) => c.name.includes('auth-token'));
+    if (!hasCookie) {
+      response.cookies.set(cookieName, token, { path: '/', sameSite: 'none', secure: true });
     }
-  );
+  }
 
-  await supabase.auth.getUser();
-
-  return supabaseResponse;
+  return response;
 }
 
 export const config = {
