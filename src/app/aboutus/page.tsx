@@ -156,7 +156,8 @@ export default function AboutUsPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
                 <span className="text-sm">
-                  Early pioneers embraced the New Testament as their only rule of faith and practice.
+                  Early pioneers embraced the New Testament as their only rule of faith and
+                  practice.
                 </span>
               </li>
               <li className="flex items-start">

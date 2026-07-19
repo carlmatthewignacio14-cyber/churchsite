@@ -164,11 +164,16 @@ export async function POST(request: NextRequest) {
             console.log('Confirmation email sent successfully. ID:', emailResult.data?.id);
           }
         } else {
-          console.warn('Resend API key is missing or not configured — skipping confirmation email.');
+          console.warn(
+            'Resend API key is missing or not configured — skipping confirmation email.'
+          );
         }
       } catch (emailError) {
         // Log email error but don't fail the whole request
-        console.error('Failed to send confirmation email:', emailError instanceof Error ? emailError.message : emailError);
+        console.error(
+          'Failed to send confirmation email:',
+          emailError instanceof Error ? emailError.message : emailError
+        );
       }
     }
 

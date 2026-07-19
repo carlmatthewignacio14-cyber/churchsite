@@ -20,7 +20,11 @@ export default function HeroSection() {
       </div>
 
       {/* Dark overlay for text readability over bright photo */}
-      <div className="absolute inset-0 z-[1]" style={{ backgroundColor: 'rgba(180, 100, 20, 0.50)', mixBlendMode: 'multiply' }} suppressHydrationWarning />
+      <div
+        className="absolute inset-0 z-[1]"
+        style={{ backgroundColor: 'rgba(180, 100, 20, 0.50)', mixBlendMode: 'multiply' }}
+        suppressHydrationWarning
+      />
       {/* Dark gradient at bottom for text legibility */}
       <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/20 via-transparent to-black/60" />
 
