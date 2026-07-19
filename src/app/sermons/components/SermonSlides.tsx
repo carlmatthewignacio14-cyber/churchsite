@@ -7,7 +7,7 @@ interface PowerPointSlide {
   id: string;
   title: string;
   speaker: string;
-  date: string;
+  date?: string;
   embedUrl: string; 
   downloadUrl: string;
   imageUrl: string;
