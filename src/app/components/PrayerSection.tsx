@@ -256,12 +256,22 @@ export default function PrayerSection() {
                     }
                   >
                     {form.private && (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="3"
+                        aria-hidden="true"
+                      >
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     )}
                   </div>
-                  <span className="text-sm text-muted-foreground">Keep this request private (prayer team only)</span>
+                  <span className="text-sm text-muted-foreground">
+                    Keep this request private (prayer team only)
+                  </span>
                 </label>
 
                 {error && (
@@ -278,7 +288,16 @@ export default function PrayerSection() {
                 >
                   {loading ? (
                     <>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="animate-spin" aria-hidden="true">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        className="animate-spin"
+                        aria-hidden="true"
+                      >
                         <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                       </svg>
                       Submitting...
