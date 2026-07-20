@@ -35,8 +35,7 @@ async function getAccessToken(): Promise<string> {
 
     if (errorCode === 'unauthorized_client') {
       throw new Error(
-        'Google OAuth configuration error: The OAuth client credentials do not match the refresh token. ' +
-          'Please ensure your GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are from a "Web application" type client in '+ 'Google Cloud Console, and that the GOOGLE_REFRESH_TOKEN was generated using those same credentials. You may need to '+ 'regenerate the refresh token.'
+        'Google OAuth configuration error: The OAuth client credentials do not match the refresh token. Please ensure your GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are from a "Web application" type client in Google Cloud Console, and that the GOOGLE_REFRESH_TOKEN was generated using those same credentials. You may need to regenerate the refresh token.'
       );
     }
 
