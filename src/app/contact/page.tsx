@@ -16,7 +16,7 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Replace with your active Google Apps Script web app URL
     const GOOGLE_SCRIPT_URL = 'https://google.com';
 
@@ -45,8 +45,18 @@ export default function ContactPage() {
       {/* Navigation Header Link */}
       <div className="border-b border-[#E6DDD4] bg-[#FAF8F5]/80 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-4 max-w-6xl h-20 flex items-center justify-between">
-          <Link href="/" className="text-xs font-bold uppercase tracking-widest text-[#706053] hover:text-[#1E1611] transition-colors flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+          <Link
+            href="/"
+            className="text-xs font-bold uppercase tracking-widest text-[#706053] hover:text-[#1E1611] transition-colors flex items-center gap-2"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+            >
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
             Home
@@ -58,11 +68,11 @@ export default function ContactPage() {
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-            
+
             {/* Left Column: Core Header Info & Church Details */}
             <div className="space-y-10">
               <div>
-                <span className="text-xs font-bold tracking-[0.3em] uppercase text-[#8B5E3C] block mb-3">We're Here For You</span>
+                <span className="text-xs font-bold tracking-[0.3em] uppercase text-[#8B5E3C] block mb-3">We&apos;re Here For You</span>
                 <h1 className="text-5xl font-serif font-bold tracking-tight text-[#1E1611] leading-none mb-6">
                   Contact Us
                 </h1>
@@ -136,11 +146,11 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[#706053] mb-2">Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       required
                       value={formData.fullName}
-                      onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all"
                       placeholder="Your Name"
                     />
@@ -148,11 +158,11 @@ export default function ContactPage() {
 
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[#706053] mb-2">Email Address</label>
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       required
                       value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all"
                       placeholder="Your Email"
                     />
@@ -160,11 +170,11 @@ export default function ContactPage() {
 
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[#706053] mb-2">Phone Number</label>
-                    <input 
-                      type="tel" 
+                    <input
+                      type="tel"
                       required
                       value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all"
                       placeholder="Your Phone Number"
                     />
@@ -172,13 +182,13 @@ export default function ContactPage() {
 
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[#706053] mb-2">Prayer Requests or Notes (Optional)</label>
-                    <textarea 
+                    <textarea
                       rows={4}
                       value={formData.notes}
-                      onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                       className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none px-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all resize-none"
                       placeholder="Tell us a little bit about yourself..."
-                      />
+                    />
                   </div>
 
                   <button
@@ -192,7 +202,6 @@ export default function ContactPage() {
                 </form>
               )}
             </div>
-
           </div>
         </div>
       </section>

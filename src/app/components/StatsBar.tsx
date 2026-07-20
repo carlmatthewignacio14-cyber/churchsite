@@ -16,7 +16,13 @@ const stats: Stat[] = [
   { prefix: '', target: 120, suffix: '+', label: 'Ministry Volunteers', decimals: 0 },
 ];
 
-function useCountUp(ref: React.RefObject<HTMLElement | null>, target: number, decimals: number, suffix: string, prefix: string) {
+function useCountUp(
+  ref: React.RefObject<HTMLElement | null>,
+  target: number,
+  decimals: number,
+  suffix: string,
+  prefix: string
+) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
