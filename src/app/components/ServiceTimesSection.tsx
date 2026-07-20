@@ -10,7 +10,12 @@ interface ServiceTime {
 }
 
 const services: ServiceTime[] = [
-  { day: 'Sunday', times: ['8:00 AM'], type: 'Main Worship Service', note: 'Sunday School for kids is available' },
+  {
+    day: 'Sunday',
+    times: ['8:00 AM'],
+    type: 'Main Worship Service',
+    note: 'Sunday School for kids is available',
+  },
   { day: 'Sunday Afternoon', times: ['3:00 PM'], type: 'Youth Service', note: 'Ages 14-35 are welcome' },
   { day: 'Wednesday', times: ['7:30 PM'], type: 'Midweek Service' },
   { day: 'Saturday', times: ['7:00 AM'], type: "Men's Gathering" },
