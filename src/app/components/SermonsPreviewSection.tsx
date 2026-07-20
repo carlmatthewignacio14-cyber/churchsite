@@ -19,7 +19,7 @@ interface SundayService {
 // facebookVideoUrl: the direct link to the Facebook video post (for card links)
 // ─────────────────────────────────────────────────────────────────────────────
 const sundayServices: SundayService[] = [
-   {
+  {
     id: '4',
     title: 'Crossing For One Broken Life | Mark 5:1-20',
     date: 'July 12, 2026',
