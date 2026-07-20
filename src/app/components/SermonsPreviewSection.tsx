@@ -21,20 +21,27 @@ interface SundayService {
 const sundayServices: SundayService[] = [
   {
     id: '4',
+    title: 'Restored By Jesus: Peter's Renewal | John 21:15-19',
+    date: 'July 19, 2026',
+    facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1684916209440809',
+    featured: true,
+  },
+  {
+    id: '1',
     title: 'Crossing For One Broken Life | Mark 5:1-20',
     date: 'July 12, 2026',
     facebookVideoUrl: 'https://web.facebook.com/cogopmarikinaph/videos/1989221781731174/',
     featured: true,
   },
   {
-    id: '1',
+    id: '2',
     title: 'They Came To The Other Side | Mark 5:1',
     date: 'July 5, 2026',
     facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1822311055408975/',
     featured: false,
   },
   {
-    id: '2',
+    id: '3',
     title: 'Anchored Fathers, Anchored Families | Hebrews 6:19',
     date: 'June 21, 2026',
     facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/4263437017240191/',
