@@ -21,7 +21,7 @@ interface SundayService {
 const sundayServices: SundayService[] = [
   {
     id: '4',
-    title: 'Restored By Jesus: Peter's Renewal | John 21:15-19',
+    title: 'Restored By Jesus: Peters Renewal | John 21:15-19',
     date: 'July 19, 2026',
     facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1684916209440809',
     featured: true,
