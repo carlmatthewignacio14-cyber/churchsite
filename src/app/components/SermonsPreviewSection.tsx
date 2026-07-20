@@ -3,7 +3,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 
-
 interface SundayService {
   id: string;
   title: string;

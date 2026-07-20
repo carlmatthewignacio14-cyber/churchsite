@@ -96,9 +96,17 @@ export default function ServiceTimesSection() {
           <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">
             Join Us
           </span>
-          <h2 style={{ fontFamily: "'Montserrat', sans-serif" }} className="text-section-title font-regular text-foreground">
+          <h2
+            style={{ fontFamily: "'Montserrat', sans-serif" }}
+            className="text-section-title font-regular text-foreground"
+          >
             Service Times<br />
-            <span style={{ fontFamily: "'Gabriel Sans', sans-serif" }} className="not-italic font-bold">&amp; Location</span>
+            <span
+              style={{ fontFamily: "'Gabriel Sans', sans-serif" }}
+              className="not-italic font-bold"
+            >
+              &amp; Location
+            </span>
           </h2>
         </div>
 
@@ -114,10 +122,14 @@ export default function ServiceTimesSection() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-xs font-bold tracking-widest uppercase text-accent">{s.day}</span>
+                      <span className="text-xs font-bold tracking-widest uppercase text-accent">
+                        {s.day}
+                      </span>
                       <div className="h-px flex-1 bg-border" />
                     </div>
-                    <h3 className="font-display text-xl font-semibold text-foreground mb-1">{s.type}</h3>
+                    <h3 className="font-display text-xl font-semibold text-foreground mb-1">
+                      {s.type}
+                    </h3>
                     {s.note && (
                       <p className="text-xs text-muted-foreground mt-1">{s.note}</p>
                     )}
