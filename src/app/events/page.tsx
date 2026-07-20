@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 const upcomingEvents = [
   {
     id: 'youth-retreat',
-    title: 'Youth & Young Adult Retreat',
+    title: 'Youth Retreat',
     date: 'August 1, 2026',
     location: 'To Be Announced',
     description:
