@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 
+
 interface SundayService {
   id: string;
   title: string;
@@ -140,6 +141,7 @@ function FacebookVideoCard({
       {/* Thumbnail area */}
       <div className="relative w-full bg-gray-900 overflow-hidden" style={{ paddingTop: '56.25%' }}>
         {service.thumbnailUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={service.thumbnailUrl}
             alt={`${service.title} thumbnail`}

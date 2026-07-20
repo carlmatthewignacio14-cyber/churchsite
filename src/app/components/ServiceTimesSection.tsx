@@ -16,7 +16,12 @@ const services: ServiceTime[] = [
     type: 'Main Worship Service',
     note: 'Sunday School for kids is available',
   },
-  { day: 'Sunday Afternoon', times: ['3:00 PM'], type: 'Youth Service', note: 'Ages 14-35 are welcome' },
+  {
+    day: 'Sunday Afternoon',
+    times: ['3:00 PM'],
+    type: 'Youth Service',
+    note: 'Ages 14-35 are welcome',
+  },
   { day: 'Wednesday', times: ['7:30 PM'], type: 'Midweek Service' },
   { day: 'Saturday', times: ['7:00 AM'], type: "Men's Gathering" },
 ];
@@ -80,7 +85,11 @@ export default function ServiceTimesSection() {
       : 'opacity-0 translate-y-7 blur-[5px]';
 
   return (
-    <section id="service-times" className="section-pad bg-background relative z-10" suppressHydrationWarning>
+    <section
+      id="service-times"
+      className="section-pad bg-background relative z-10"
+      suppressHydrationWarning
+    >
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Section heading */}
         <div ref={headingRef} className={`mb-12 ${revealClass(headingRevealed)}`}>
