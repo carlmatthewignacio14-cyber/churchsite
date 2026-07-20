@@ -5,6 +5,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
     remotePatterns: imageHosts,
+    qualities: [75, 85, 90, 95, 100],
   },
   webpack: (config) => {
     return config;
