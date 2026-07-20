@@ -197,15 +197,11 @@ export default function ContactPage() {
                       strokeWidth="2.5"
                       viewBox="0 0 24 24"
                     >
- agent-deploy-failure-379d
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         d="M4.5 12.75l6 6 9-13.5"
                       />
-
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
- rocket-update
                     </svg>
                   </span>
                   <h3 className="text-lg font-bold text-[#1E1611]">Welcome to the Family!</h3>

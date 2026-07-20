@@ -356,7 +356,9 @@ function EventsContent() {
                     </h2>
                     <p className="text-sm font-semibold uppercase tracking-wider text-accent">
                       {event?.date}
-                      {(event as any)?.time ? ` \u2022 ${(event as any).time}` : ''}
+                      {(event as { time?: string })?.time
+                        ? ` \u2022 ${(event as { time?: string }).time}`
+                        : ''}
                     </p>
                   </div>
                   <span className="inline-block bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto">

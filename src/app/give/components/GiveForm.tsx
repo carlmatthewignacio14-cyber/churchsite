@@ -2,8 +2,6 @@
 
 import React, { useState } from 'react';
 
-const presetAmounts = [100, 200, 500, 1000, 2000];
-
 const funds = [
   'General Fund',
   'Building Fund',
@@ -46,9 +44,6 @@ export default function GiveForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-
-    const GOOGLE_SCRIPT_URL =
-      'https://script.google.com/macros/s/AKfycbx9-D035Xtj66MJEiLrxUZwWrkKoPsIIpH4CJnYq4F5wBUpcv2ZvCwrmCWNA_6H8PG3HQ/exec';
   };
 
   if (submitted) {
