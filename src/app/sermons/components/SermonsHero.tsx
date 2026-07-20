@@ -13,7 +13,8 @@ export default function SermonsHero() {
     el.style.transform = 'translateY(30px)';
     setTimeout(() => {
       if (el) {
-        el.style.transition = 'opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)';
+        el.style.transition =
+          'opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)';
         el.style.opacity = '1';
         el.style.transform = 'translateY(0)';
       }
@@ -30,8 +31,8 @@ export default function SermonsHero() {
           fill
           priority
           className="object-cover"
-          sizes="100vw" />
-        
+          sizes="100vw"
+        />
       </div>
       <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/50 via-black/40 to-black/80" />
 
@@ -41,13 +42,15 @@ export default function SermonsHero() {
           Sermon Library
         </span>
         <h1 className="font-display text-hero-display font-light italic text-white leading-none">
-          Messages<br />
+          Messages
+          <br />
           <span className="not-italic font-bold">That Move You</span>
         </h1>
         <p className="text-white/70 text-lg font-light mt-6 max-w-xl leading-relaxed">
-          Browse our full archive of sermons — watch online, listen on the go, or share with a friend who needs to hear it.
+          Browse our full archive of sermons — watch online, listen on the go, or share with a
+          friend who needs to hear it.
         </p>
       </div>
-    </section>);
-
+    </section>
+  );
 }

@@ -41,13 +41,14 @@ export default function GiveForm() {
 
   const effectiveAmount = form.customAmount
     ? parseFloat(form.customAmount) || 0
-    : form.amount ?? 0;
+    : (form.amount ?? 0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
 
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9-D035Xtj66MJEiLrxUZwWrkKoPsIIpH4CJnYq4F5wBUpcv2ZvCwrmCWNA_6H8PG3HQ/exec';
+    const GOOGLE_SCRIPT_URL =
+      'https://script.google.com/macros/s/AKfycbx9-D035Xtj66MJEiLrxUZwWrkKoPsIIpH4CJnYq4F5wBUpcv2ZvCwrmCWNA_6H8PG3HQ/exec';
   };
 
   if (submitted) {
@@ -56,7 +57,14 @@ export default function GiveForm() {
         <div className="container mx-auto px-4 max-w-2xl text-center">
           <div className="bg-[#FAF8F5] border border-[#E6DDD4] rounded-none p-12 flex flex-col items-center gap-5 shadow-sm">
             <div className="w-20 h-20 bg-[#8B5E3C]/10 flex items-center justify-center rounded-full text-[#8B5E3C]">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
               </svg>
             </div>
@@ -85,12 +93,9 @@ export default function GiveForm() {
     <section className="py-16 bg-[#F4EFEA] relative z-10 font-sans text-[#1E1611]">
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start">
-
           {/* Form Side */}
           <div className="lg:col-span-3 bg-[#FAF8F5] border border-[#E6DDD4] rounded-none p-8 md:p-10 shadow-sm">
-            <h2 className="font-serif text-2xl font-bold text-[#1E1611] mb-8">
-              Make a Gift
-            </h2>
+            <h2 className="font-serif text-2xl font-bold text-[#1E1611] mb-8">Make a Gift</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Frequency Toggle */}
@@ -123,13 +128,17 @@ export default function GiveForm() {
                   Gift Amount
                 </p>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#706053] text-sm font-semibold">₱</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#706053] text-sm font-semibold">
+                    ₱
+                  </span>
                   <input
                     type="number"
                     placeholder="Enter amount"
-                    required 
+                    required
                     value={form.customAmount}
-                    onChange={(e) => setForm({ ...form, customAmount: e.target.value, amount: null })}
+                    onChange={(e) =>
+                      setForm({ ...form, customAmount: e.target.value, amount: null })
+                    }
                     className="w-full bg-white border border-[#D1C4B6] focus:border-[#8B5E3C] focus:ring-1 focus:ring-[#8B5E3C] rounded-none pl-7 pr-4 py-3 text-sm text-[#1E1611] placeholder-[#A39485] focus:outline-none transition-all"
                     min="1"
                     aria-label="Custom giving amount"
@@ -144,10 +153,12 @@ export default function GiveForm() {
                   Choose Payment Option
                 </p>
                 <div className="grid grid-cols-3 gap-2 bg-[#E6DDD4]/40 p-1 border border-[#D1C4B6] rounded-none">
-                  {([
-                    { id: 'gcash', label: 'GCash' },
-                    { id: 'inperson', label: 'In-Person' },
-                  ] as const).map((method) => (
+                  {(
+                    [
+                      { id: 'gcash', label: 'GCash' },
+                      { id: 'inperson', label: 'In-Person' },
+                    ] as const
+                  ).map((method) => (
                     <button
                       key={method.id}
                       type="button"
@@ -167,7 +178,10 @@ export default function GiveForm() {
 
               {/* Fund Designation */}
               <div>
-                <label htmlFor="fund" className="text-xs uppercase tracking-widest text-[#706053] mb-3 font-bold block">
+                <label
+                  htmlFor="fund"
+                  className="text-xs uppercase tracking-widest text-[#706053] mb-3 font-bold block"
+                >
                   Designate Your Gift
                 </label>
                 <select
@@ -179,7 +193,9 @@ export default function GiveForm() {
                   suppressHydrationWarning
                 >
                   {funds.map((f) => (
-                    <option key={f} value={f}>{f}</option>
+                    <option key={f} value={f}>
+                      {f}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -248,50 +264,58 @@ export default function GiveForm() {
           {/* Info Side */}
           <div className="lg:col-span-2 space-y-4">
             {form.paymentMethod === 'gcash' && (
-  <div className="space-y-4">
-    <h3 className="text-xl font-serif font-bold text-[#1E1611]">GCash Transfer</h3>
-    <p className="text-xs text-[#5A4F43] leading-relaxed">
-      Please scan our official QR code using your GCash app or manually send your gift to the mobile credentials listed below.
-    </p>
-    
-    <div className="p-4 bg-white border border-[#D1C4B6] rounded-none text-center flex flex-col items-center">
-      {/* 📸 Official GCash QR Asset Rendering Box */}
-      <div className="w-44 h-44 relative bg-[#FAF8F5] border border-[#E6DDD4] p-2 flex items-center justify-center mb-4">
-        <img 
-          src="/assets/images/gcash-qr.jpg" 
-          alt="Official COGOP Marikina GCash QR Code"
-          className="w-full h-full object-contain"
-        />
-      </div>
+              <div className="space-y-4">
+                <h3 className="text-xl font-serif font-bold text-[#1E1611]">GCash Transfer</h3>
+                <p className="text-xs text-[#5A4F43] leading-relaxed">
+                  Please scan our official QR code using your GCash app or manually send your gift
+                  to the mobile credentials listed below.
+                </p>
 
-      <div className="w-full text-left font-sans text-xs space-y-2 border-t border-[#E6DDD4] pt-3 text-[#1E1611]">
-        <p className="flex justify-between">
-          <span className="text-[#706053] font-bold uppercase tracking-wider">Account Name:</span>
-          <span className="font-semibold">COGOP MARIKINA</span>
-        </p>
-        <p className="flex justify-between">
-          <span className="text-[#706053] font-bold uppercase tracking-wider">Mobile Number:</span>
-          <span className="font-mono font-bold text-[#5A3E29]">09859397919</span>
-        </p>
-      </div>
-    </div>
-    <p className="text-[10px] text-[#706053] italic leading-tight">
-      *Tip: If browsing via a phone, you can screenshot the QR code above and upload it directly into your GCash app scanner panel.
-    </p>
-  </div>
-)}
+                <div className="p-4 bg-white border border-[#D1C4B6] rounded-none text-center flex flex-col items-center">
+                  {/* 📸 Official GCash QR Asset Rendering Box */}
+                  <div className="w-44 h-44 relative bg-[#FAF8F5] border border-[#E6DDD4] p-2 flex items-center justify-center mb-4">
+                    <img
+                      src="/assets/images/gcash-qr.jpg"
+                      alt="Official COGOP Marikina GCash QR Code"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+
+                  <div className="w-full text-left font-sans text-xs space-y-2 border-t border-[#E6DDD4] pt-3 text-[#1E1611]">
+                    <p className="flex justify-between">
+                      <span className="text-[#706053] font-bold uppercase tracking-wider">
+                        Account Name:
+                      </span>
+                      <span className="font-semibold">COGOP MARIKINA</span>
+                    </p>
+                    <p className="flex justify-between">
+                      <span className="text-[#706053] font-bold uppercase tracking-wider">
+                        Mobile Number:
+                      </span>
+                      <span className="font-mono font-bold text-[#5A3E29]">09859397919</span>
+                    </p>
+                  </div>
+                </div>
+                <p className="text-[10px] text-[#706053] italic leading-tight">
+                  *Tip: If browsing via a phone, you can screenshot the QR code above and upload it
+                  directly into your GCash app scanner panel.
+                </p>
+              </div>
+            )}
 
             {form.paymentMethod === 'inperson' && (
               <div className="bg-[#FAF8F5] border border-[#E6DDD4] p-6 shadow-sm">
                 <h3 className="font-serif text-lg font-bold text-[#1E1611] mb-3">In-Person Drop</h3>
                 <p className="text-sm text-[#5A4F43] leading-relaxed mb-3">
-                  You can secure offering envelopes directly from our ushers at the sanctuary lobby entrance during our Sunday worship assemblies.
+                  You can secure offering envelopes directly from our ushers at the sanctuary lobby
+                  entrance during our Sunday worship assemblies.
                 </p>
-                <p className="text-sm text-[#1E1611] font-semibold">📍 33 Banaba St, Nangka, Marikina City</p>
+                <p className="text-sm text-[#1E1611] font-semibold">
+                  📍 33 Banaba St, Nangka, Marikina City
+                </p>
               </div>
             )}
           </div>
-
         </div>
       </div>
     </section>
