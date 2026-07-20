@@ -138,10 +138,7 @@ function FacebookVideoCard({
       aria-label={`Watch ${service.title} on Facebook`}
     >
       {/* Thumbnail area */}
-      <div
-        className="relative w-full bg-gray-900 overflow-hidden"
-        style={{ paddingTop: '56.25%' }}
-      >
+      <div className="relative w-full bg-gray-900 overflow-hidden" style={{ paddingTop: '56.25%' }}>
         {service.thumbnailUrl ? (
           <img
             src={service.thumbnailUrl}

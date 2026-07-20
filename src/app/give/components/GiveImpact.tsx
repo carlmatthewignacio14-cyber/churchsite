@@ -12,11 +12,13 @@ interface ImpactItem {
 const impacts: ImpactItem[] = [
   {
     icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+    stat: '500+',
     label: 'Families Supported',
     description: 'Meals, emergency funds, and counseling provided to Nashville families through our benevolence program annually.',
   },
   {
     icon: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 22V12h6v10',
+    stat: '133',
     label: 'Mission Partners',
     description: 'Local and international ministry partners funded through your generosity, reaching communities in 133 countries.',
   },
