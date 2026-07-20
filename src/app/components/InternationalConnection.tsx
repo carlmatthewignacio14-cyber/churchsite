@@ -62,9 +62,7 @@ export default function InternationalConnection() {
                 <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
                   {portal?.title}
                 </h3>
-                <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                  {portal?.description}
-                </p>
+                <p className="text-slate-400 text-sm leading-relaxed mb-6">{portal?.description}</p>
               </div>
 
               <a

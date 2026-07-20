@@ -100,7 +100,8 @@ export default function ServiceTimesSection() {
             style={{ fontFamily: "'Montserrat', sans-serif" }}
             className="text-section-title font-regular text-foreground"
           >
-            Service Times<br />
+            Service Times
+            <br />
             <span
               style={{ fontFamily: "'Gabriel Sans', sans-serif" }}
               className="not-italic font-bold"
@@ -150,7 +151,17 @@ export default function ServiceTimesSection() {
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
                   {isMounted && (
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true" suppressHydrationWarning>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      className="text-primary"
+                      aria-hidden="true"
+                      suppressHydrationWarning
+                    >
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
