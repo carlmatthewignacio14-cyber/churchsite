@@ -29,7 +29,9 @@ export default function Header() {
     } else {
       document.body.style.overflow = '';
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [menuOpen]);
 
   return (
@@ -46,9 +48,15 @@ export default function Header() {
           }`}
         >
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 min-w-0" aria-label="Church of God of Prophecy Home">
+          <Link
+            href="/"
+            className="flex items-center gap-2 min-w-0"
+            aria-label="Church of God of Prophecy Home"
+          >
             <AppLogo size={32} />
-            <span className={`font-display text-base sm:text-lg font-semibold tracking-tight transition-colors duration-500 ${scrolled ? 'text-gray-900' : 'text-white'}`}>
+            <span
+              className={`font-display text-base sm:text-lg font-semibold tracking-tight transition-colors duration-500 ${scrolled ? 'text-gray-900' : 'text-white'}`}
+            >
               Church of God of Prophecy
               <span className="block text-sm font-medium tracking-widest">Marikina</span>
             </span>
@@ -61,8 +69,7 @@ export default function Header() {
                 key={link?.href}
                 href={link?.href}
                 className={`px-4 py-2 text-xs font-semibold tracking-widest uppercase transition-colors duration-500 ${
-                  scrolled 
-                    ? 'text-gray-900 hover:text-gray-600' :'text-white hover:text-white/70'
+                  scrolled ? 'text-gray-900 hover:text-gray-600' : 'text-white hover:text-white/70'
                 }`}
               >
                 {link?.label}

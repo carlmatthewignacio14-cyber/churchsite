@@ -65,9 +65,8 @@ const deleteCookie = (name: string) => {
 };
 
 const getToken = () =>
-  (canUseCookies() ? fromCookies() : fromStorage()).find((c) =>
-    c.name.includes('auth-token')
-  )?.value ?? null;
+  (canUseCookies() ? fromCookies() : fromStorage()).find((c) => c.name.includes('auth-token'))
+    ?.value ?? null;
 
 if (typeof window !== 'undefined' && !(window as any).__sb_patched__) {
   (window as any).__sb_patched__ = true;
@@ -103,10 +102,14 @@ export function createClient() {
           } else {
             cookiesToSet.forEach(({ name, value, options }) => {
               try {
-                value
-                  ? localStorage.setItem(`${PFX}${name}`, value)
-                  : localStorage.removeItem(`${PFX}${name}`);
-              } catch {}
+                if (value) {
+                  localStorage.setItem(`${PFX}${name}`, value);
+                } else {
+                  localStorage.removeItem(`${PFX}${name}`);
+                }
+              } catch {
+                void 0;
+              }
               if (value) setCookie(name, value, options);
             });
           }

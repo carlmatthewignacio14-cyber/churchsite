@@ -131,9 +131,7 @@ export default function ServiceTimesSection() {
                     <h3 className="font-display text-xl font-semibold text-foreground mb-1">
                       {s.type}
                     </h3>
-                    {s.note && (
-                      <p className="text-xs text-muted-foreground mt-1">{s.note}</p>
-                    )}
+                    {s.note && <p className="text-xs text-muted-foreground mt-1">{s.note}</p>}
                   </div>
                   <div className="flex flex-col items-end gap-1 shrink-0">
                     {s.times.map((t) => (
@@ -173,7 +171,8 @@ export default function ServiceTimesSection() {
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">Find Us</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    33 Banaba St, Nangka,<br />
+                    33 Banaba St, Nangka,
+                    <br />
                     Marikina, 1808 Metro Manila
                   </p>
                   <a
