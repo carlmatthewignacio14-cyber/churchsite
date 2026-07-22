@@ -48,7 +48,14 @@ export default function SignUpForm() {
 
     if (isLeaderOrPastor) {
       // 👑 ROUTE A: Use the safe server background builder for Leaders & Pastors
-      const result = await registerChurchLeader(email, password, role, personalPasscode);
+      const result = await registerChurchLeader(
+        email, 
+        password, 
+        role, 
+        personalPasscode, 
+        username, // 👥 Add this
+        ministry  // 🏷️ Add this
+      );
       if (!result.success) {
         setErrorMsg(result.message);
         setSuccess(false);
