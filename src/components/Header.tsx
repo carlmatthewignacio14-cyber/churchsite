@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AppLogo from '@/components/ui/AppLogo';
+import { supabase }  from '@/lib/supabase';
+import AuthModal from './AuthModal';    
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -15,6 +17,9 @@ const navLinks = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [userSession, setUserSession] = useState<any>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -30,6 +35,24 @@ export default function Header() {
     }
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUserSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogoutAction = async () => {
+    await supabase.auth.signOut();
+    setMenuOpen(false);
+    window.location.reload();
+  };
 
   return (
     <>
@@ -69,16 +92,42 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-3">
-            <Link
-              href="#service-times"
-              className="bg-primary text-primary-foreground px-5 py-2.5 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-colors"
-            >
-              Plan a Visit
-            </Link>
+           {userSession && (
+              <Link
+                href="/dashboard"
+                className={`px-4 py-2 text-xs font-bold tracking-widest uppercase transition-colors duration-500 text-blue-400 hover:text-blue-300`}
+              >
+                Dashboard
+              </Link>
+            )}
           </div>
 
+          {/* Desktop CTA / Login Section */}
+          <div className="hidden md:flex items-center gap-3">
+            {userSession ? (
+              // ✅ IF LOGGED IN: Show role status layout and logout actions
+              <div className="flex items-center gap-3">
+                <span className="bg-blue-600 text-white text-[10px] tracking-wider font-bold px-2 py-1 rounded uppercase">
+                  {userSession.user?.user_metadata?.role || 'New'}
+                </span>
+                <button
+                  onClick={handleLogoutAction}
+                  className="bg-red-600 text-white px-4 py-2 text-xs font-semibold tracking-widest uppercase hover:bg-red-700 transition-colors"
+                >
+                  Log Out
+                </button>
+              </div>
+            ) : (
+              // ❌ IF LOGGED OUT: Trigger Modal opening sequence
+              <button
+                onClick={() => setIsAuthOpen(true)}
+                className="bg-primary text-primary-foreground px-5 py-2.5 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-colors"
+              >
+                Log In / Sign Up
+              </button>
+            )}
+          </div>
+        
           {/* Mobile Hamburger */}
           <button
             className="md:hidden flex flex-col justify-center items-center w-11 h-11 gap-1.5 focus:outline-none"
@@ -122,14 +171,38 @@ export default function Header() {
             {link?.label}
           </Link>
         ))}
-        <Link
-          href="#service-times"
-          onClick={() => setMenuOpen(false)}
-          className="mt-4 bg-primary text-primary-foreground px-8 py-4 text-sm font-semibold tracking-widest uppercase"
-        >
-          Plan a Visit
-        </Link>
+        
+       {/* 6. Dynamic Dashboard routing link injected inside Mobile Overlay view */}
+        {userSession && (
+          <Link
+            href="/dashboard"
+            onClick={() => setMenuOpen(false)}
+            className="font-display text-4xl font-bold text-blue-400 hover:text-blue-300 transition-colors"
+          >
+            Dashboard
+          </Link>
+        )}
+
+        {/* Mobile Authentication buttons */}
+        {userSession ? (
+          <button
+            onClick={handleLogoutAction}
+            className="mt-4 bg-red-600 text-white px-8 py-4 text-sm font-semibold tracking-widest uppercase w-64 text-center"
+          >
+            Log Out
+          </button>
+        ) : (
+          <button
+            onClick={() => { setMenuOpen(false); setIsAuthOpen(true); }}
+            className="mt-4 bg-primary text-primary-foreground px-8 py-4 text-sm font-semibold tracking-widest uppercase w-64 text-center"
+          >
+            Log In / Sign Up
+          </button>
+        )}
       </div>
+
+      {/* 7. Connect the underlying authorization popup view components */}
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </>
   );
 }
