@@ -78,21 +78,24 @@ export default function DashboardPage() {
           <div>
             <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-widest">Active Profile Dashboard</span>
             
-            {/* 👤 DISPLAY USERNAME INSTEAD OF EMAIL */}
+            {/* 👤 FIXED USERNAME FALLBACK CHECK */}
             <h1 className="text-2xl font-bold mt-1 text-slate-100">
-              Welcome, {currentUser?.user_metadata?.username || 'Church Member'}
+              Welcome, {currentUser?.user_metadata?.username || currentUser?.user_metadata?.name || 'Church Member'}
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">Account Email: {currentUser?.email}</p>
           </div>
 
           <div className="flex flex-col items-start md:items-end gap-1.5">
+            {/* 🏷️ FIXED DYNAMIC MINISTRY BADGE DISPLAY */}
             <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wider shadow-sm">
-              Role Tier: {userRole}
+              {currentUser?.user_metadata?.ministry 
+                ? `Role: ${currentUser.user_metadata.ministry.replace(" Ministry", "")} Leader` 
+                : `Role Tier: ${userRole}`}
             </span>
             
-            {/* 🏷️ DYNAMIC MINISTRY BADGE DISPLAY */}
+            {/* Secondary verification badge */}
             {currentUser?.user_metadata?.ministry && (
-              <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 text-[11px] font-semibold px-2.5 py-1 rounded">
+              <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 text-[10px] font-semibold px-2 py-0.5 rounded">
                 📍 {currentUser.user_metadata.ministry}
               </span>
             )}
