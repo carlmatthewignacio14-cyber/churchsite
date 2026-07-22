@@ -73,17 +73,29 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-slate-950 text-white pt-28 px-4 pb-12">
       <div className="max-w-5xl mx-auto space-y-6">
 
-        {/* HEADER BAR STATUS PROFILE CARD */}
-        <div className="border border-slate-800 bg-slate-900/40 p-6 rounded-xl backdrop-blur-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        {/* Header Summary Strip */}
+        <div className="border border-slate-800 bg-slate-900/50 p-6 rounded-xl backdrop-blur-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-widest">Active Shift Profile</span>
-            <h1 className="text-xl font-bold mt-1 text-slate-100">{currentUser?.email}</h1>
+            <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-widest">Active Profile Dashboard</span>
+            
+            {/* 👤 DISPLAY USERNAME INSTEAD OF EMAIL */}
+            <h1 className="text-2xl font-bold mt-1 text-slate-100">
+              Welcome, {currentUser?.user_metadata?.username || 'Church Member'}
+            </h1>
+            <p className="text-xs text-slate-400 mt-0.5">Account Email: {currentUser?.email}</p>
           </div>
-          <div className="flex flex-col items-end">
-            <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
-              Position: {userRole}
+
+          <div className="flex flex-col items-start md:items-end gap-1.5">
+            <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wider shadow-sm">
+              Role Tier: {userRole}
             </span>
-            <p className="text-[11px] text-slate-400 mt-1">Status: Confirmed for this Month</p>
+            
+            {/* 🏷️ DYNAMIC MINISTRY BADGE DISPLAY */}
+            {currentUser?.user_metadata?.ministry && (
+              <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 text-[11px] font-semibold px-2.5 py-1 rounded">
+                📍 {currentUser.user_metadata.ministry}
+              </span>
+            )}
           </div>
         </div>
 
