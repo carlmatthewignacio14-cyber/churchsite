@@ -8,14 +8,20 @@ export async function registerChurchLeader(
   email: string, 
   password: string, 
   role: string, 
-  personalCode: string
+  personalCode: string,
+  username: string,
+  ministry: string 
 ) {
   // 1. Register the core user account inside Supabase Auth management
   const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
     email,
     password,
     email_confirm: true, // Auto-confirms email to keep onboarding fast
-    user_metadata: { role }
+    user_metadata: { 
+      role, 
+      username,
+      ministry: role === 'Leaders' ? ministry : null
+    }
   });
 
   if (authError || !authData.user) {
@@ -45,5 +51,5 @@ export async function registerChurchLeader(
     return { success: false, message: dbError.message };
   }
 
-  return { success: true, message: '🎉 Success! Your account and custom passcode are now live.' };
+  return { success: true, message: '🎉 Success! Your account is now live.' };
 }
