@@ -25,7 +25,7 @@ export default function LoginForm() {
         setLoading(false);
       } else {
         alert('Passcode Verified! Entering Portal...');
-        window.location.href = '/dashboard';
+        window.location.href = '/';
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
