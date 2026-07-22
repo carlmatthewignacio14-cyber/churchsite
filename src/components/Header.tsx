@@ -40,21 +40,21 @@ export default function Header() {
   }, [menuOpen]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase?.auth?.getSession()?.then(({ data: { session } }) => {
       setUserSession(session);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase?.auth?.onAuthStateChange((_event, session) => {
       setUserSession(session);
     });
 
-    return () => subscription.unsubscribe();
+    return () => subscription?.unsubscribe();
   }, []);
 
   const handleLogoutAction = async () => {
-    await supabase.auth.signOut();
+    await supabase?.auth?.signOut();
     setMenuOpen(false);
-    window.location.reload();
+    window.location?.reload();
   };
 
   return (
@@ -108,15 +108,14 @@ export default function Header() {
                 Dashboard
               </Link>
             )}
-          </div>
 
           {/* Desktop CTA / Login Section */}
           <div className="hidden md:flex items-center gap-3">
             {userSession ? (
               // ✅ IF LOGGED IN: Show role status layout and logout actions
-              <div className="flex items-center gap-3">
+              (<div className="flex items-center gap-3">
                 <span className="bg-blue-600 text-white text-[10px] tracking-wider font-bold px-2 py-1 rounded uppercase">
-                  {userSession.user?.user_metadata?.role || 'New'}
+                  {userSession?.user?.user_metadata?.role || 'New'}
                 </span>
                 <button
                   onClick={handleLogoutAction}
@@ -124,15 +123,14 @@ export default function Header() {
                 >
                   Log Out
                 </button>
-              </div>
+              </div>)
             ) : (
               // ❌ IF LOGGED OUT: Trigger Modal opening sequence
-              <button
+              (<button
                 onClick={() => setIsAuthOpen(true)}
                 className="bg-primary text-primary-foreground px-5 py-2.5 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-colors"
-              >
-                Log In / Sign Up
-              </button>
+              >Log In / Sign Up
+                              </button>)
             )}
           </div>
         
@@ -208,7 +206,6 @@ export default function Header() {
           </button>
         )}
       </div>
-
       {/* 7. Connect the underlying authorization popup view components */}
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </>

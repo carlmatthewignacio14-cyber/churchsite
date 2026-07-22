@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { supabase } from '@/lib/supabase'; // Hooks up to your local lib/supabase configuration folder
+import { supabase } from '@/lib/supabase'
+; // Hooks up to your local lib/supabase configuration folder
 import { ChurchRole } from '../contexts/auth-types';
 
 export default function SignUpForm() {

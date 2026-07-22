@@ -211,13 +211,22 @@ export default function DashboardPage() {
                     🔒 Media uploading and Leader promotion parameters require Pastor access level permissions.
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        )}
 
-            )}
-                {/* Fallback View for standard unregistered or New users */}
-                {userRole === 'New' && (
-                Welcome to the Church Portal!
-                Your account is active, but you do not have any specialized roles assigned to your identity yet. Please speak to a leader if you need staff portal assignments.
-                )}
+        {/* Fallback View for standard unregistered or New users */}
+        {userRole === 'New' && (
+          <div className="border border-slate-800 bg-slate-900 p-6 rounded-xl text-center">
+            <h2 className="text-lg font-bold text-white mb-2">Welcome to the Church Portal!</h2>
+            <p className="text-sm text-slate-400">
+              Your account is active, but you do not have any specialized roles assigned to your identity yet. Please speak to a leader if you need staff portal assignments.
+            </p>
+          </div>
+        )}
 
-            );
-          }
+      </div>
+    </div>
+  );
+}
