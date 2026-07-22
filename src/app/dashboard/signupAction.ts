@@ -1,5 +1,4 @@
-'use server'
-
+'use server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 /**
@@ -47,4 +46,4 @@ export async function registerChurchLeader(
   }
 
   return { success: true, message: '🎉 Success! Your account and custom passcode are now live.' };
-}x
+}
