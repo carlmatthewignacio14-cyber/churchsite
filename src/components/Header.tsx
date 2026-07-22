@@ -129,6 +129,7 @@ export default function Header() {
               (<button
                 onClick={() => setIsAuthOpen(true)}
                 className="bg-primary text-primary-foreground px-5 py-2.5 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-colors"
+                suppressHydrationWarning
               >Log In / Sign Up
                               </button>)
             )}
@@ -194,6 +195,7 @@ export default function Header() {
           <button
             onClick={handleLogoutAction}
             className="mt-4 bg-red-600 text-white px-8 py-4 text-sm font-semibold tracking-widest uppercase w-64 text-center"
+            suppressHydrationWarning
           >
             Log Out
           </button>
@@ -201,6 +203,7 @@ export default function Header() {
           <button
             onClick={() => { setMenuOpen(false); setIsAuthOpen(true); }}
             className="mt-4 bg-primary text-primary-foreground px-8 py-4 text-sm font-semibold tracking-widest uppercase w-64 text-center"
+            suppressHydrationWarning
           >
             Log In / Sign Up
           </button>
