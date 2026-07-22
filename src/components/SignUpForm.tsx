@@ -8,7 +8,9 @@ import { registerChurchLeader } from '../app/dashboard/signupAction';
 export default function SignUpForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [role, setRole] = useState<ChurchRole>('New');
+  const [ministry, setMinistry] = useState('');
   
   const [masterCode, setMasterCode] = useState('');
   const [personalPasscode, setPersonalPasscode] = useState('');
@@ -55,13 +57,15 @@ export default function SignUpForm() {
         // Clear secret parameters
         setMasterCode('');
         setPersonalPasscode('');
+        setUsername('');
+        setMinistry('');
       }
     } else {
       // ✉️ ROUTE B: Standard signup for general Visitors & Members
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { role } }
+        options: { data: { role, username } }
       });
       if (error) setErrorMsg(error.message);
       else setSuccess(true);
@@ -77,6 +81,11 @@ export default function SignUpForm() {
       {success && <p className="bg-green-500/20 text-green-400 p-2 text-xs rounded mb-4 text-center border border-green-500/30">🎉 Success! Account successfully registered.</p>}
 
       <form onSubmit={handleSignUpSubmit} className="space-y-4">
+        <div>
+          <label className="text-xs font-semibold text-slate-400 block mb-1">Username</label>
+          <input type="text" required value={username} onChange={e => setUsername(e.target.value)} placeholder="Enter unique username" className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
+        </div>
+        
         <div>
           <label className="text-xs font-semibold text-slate-400 block mb-1">Email Address</label>
           <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
@@ -101,6 +110,22 @@ export default function SignUpForm() {
           </select>
         </div>
 
+        {/* ➕ Conditional Ministry Dropdown for Leaders */}
+        {role === 'Leaders' && (
+          <div className="animate-fadeIn">
+            <label className="text-xs font-semibold text-amber-400 block mb-1">Ministry Assignment</label>
+            <select value={ministry} onChange={e => setMinistry(e.target.value)} className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-amber-500 outline-none cursor-pointer">
+              <option value="">-- Select Your Ministry Team --</option>
+              <option value="Pastoral Team">Pastoral Team</option>
+              <option value="Men's Ministry">Men's Ministry</option>
+              <option value="Women's Ministry">Women's Ministry</option>
+              <option value="Youth Ministry">Youth Ministry</option>
+              <option value="Kids Ministry">Kids Ministry</option>
+              <option value="Multimedia Ministry">Multimedia Ministry</option>
+            </select>
+          </div>
+        )}
+        
         {/* 🔑 STEP A: Input General Setup Key */}
         {(role === 'Leaders' || role === 'Pastors') && (
           <div className="bg-amber-500/5 border border-amber-500/20 p-3 rounded-lg space-y-3">
