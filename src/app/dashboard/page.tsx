@@ -3,221 +3,261 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 
-interface ChurchUser {
-  id: string;
-  email: string;
-  raw_user_meta_data: {
-    role?: string;
-  };
-}
-
 export default function DashboardPage() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<string>('New');
   const [loading, setLoading] = useState(true);
+  
+  // Tab Switcher for Leaders/Pastors ('management' | 'pages')
+  const [activeTab, setActiveTab] = useState<'management' | 'pages'>('management');
+  // Content Sub-tab Switcher ('events' | 'recent' | 'sermons')
+  const [contentTab, setContentTab] = useState<'events' | 'recent' | 'sermons'>('events');
 
-  // States for the Management panel
-  const [membersList, setMembersList] = useState<ChurchUser[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState('');
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [taskDescription, setTaskDescription] = useState('');
+  // Form input states for adding church content
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [mediaUrl, setMediaUrl] = useState('');
   const [actionMessage, setActionMessage] = useState('');
 
+  // Mock list of team schedules for the month (visible to Staff, Leaders, Pastors)
+  const monthlyRoster = [
+    { name: 'John Doe', role: 'Staff', assignment: 'Praise & Worship Guitarist', date: 'August 2026' },
+    { name: 'Sarah Smith', role: 'Staff', assignment: 'Sunday School Teacher', date: 'August 2026' },
+    { name: 'David Lee', role: 'Staff', assignment: 'Media & Tech Operator', date: 'August 2026' },
+    { name: 'Maria Santos', role: 'Staff', assignment: 'Main Entrance Greeter', date: 'August 2026' },
+  ];
+
   useEffect(() => {
-    // 1. Get logged-in user profile attributes
     const fetchUserSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        window.location.href = '/'; // Kick unauthenticated guests to home
+        window.location.href = '/'; // Bounce unauthenticated visitors back home
         return;
       }
       setCurrentUser(session.user);
-      const role = session.user?.user_metadata?.role || 'New';
-      setUserRole(role);
-
-      // 2. If user is a Leader or Pastor, fetch the list of church members
-      if (role === 'Leaders' || role === 'Pastors') {
-        fetchChurchMembers();
-      } else {
-        setLoading(false);
-      }
+      setUserRole(session.user?.user_metadata?.role || 'New');
+      setLoading(false);
     };
-
     fetchUserSession();
   }, []);
 
-  const fetchChurchMembers = async () => {
-    // NOTE: This basic code fetches accounts directly via Supabase Auth metadata lookup.
-    // In a production app, you will ideally fetch this from a custom 'profiles' table.
-    const { data, error } = await supabase.auth.admin.listUsers();
-    
-    if (!error && data?.users) {
-      // Filter list to prioritize viewing standard Members or New users
-      const filtered = data.users.filter(
-        (u: any) => u.user_metadata?.role === 'Members' || u.user_metadata?.role === 'New'
-      );
-      setMembersList(filtered);
-    }
-    setLoading(false);
-  };
-
-  const handlePromoteToStaff = async (e: React.FormEvent) => {
+  const handleContentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setActionMessage('');
-
-    if (!selectedUserId || !selectedMonth || !taskDescription) {
-      setActionMessage('❌ Please populate all assignment configurations.');
-      return;
-    }
-
-    // 🛡️ Security Check: Ensure standard users can't trigger this manually
-    if (userRole !== 'Leaders' && userRole !== 'Pastors') {
-      setActionMessage('⛔ Unauthorized action configuration.');
-      return;
-    }
-
-    // 🗄️ Update User Metadata via Supabase Admin API
-    // Note: Updating roles typically requires custom Edge Functions or an internal profiles table.
-    // Here we show how to assign the metadata parameters cleanly:
-    const { error } = await supabase.auth.admin.updateUserById(selectedUserId, {
-      user_metadata: { 
-        role: 'Staff', 
-        monthly_assignment: taskDescription,
-        assignment_month: selectedMonth
-      }
-    });
-
-    if (error) {
-      setActionMessage(`❌ Update failed: ${error.message}`);
-    } else {
-      setActionMessage('🎉 Success! User role promoted to Staff with assignment active.');
-      // Reset form controls
-      setSelectedUserId('');
-      setTaskDescription('');
-      setSelectedMonth('');
-      fetchChurchMembers(); // Refresh directory layout
-    }
+    setActionMessage('Uploading data to database...');
+    
+    // Placeholder simulation for writing to Supabase tables
+    setTimeout(() => {
+      alert(`Successfully published item to ${contentTab.toUpperCase()} layout!`);
+      setActionMessage(`🎉 New ${contentTab.slice(0, -1)} entry added successfully!`);
+      setTitle('');
+      setDescription('');
+      setMediaUrl('');
+    }, 800);
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">Loading portal database configurations...</div>;
+    return <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center font-mono tracking-widest text-xs">LOADING PORTAL STRUCTURE...</div>;
+  }
+
+  // Deny access immediately if a standard 'New' visitor or basic 'Members' types this route directly
+  if (userRole === 'New' || userRole === 'Members') {
+    return (
+      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-6 text-center">
+        <div className="max-w-md bg-slate-900 border border-slate-800 p-6 rounded-xl">
+          <h2 className="text-xl font-bold text-red-400">Access Denied</h2>
+          <p className="text-sm text-slate-400 mt-2">This workspace environment is strictly reserved for Church Staff, Leaders, and Pastors.</p>
+          <button onClick={() => window.location.href = '/'} className="mt-4 bg-blue-600 px-4 py-2 rounded text-xs font-bold uppercase tracking-wider">Back to Homepage</button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white pt-24 px-4 pb-12">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-screen bg-slate-950 text-white pt-28 px-4 pb-12">
+      <div className="max-w-5xl mx-auto space-y-6">
         
-        {/* Header Summary Strip */}
-        <div className="border border-slate-800 bg-slate-900/50 p-6 rounded-xl backdrop-blur-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        {/* HEADER BAR STATUS PROFILE CARD */}
+        <div className="border border-slate-800 bg-slate-900/40 p-6 rounded-xl backdrop-blur-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold font-display">Church Management Portal</h1>
-            <p className="text-sm text-slate-400 mt-1">Logged in as: <span className="text-white font-medium">{currentUser?.email}</span></p>
+            <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-widest">Active Shift Profile</span>
+            <h1 className="text-xl font-bold mt-1 text-slate-100">{currentUser?.email}</h1>
           </div>
-          <span className="bg-blue-600/20 text-blue-400 border border-blue-500/30 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-widest">
-            Role Tier: {userRole}
-          </span>
+          <div className="flex flex-col items-end">
+            <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
+              Position: {userRole}
+            </span>
+            <p className="text-[11px] text-slate-400 mt-1">Status: Confirmed for this Month</p>
+          </div>
         </div>
 
-        {/* 📋 SECTION A: Staff View Panel (Display unique tasks assigned to them) */}
-        {userRole === 'Staff' && (
-          <div className="border border-slate-800 bg-slate-900 p-6 rounded-xl">
-            <h2 className="text-lg font-bold text-green-400 mb-2">📋 Your Monthly Schedule Assignment</h2>
-            {currentUser?.user_metadata?.monthly_assignment ? (
-              <div className="bg-slate-950 p-4 rounded border border-slate-800 mt-3">
-                <p className="text-xs text-slate-400 uppercase tracking-wider font-bold">Month: {currentUser.user_metadata.assignment_month}</p>
-                <p className="text-white text-base mt-1 font-medium">{currentUser.user_metadata.monthly_assignment}</p>
-              </div>
-            ) : (
-              <p className="text-sm text-slate-400 mt-2">No task structures logged for this current cycle loop.</p>
-            )}
+        {/* ⭐ TOP SECTION: Your Individual Assignment for the Month */}
+        <div className="border border-green-500/20 bg-green-500/5 p-5 rounded-xl border-l-4 border-l-green-500">
+          <h2 className="text-sm font-bold tracking-wider text-green-400 uppercase">Your Personal Deployment Status</h2>
+          {currentUser?.user_metadata?.monthly_assignment ? (
+            <div className="mt-2">
+              <p className="text-xs text-slate-400">Assigned Schedule Window: <span className="text-slate-200 font-semibold">{currentUser.user_metadata.assignment_month}</span></p>
+              <p className="text-base text-white font-medium mt-1">🎯 {currentUser.user_metadata.monthly_assignment}</p>
+            </div>
+          ) : (
+            <p className="text-sm text-slate-300 mt-1">You are logged on as active <span className="font-semibold">{userRole}</span>. No individual tactical duty restriction is logged for your profile today.</p>
+          )}
+        </div>
+
+        {/* 📋 MANAGEMENT VIEW: Visible to Staff, Leaders, and Pastors */}
+        {userRole === 'Staff' ? (
+          /* Staff-Only Roster Board View */
+          <div className="border border-slate-800 bg-slate-900 p-6 rounded-xl space-y-4">
+            <div>
+              <h2 className="text-lg font-bold text-slate-100">Monthly Management Roster</h2>
+              <p className="text-xs text-slate-400 mt-0.5">View everyone assigned to active ministry management roles for this month cycle.</p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm text-slate-300">
+                <thead className="bg-slate-950 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
+                  <tr>
+                    <th className="p-3">Team Member</th>
+                    <th className="p-3">Position</th>
+                    <th className="p-3">Assigned Management Duty</th>
+                    <th className="p-3">Schedule Month</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/50">
+                  {monthlyRoster.map((item, idx) => (
+                    <tr key={idx} className="hover:bg-slate-900/50">
+                      <td className="p-3 font-medium text-white">{item.name}</td>
+                      <td className="p-3 text-xs"><span className="bg-slate-800 px-2 py-0.5 rounded text-slate-400">{item.role}</span></td>
+                      <td className="p-3 text-slate-200">{item.assignment}</td>
+                      <td className="p-3 text-xs text-slate-400">{item.date}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        )}
-
-        {/* 🛠️ SECTION B: Leader & Pastor Administration Console */}
-        {(userRole === 'Leaders' || userRole === 'Pastors') && (
-          <div className="grid md:grid-cols-3 gap-6">
+        ) : (
+          /* 👑 ADMINISTRATIVE DASHBOARD FOR LEADERS & PASTORS */
+          <div className="space-y-6">
             
-            {/* Left Column: Form Assignment Prompter */}
-            <div className="md:col-span-2 border border-slate-800 bg-slate-900 p-6 rounded-xl space-y-4">
-              <h2 className="text-lg font-bold text-amber-400">Promote Member to Monthly Staff</h2>
-              <p className="text-xs text-slate-400">Select a church member below to grant them Staff access and set their schedule assignment for the month.</p>
-
-              {actionMessage && <div className="text-sm p-3 rounded bg-slate-950 border border-slate-800 font-medium">{actionMessage}</div>}
-
-              <form onSubmit={handlePromoteToStaff} className="space-y-4 pt-2">
-                <div>
-                  <label className="text-xs font-semibold uppercase text-slate-400">Select Account</label>
-                  <select 
-                    value={selectedUserId} 
-                    onChange={e => setSelectedUserId(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-sm mt-1 focus:border-blue-500 outline-none"
-                  >
-                    <option value="">-- Choose an Available Member --</option>
-                    {membersList.map(m => (
-                      <option key={m.id} value={m.id}>{m.email} ({m.raw_user_meta_data?.role || 'Members'})</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs font-semibold uppercase text-slate-400">Target Month</label>
-                    <input 
-                      type="month" 
-                      value={selectedMonth}
-                      onChange={e => setSelectedMonth(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-sm mt-1 focus:border-blue-500 outline-none" 
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-semibold uppercase text-slate-400">Task Schedule Details</label>
-                  <textarea 
-                    rows={3}
-                    placeholder="e.g., Usher Duty Setup, Media Tech Operator, Greeter Team Lead"
-                    value={taskDescription}
-                    onChange={e => setTaskDescription(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-sm mt-1 focus:border-blue-500 outline-none resize-none"
-                  />
-                </div>
-
-                <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold p-3 rounded-lg text-xs tracking-widest uppercase transition-all shadow-md">
-                  Confirm Allocation & Update Status
-                </button>
-              </form>
+            {/* Top Workspace Tab Navs */}
+            <div className="flex border-b border-slate-800 gap-2">
+              <button 
+                onClick={() => setActiveTab('management')}
+                className={`px-4 py-2 text-xs tracking-widest font-bold uppercase border-b-2 transition-all ${
+                  activeTab === 'management' ? 'border-amber-500 text-amber-400' : 'border-transparent text-slate-400 hover:text-white'
+                }`}
+              >
+                👥 Roster Management
+              </button>
+              <button 
+                onClick={() => setActiveTab('pages')}
+                className={`px-4 py-2 text-xs tracking-widest font-bold uppercase border-b-2 transition-all ${
+                  activeTab === 'pages' ? 'border-purple-500 text-purple-400' : 'border-transparent text-slate-400 hover:text-white'
+                }`}
+              >
+                🖥️ Website Page Manager
+              </button>
             </div>
 
-            {/* Right Column: Special Quick Management Switches for Pastor Tier */}
-            <div className="border border-slate-800 bg-slate-900 p-6 rounded-xl space-y-4">
-              <h2 className="text-lg font-bold text-purple-400">System Utilities</h2>
-              <div className="space-y-2">
-                <button className="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-left text-xs font-semibold text-slate-300 hover:border-purple-500 transition-colors">
-                  📁 Global Website Info Editor
-                </button>
-                
-                {/* 👑 PASTOR ONLY EXCLUSIVE CONTROLS */}
-                {userRole === 'Pastors' ? (
-                  <>
-                    <button className="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-left text-xs font-semibold text-purple-400 hover:border-purple-500 transition-colors">
-                      📤 Upload Media Library Files
-                    </button>
-                    <button className="w-full bg-slate-950 border border-slate-800 p-3 rounded-lg text-left text-xs font-semibold text-purple-400 hover:border-purple-500 transition-colors">
-                      👑 Manage Leader Account Tiers
-                    </button>
-                  </>
-                ) : (
-                  <div className="p-3 bg-slate-950 border border-slate-800 rounded-lg text-[11px] text-slate-500 text-center">
-                    🔒 Media uploading and Leader promotion parameters require Pastor access level permissions.
+            {/* TAB PANEL 1: Staff Allocations & Management Roster */}
+            {activeTab === 'management' && (
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="md:col-span-2 border border-slate-800 bg-slate-900 p-6 rounded-xl space-y-4">
+                  <h2 className="text-base font-bold text-amber-400">Current Monthly Management Overview</h2>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs text-slate-300">
+                      <thead className="bg-slate-950 text-slate-400 uppercase tracking-wider border-b border-slate-800">
+                        <tr>
+                          <th className="p-3">Name</th>
+                          <th className="p-3">Duty Assignment</th>
+                          <th className="p-3">Schedule</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-800/50">
+                        {monthlyRoster.map((item, idx) => (
+                          <tr key={idx}>
+                            <td className="p-3 text-white font-medium">{item.name}</td>
+                            <td className="p-3 text-slate-300">{item.assignment}</td>
+                            <td className="p-3 text-slate-400">{item.date}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
-                )}
+                </div>
 
-            )}
-                {/* Fallback View for standard unregistered or New users */}
-                {userRole === 'New' && (
-                Welcome to the Church Portal!
-                Your account is active, but you do not have any specialized roles assigned to your identity yet. Please speak to a leader if you need staff portal assignments.
-                )}
+                <div className="border border-slate-800 bg-slate-900 p-5 rounded-xl h-fit space-y-3">
+                  <h3 className="text-sm font-bold text-slate-200">Quick Allocation Forms</h3>
+                  Select church accounts from your registry directory to update their roles dynamically to active Staff.
+                  <button 
+                    onClick={() => alert('Opening roster picker console...')} 
+                    className="w-full bg-amber-500 text-slate-950 font-bold py-2 rounded text-xs tracking-wider uppercase hover:bg-amber-400 transition-colors">
+                    Assign Staff for Month
 
-            );
-          }
+
+              )}
+              {/* TAB PANEL 2: Website Layout Updates (Events, Recent Events, Sermons) */}
+              {activeTab === 'pages' && (
+
+                {/* Content type picker menu */}
+                      <button
+                        onClick={() => { setContentTab('events'); setActionMessage(''); }}
+                        className={w-full text-left p-3 rounded-md text-xs font-semibold uppercase tracking-wider transition-all ${contentTab === 'events' ? 'bg-purple-600/20 text-purple-400 font-bold border border-purple-500/20' : 'hover:bg-slate-900 text-slate-400'}}
+                        >
+                        Upcoming Events
+
+                      <button
+                        onClick={() => { setContentTab('recent'); setActionMessage(''); }}
+                        className={w-full text-left p-3 rounded-md text-xs font-semibold uppercase tracking-wider transition-all ${contentTab === 'recent' ? 'bg-purple-600/20 text-purple-400 font-bold border border-purple-500/20' : 'hover:bg-slate-900 text-slate-400'}}
+                        >
+                          Recent Activities
+
+                      <button
+                        onClick={() => { setContentTab('sermons'); setActionMessage(''); }}
+                        className={w-full text-left p-3 rounded-md text-xs font-semibold uppercase tracking-wider transition-all ${contentTab === 'sermons' ? 'bg-purple-600/20 text-purple-400 font-bold border border-purple-500/20' : 'hover:bg-slate-900 text-slate-400'}}
+                        >
+                          Sermons & Media 
+
+                {/* Main operational form template */}
+                    Publish to Website: {contentTab}Fill in the values below to push modifications to the live public screen layout modules.
+
+                    {actionMessage && {actionMessage}}
+
+                    Title Heading
+                    <input
+                      type="text"
+                      required
+                      value={title}
+                      onChange={e => setTitle(e.target.value)}
+                      placeholder={e.g., Sunday Youth Worship Service, Anniversary Video}
+                      className="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-purple-500 outline-none"
+                    />
+
+                    Description / Summary Content
+                     <textarea
+                       rows={3}
+                       required
+                       value={description}
+                       onChange={e => setDescription(e.target.value)}
+                       placeholder="Provide details, times, locations or scripture references..."
+                       className="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-purple-500 outline-none resize-none"
+                       />
+
+                    Attach Media URL / Link (Optional)
+                    <input
+                      type="url"
+                      value={mediaUrl}
+                      onChange={e => setMediaUrl(e.target.value)}
+                      placeholder="e.g., youtube.com..., google.com..."
+                      className="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-purple-500 outline-none"
+                      />
+                      Publish Update & Upload Media
+
+
+                 )}
+
+              )}
+
+          );
+        }
+
+                    
