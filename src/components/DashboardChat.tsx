@@ -69,18 +69,30 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
     const currentText = inputText;
     setInputText('');
 
-    // Save directly to your Supabase table rows
-    const { error } = await supabase
-      .from('chat_messages')
-      .insert([
-        {
-          user_id: currentUserId,
-          sender_name: myUsername,
-          message_text: currentText
-        }
-      ]);
+    // Get the current session token to authenticate the API call
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.access_token) {
+      console.error("Failed to save message: No active session");
+      return;
+    }
 
-    if (error) console.error("Failed to save message:", error.message);
+    // Use API route with admin client to bypass RLS
+    const response = await fetch('/api/chat-messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({
+        message_text: currentText,
+        sender_name: myUsername,
+      }),
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      console.error("Failed to save message:", err.error);
+    }
   };
 
   return (
