@@ -312,7 +312,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
               <div className="px-4 py-2 shrink-0">
                 <input
                   type="text"
-                  placeholder="Search Messenger..."
+                  placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-[#1c212d] text-slate-200 placeholder-slate-400 text-xs rounded-full px-4 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
