@@ -30,38 +30,54 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
   const [inputText, setInputText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [newGroupName, setNewGroupName] = useState('');
-  
+
   const chatEndRef = useRef<HTMLDivElement>(null);
   const myUsername = currentUser?.user_metadata?.username || currentUser?.email || 'User';
   const currentUserId = currentUser?.id;
 
+  // 1. Fetch initial user channels and available users directory
   useEffect(() => {
     if (!currentUserId) return;
 
     const fetchInitialSidebarData = async () => {
-      // Fetch public group chat rooms and private DMs user is a part of
-      const { data: userRooms } = await supabase
-        .from('chat_rooms')
-        .select(`
-          id, name, is_group,
-          room_members!inner(user_id)
-        `)
-        .eq('room_members.user_id', currentUserId);
+      // Fetch rooms where current user is a member
+      const { data: userMemberships } = await supabase
+        .from('room_members')
+        .select('room_id')
+        .eq('user_id', currentUserId);
 
-      // Fetch all system users to allow starting a Direct Message thread
+      if (userMemberships && userMemberships.length > 0) {
+        const roomIds = userMemberships.map((m) => m.room_id);
+        const { data: userRooms } = await supabase
+          .from('chat_rooms')
+          .select('id, name, is_group')
+          .in('id', roomIds);
+
+        if (userRooms) {
+          setRooms(
+            userRooms.map((r: any) => ({
+              id: r.id,
+              name: r.name || 'Private Message',
+              is_group: r.is_group,
+            }))
+          );
+        }
+      }
+
+      // Fetch directory users
       const { data: profiles } = await supabase
-        .from('user_directory') 
+        .from('user_directory')
         .select('id, username, email')
         .neq('id', currentUserId);
-      
-      if (userRooms) setRooms(userRooms.map((r: any) => ({ id: r.id, name: r.name || 'Private Message', is_group: r.is_group })));
+
       if (profiles) setUsersList(profiles);
     };
 
     fetchInitialSidebarData();
   }, [currentUserId]);
 
-  // 2. Room Switch Listener: Loads message history and sets up Realtime when active room updates
+  // 2. Room Switch & Realtime Listener
+  // FIXED: Dependency array now includes activeRoom?.id so it properly unsubscribes/resubscribes on room changes
   useEffect(() => {
     if (!currentUserId || !activeRoom) return;
 
@@ -73,52 +89,68 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         .order('created_at', { ascending: true });
 
       if (data && !error) {
-        setMessages(data.map((row: any) => ({
-          id: row.id.toString(),
-          sender: row.sender_name || 'User',
-          text: row.message_text || '',
-          timestamp: new Date(row.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        })));
+        setMessages(
+          data.map((row: any) => ({
+            id: row.id.toString(),
+            sender: row.sender_name || 'User',
+            text: row.message_text || '',
+            timestamp: new Date(row.created_at).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+          }))
+        );
       }
     };
 
     loadChatHistory();
 
-    // Listen live for new incoming database rows
+    // Set up Realtime listener specifically for activeRoom.id
     const channel = supabase
-  .channel(`room-messages:${activeRoom.id}`)
-  .on('postgres_changes', { 
-    event: 'INSERT', 
-    schema: 'public', 
-    table: 'chat_messages',
-    filter: `room_id=eq.${activeRoom.id}` // <-- FIXED with backticks ``
-  }, (payload) => {
+      .channel(`room-messages:${activeRoom.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: `room_id=eq.${activeRoom.id}`,
+        },
+        (payload) => {
           const newRow = payload.new;
           const incomingMsg: Message = {
             id: newRow.id.toString(),
             sender: newRow.sender_name || 'User',
             text: newRow.message_text || '',
-            timestamp: new Date(newRow.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            timestamp: new Date(newRow.created_at).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
           };
-          setMessages((prev) => prev.some(m => m.id === incomingMsg.id) ? prev : [...prev, incomingMsg]);
+
+          // Append incoming message ONLY if it isn't already present
+          setMessages((prev) =>
+            prev.some((m) => m.id === incomingMsg.id) ? prev : [...prev, incomingMsg]
+          );
         }
-      ).subscribe();
+      )
+      .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [currentUserId]);
+  }, [currentUserId, activeRoom?.id]); // <-- CRITICAL FIX HERE
 
+  // Auto scroll to bottom
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // 3. Create a Group Chat logic
+  // 3. Create Group Chat
   const handleCreateGroup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newGroupName.trim() || !currentUserId) return;
 
-    // Create the room
     const { data: newRoom, error: roomErr } = await supabase
       .from('chat_rooms')
       .insert([{ name: newGroupName, is_group: true }])
@@ -127,8 +159,9 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
 
     if (roomErr || !newRoom) return;
 
-    // Add creator to room members
-    await supabase.from('room_members').insert([{ room_id: newRoom.id, user_id: currentUserId }]);
+    await supabase.from('room_members').insert([
+      { room_id: newRoom.id, user_id: currentUserId },
+    ]);
 
     const addedRoom: ChatRoom = { id: newRoom.id, name: newRoom.name, is_group: true };
     setRooms((prev) => [...prev, addedRoom]);
@@ -136,87 +169,89 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
     setNewGroupName('');
   };
 
-  // 4. Start/Open Direct Messaging connection with a user
+  // 4. Start/Open Direct Messaging Room (FIXED)
   const handleStartDM = async (targetUser: UserProfile) => {
     if (!currentUserId) return;
 
-    // Check if an isolated direct message channel room exists between these two users
-    const { data: existingMembers } = await supabase
+    // Find rooms the current user belongs to
+    const { data: myMemberships } = await supabase
       .from('room_members')
       .select('room_id')
       .eq('user_id', currentUserId);
 
     let targetRoomId = null;
 
-    if (existingMembers && existingMembers.length > 0) {
-      const roomIds = existingMembers.map(m => m.room_id);
-      const { data: matchedDM } = await supabase
-        .from('chat_rooms')
-        .select(`id, room_members!inner(user_id)`)
-        .eq('is_group', false)
-        .in('id', roomIds)
-        .eq('room_members.user_id', targetUser.id)
+    if (myMemberships && myMemberships.length > 0) {
+      const myRoomIds = myMemberships.map((m) => m.room_id);
+
+      // Check if target user shares any non-group room with the current user
+      const { data: sharedDM } = await supabase
+        .from('room_members')
+        .select('room_id, chat_rooms!inner(id, is_group)')
+        .eq('user_id', targetUser.id)
+        .eq('chat_rooms.is_group', false)
+        .in('room_id', myRoomIds)
         .maybeSingle();
 
-      if (matchedDM) targetRoomId = matchedDM.id;
+      if (sharedDM) {
+        targetRoomId = sharedDM.room_id;
+      }
     }
 
-    // Create a new DM room if it doesn't exist
+    // Create new DM room if none exists between these 2 users
+    const dmName = `DM: ${targetUser.username || targetUser.email}`;
+
     if (!targetRoomId) {
       const { data: newRoom } = await supabase
         .from('chat_rooms')
-        .insert([{ name: `DM: ${targetUser.username || targetUser.email}`, is_group: false }])
-        .select().single();
+        .insert([{ name: dmName, is_group: false }])
+        .select()
+        .single();
 
       if (newRoom) {
         targetRoomId = newRoom.id;
         await supabase.from('room_members').insert([
           { room_id: targetRoomId, user_id: currentUserId },
-          { room_id: targetRoomId, user_id: targetUser.id }
+          { room_id: targetRoomId, user_id: targetUser.id },
         ]);
       }
     }
 
     if (targetRoomId) {
-      const dmTarget = { id: targetRoomId, name: targetUser.username || targetUser.email, is_group: false };
-      if (!rooms.some(r => r.id === targetRoomId)) setRooms(prev => [...prev, dmTarget]);
+      const dmTarget = { id: targetRoomId, name: dmName, is_group: false };
+      
+      // Update room list if not already present
+      setRooms((prev) =>
+        prev.some((r) => r.id === targetRoomId) ? prev : [...prev, dmTarget]
+      );
+      
+      // Switch active room
       setActiveRoom(dmTarget);
     }
   };
-  
+
+  // 5. Send Message
   const handleSendMessage = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!inputText.trim() || !currentUserId || !activeRoom) return;
+    e.preventDefault();
+    if (!inputText.trim() || !currentUserId || !activeRoom) return;
 
-  const currentText = inputText;
-  setInputText('');
+    const currentText = inputText;
+    setInputText('');
 
-  // 1. Create a local message object to show on your screen instantly
-  const localMsg: Message = {
-    id: crypto.randomUUID(), // temporary unique ID
-    sender: myUsername,
-    text: currentText,
-    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    // Save to database (Realtime listener will handle rendering on screen)
+    await supabase.from('chat_messages').insert([
+      {
+        user_id: currentUserId,
+        sender_name: myUsername,
+        message_text: currentText,
+        room_id: activeRoom.id,
+      },
+    ]);
   };
-
-  // 2. Put it directly onto your screen right now
-  setMessages((prev) => [...prev, localMsg]);
-
-  // 3. Save it to the database silently in the background
-  await supabase.from('chat_messages').insert([
-    {
-      user_id: currentUserId,
-      sender_name: myUsername,
-      message_text: currentText,
-      room_id: activeRoom.id
-    }
-  ]);
-};
 
   return (
     <div className="border border-slate-800 bg-slate-900 rounded-xl overflow-hidden flex h-[500px]">
-      
-      {/* LEFT SIDEBAR: Room and Contact Lists Navigator */}
+      {/* LEFT SIDEBAR */}
       <div className="w-1/3 border-r border-slate-800 bg-slate-950 flex flex-col p-3 space-y-4">
         <div>
           <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Create Group</h4>
@@ -252,7 +287,6 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
 
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Direct Messages</h4>
-            
             <input
               type="text"
               placeholder="Search users..."
@@ -260,27 +294,26 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="bg-slate-900 border border-slate-800 rounded p-1 text-xs text-white w-full mb-2 focus:outline-none"
             />
-          
             <div className="space-y-1">
               {usersList
-                .filter(user => 
+                .filter((user) =>
                   (user.username || user.email || '').toLowerCase().includes(searchQuery.toLowerCase())
                 )
                 .map((user) => (
                   <button
-                  key={user.id}
-                  onClick={() => handleStartDM(user)}
-                  className="w-full text-left text-xs p-2 rounded bg-slate-900 text-slate-300 hover:bg-slate-800 block truncate"
-                >
-                  👤 {user.username || user.email}
-                </button>
-              ))}
+                    key={user.id}
+                    onClick={() => handleStartDM(user)}
+                    className="w-full text-left text-xs p-2 rounded bg-slate-900 text-slate-300 hover:bg-slate-800 block truncate"
+                  >
+                    👤 {user.username || user.email}
+                  </button>
+                ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* RIGHT SIDE: Open Main Chat Window View feed */}
+      {/* RIGHT SIDE: Active Chat Feed */}
       <div className="flex-1 flex flex-col bg-slate-900">
         {activeRoom ? (
           <>
