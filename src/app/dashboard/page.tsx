@@ -59,7 +59,7 @@ export default function DashboardPage() {
     );
   }
 
-  if (userRole === 'New' || userRole === 'Members') {
+  if (userRole === 'New') {
     return (
       <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-6 text-center">
         <div className="max-w-md bg-slate-900 border border-slate-800 p-6 rounded-xl">
