@@ -33,6 +33,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
   const [activeTab, setActiveTab] = useState<'staff' | 'chat' | 'manage' | 'settings'>('chat');
   const [mobileView, setMobileView] = useState<'list' | 'chat'>('list');
   const [filterCategory, setFilterCategory] = useState<'all' | 'unread' | 'groups'>('all');
+  const [isThreeDotsOpen, setIsThreeDotsOpen] = useState(false);
 
   const [rooms, setRooms] = useState<ChatRoom[]>([]);
   const [activeRoom, setActiveRoom] = useState<ChatRoom | null>(null);
@@ -239,8 +240,16 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         {/* OTHER TABS */}
         {activeTab !== 'chat' && (
           <div className="flex-1 p-5 text-slate-200 overflow-y-auto">
-            <h2 className="text-xl font-bold capitalize mb-2">{activeTab} Section</h2>
-            <p className="text-xs text-slate-400">Settings and management features here.</p>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold capitalize">{activeTab} Section</h2>
+              <button
+                onClick={() => setActiveTab('chat')}
+                className="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg transition"
+              >
+                ← Back to Chats
+              </button>
+            </div>
+            <p className="text-xs text-slate-400">Manage app configuration and user settings here.</p>
           </div>
         )}
 
@@ -255,11 +264,42 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
               }`}
             >
               {/* Header Title + Actions */}
-              <div className="p-4 pb-2 flex items-center justify-between shrink-0">
+              <div className="p-4 pb-2 flex items-center justify-between shrink-0 relative">
                 <h1 className="text-2xl font-black tracking-tight text-white">Chats</h1>
-                <div className="flex gap-2">
-                  <button className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-sm">⋯</button>
-                  <button className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-sm">✏️</button>
+                <div className="flex gap-2 relative">
+                  {/* 3-DOT ACTION BUTTON & DROPDOWN MENU */}
+                  <button 
+                    onClick={() => setIsThreeDotsOpen(!isThreeDotsOpen)}
+                    className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-sm transition"
+                    aria-label="More options"
+                  >
+                    ⋯
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isThreeDotsOpen && (
+                    <div className="absolute right-10 top-0 w-44 bg-[#202531] border border-slate-700/80 rounded-xl shadow-2xl py-1 z-50 text-xs text-slate-200">
+                      <button
+                        onClick={() => {
+                          setActiveTab('settings');
+                          setIsThreeDotsOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2.5 hover:bg-slate-700/60 flex items-center gap-2 font-medium"
+                      >
+                        <span>⚙️</span> Settings
+                      </button>
+                      <button
+                        onClick={() => setIsThreeDotsOpen(false)}
+                        className="w-full text-left px-4 py-2.5 hover:bg-slate-700/60 flex items-center gap-2 font-medium text-slate-400"
+                      >
+                        <span>🔕</span> Mute Notifications
+                      </button>
+                    </div>
+                  )}
+
+                  <button className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-sm">
+                    ✏️
+                  </button>
                 </div>
               </div>
 
@@ -383,14 +423,6 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                       </div>
                     </div>
 
-                    {/* Messenger Call & Info Actions */}
-                    <div className="flex items-center gap-3 text-blue-500 text-lg">
-                      <button className="hover:opacity-80">📞</button>
-                      <button className="hover:opacity-80">📹</button>
-                      <button className="hover:opacity-80">ℹ️</button>
-                    </div>
-                  </div>
-
                   {/* Message Stream */}
                   <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#0e1017] min-h-0">
                     {messages.length === 0 ? (
@@ -427,28 +459,20 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                     <div ref={chatEndRef} />
                   </div>
 
-                  {/* Messenger Bottom Input Toolbar */}
-                  <form onSubmit={handleSendMessage} className="p-3 bg-[#14171f] border-t border-slate-800/80 flex items-center gap-2 shrink-0">
-                    <div className="flex items-center gap-1.5 text-red-500 text-lg shrink-0">
-                      <button type="button" className="hover:opacity-80">➕</button>
-                      <button type="button" className="hover:opacity-80">🖼️</button>
-                      <button type="button" className="hover:opacity-80">😀</button>
-                      <button type="button" className="hover:opacity-80">👾</button>
-                    </div>
-
-                    <input
-                      type="text"
-                      placeholder="Aa"
-                      value={inputText}
-                      onChange={(e) => setInputText(e.target.value)}
-                      className="flex-1 bg-[#202531] border border-slate-700/50 rounded-full px-4 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-400"
-                    />
-
+                    {/* Paper Airplane Send Button */}
                     <button
                       type="submit"
-                      className="text-red-500 font-bold px-2 py-1 text-lg hover:scale-105 transition shrink-0"
+                      aria-label="Send message"
+                      className="p-2 text-blue-500 hover:text-blue-400 hover:scale-105 transition shrink-0 flex items-center justify-center"
                     >
-                      ❤️
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-5 h-5 ml-0.5"
+                      >
+                        <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.917H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.917a.75.75 0 0 0 .926.941l18-7.5a.75.75 0 0 0 0-1.382l-18-7.5Z" />
+                      </svg>
                     </button>
                   </form>
                 </>
@@ -463,7 +487,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         )}
       </div>
 
-      {/* BOTTOM NAVIGATION BAR */}
+      {/* BOTTOM NAVIGATION BAR (Settings removed, hidden into 3-dot dropdown) */}
       <nav className="h-14 bg-[#14171f] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 shrink-0">
         {isLeaderOrPastor && (
           <button
@@ -492,14 +516,6 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
             <span>MANAGE</span>
           </button>
         )}
-
-        <button
-          onClick={() => { setActiveTab('settings'); setMobileView('list'); }}
-          className={`flex flex-col items-center gap-1 ${activeTab === 'settings' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
-        >
-          <span>⚙️</span>
-          <span>SETTINGS</span>
-        </button>
       </nav>
     </div>
   );
