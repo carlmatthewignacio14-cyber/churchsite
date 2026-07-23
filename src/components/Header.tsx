@@ -154,6 +154,7 @@ export default function Header() {
               (<button
                 onClick={() => setIsAuthOpen(true)}
                 className="bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-all rounded shadow-md"
+                suppressHydrationWarning
               >Log In
                               </button>)
             )}
