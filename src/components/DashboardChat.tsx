@@ -479,13 +479,11 @@ const filteredUsers = usersList.filter((u) => {
               </div>
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-xs text-slate-500 p-8 mb-16">
-                <div className="w-14 h-14 rounded-full bg-[#12151e] flex items-center justify-center text-xl mb-3">💬</div>
-                Select a conversation thread from the list to start messaging.
-              </div>
-            )}
+            <div className="w-14 h-14 rounded-full bg-[#12151e] flex items-center justify-center text-xl mb-3">💬</div>
+            Select a conversation thread from the list to start messaging.
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
 
     {/* 2. FIXED BOTTOM NAVIGATION BAR (Sits at the very bottom) */}
