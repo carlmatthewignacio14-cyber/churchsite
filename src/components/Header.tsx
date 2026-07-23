@@ -203,17 +203,6 @@ export default function Header() {
             {link?.label}
           </Link>
         ))}
-        
-        {/* Dynamic Dashboard routing link injected inside Mobile Overlay view */}
-        {userSession && (
-          <Link
-            href="/dashboard"
-            onClick={() => setMenuOpen(false)}
-            className="font-display text-4xl font-bold text-blue-400 hover:text-blue-300 transition-colors"
-          >
-            Dashboard
-          </Link>
-        )}
 
         {/* Mobile Authentication buttons */}
         {!userSession && (
