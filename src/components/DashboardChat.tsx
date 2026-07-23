@@ -232,14 +232,31 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
   });
 
   return (
-    <div className="fixed inset-0 h-screen w-screen bg-[#11141a] text-slate-100 flex flex-col overflow-hidden font-sans">
+    <div className="fixed inset-0 h-[100dvh] w-screen bg-[#0d0f14] text-slate-100 flex flex-col overflow-hidden font-sans">
+      
+      {/* Custom Dark Scrollbar Global Styles */}
+      <style jsx global>{`
+        .custom-dark-scroll::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-dark-scroll::-webkit-scrollbar-track {
+          background: #0d0f14;
+        }
+        .custom-dark-scroll::-webkit-scrollbar-thumb {
+          background: #222734;
+          border-radius: 9999px;
+        }
+        .custom-dark-scroll::-webkit-scrollbar-thumb:hover {
+          background: #333a4d;
+        }
+      `}</style>
 
-      {/* MAIN VIEWPORT */}
-      <div className="flex-1 flex overflow-hidden relative min-h-0">
+      {/* MAIN VIEWPORT BODY */}
+      <div className="flex-1 flex overflow-hidden relative min-h-0 w-full">
         
         {/* OTHER TABS */}
         {activeTab !== 'chat' && (
-          <div className="flex-1 p-5 text-slate-200 overflow-y-auto">
+          <div className="flex-1 p-5 text-slate-200 overflow-y-auto custom-dark-scroll">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold capitalize">{activeTab} Section</h2>
               <button
@@ -249,25 +266,23 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                 ← Back to Chats
               </button>
             </div>
-            <p className="text-xs text-slate-400">Settings and management features here.</p>
+            <p className="text-xs text-slate-400">Management & Settings Section</p>
           </div>
         )}
 
-        {/* MESSENGER CHAT TAB */}
+        {/* CHAT TAB */}
         {activeTab === 'chat' && (
           <div className="flex-1 flex w-full overflow-hidden min-h-0">
             
-            {/* LEFT SIDEBAR: MESSENGER LIST */}
+            {/* LEFT SIDEBAR: CHAT THREADS */}
             <div 
-              className={`w-full md:w-96 border-r border-slate-800/80 bg-[#14171f] flex flex-col shrink-0 min-h-0 ${
+              className={`w-full md:w-96 border-r border-slate-800/60 bg-[#12151e] flex flex-col shrink-0 min-h-0 ${
                 mobileView === 'list' ? 'flex' : 'hidden md:flex'
               }`}
             >
-              {/* Header Title + Actions */}
               <div className="p-4 pb-2 flex items-center justify-between shrink-0 relative">
                 <h1 className="text-2xl font-black tracking-tight text-white">Chats</h1>
                 <div className="flex gap-2 relative">
-                  {/* 3-DOT BUTTON WITH DROPDOWN */}
                   <button 
                     onClick={() => setIsThreeDotsOpen(!isThreeDotsOpen)}
                     className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-sm transition"
@@ -276,9 +291,8 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                     ⋯
                   </button>
 
-                  {/* Dropdown Menu */}
                   {isThreeDotsOpen && (
-                    <div className="absolute right-10 top-0 w-44 bg-[#202531] border border-slate-700/80 rounded-xl shadow-2xl py-1 z-50 text-xs text-slate-200">
+                    <div className="absolute right-10 top-0 w-44 bg-[#1c212d] border border-slate-700/80 rounded-xl shadow-2xl py-1 z-50 text-xs text-slate-200">
                       <button
                         onClick={() => {
                           setActiveTab('settings');
@@ -288,184 +302,116 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                       >
                         <span>⚙️</span> Settings
                       </button>
-                      <button
-                        onClick={() => setIsThreeDotsOpen(false)}
-                        className="w-full text-left px-4 py-2.5 hover:bg-slate-700/60 flex items-center gap-2 font-medium text-slate-400"
-                      >
-                        <span>🔕</span> Mute Notifications
-                      </button>
                     </div>
                   )}
-
                   <button className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-sm">✏️</button>
                 </div>
               </div>
 
-              {/* Search Bar */}
+              {/* Search */}
               <div className="px-4 py-2 shrink-0">
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 text-slate-400 text-sm">🔍</span>
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-[#202531] text-slate-200 placeholder-slate-400 text-xs rounded-full pl-9 pr-4 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  />
-                </div>
+                <input
+                  type="text"
+                  placeholder="Search Messenger..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-[#1c212d] text-slate-200 placeholder-slate-400 text-xs rounded-full px-4 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
               </div>
 
-              {/* Filter Pills */}
-              <div className="flex items-center gap-1 px-4 py-2 overflow-x-auto shrink-0 border-b border-slate-800/40">
-                <button
-                  onClick={() => setFilterCategory('all')}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition ${
-                    filterCategory === 'all' ? 'bg-blue-600/30 text-blue-400 border border-blue-500/30' : 'bg-[#202531] text-slate-300 hover:bg-slate-800'
-                  }`}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => setFilterCategory('unread')}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition ${
-                    filterCategory === 'unread' ? 'bg-blue-600/30 text-blue-400 border border-blue-500/30' : 'bg-[#202531] text-slate-300 hover:bg-slate-800'
-                  }`}
-                >
-                  Unread
-                </button>
-                <button
-                  onClick={() => setFilterCategory('groups')}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition ${
-                    filterCategory === 'groups' ? 'bg-blue-600/30 text-blue-400 border border-blue-500/30' : 'bg-[#202531] text-slate-300 hover:bg-slate-800'
-                  }`}
-                >
-                  Groups
-                </button>
-              </div>
-
-              {/* Chat Thread List */}
-              <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 min-h-0">
+              {/* Thread List with Styled Scrollbar */}
+              <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 min-h-0 custom-dark-scroll">
                 {filteredRooms.map((room) => (
                   <button
                     key={room.id}
                     onClick={() => selectRoom(room)}
                     className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition ${
-                      activeRoom?.id === room.id ? 'bg-[#212735]' : 'hover:bg-[#1a1f2c]'
+                      activeRoom?.id === room.id ? 'bg-[#1e2433]' : 'hover:bg-[#161a25]'
                     }`}
                   >
-                    {/* Circle Avatar */}
-                    <div className="relative shrink-0">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-lg">
-                        {room.name.charAt(0).toUpperCase()}
-                      </div>
-                      <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-[#14171f] rounded-full"></span>
+                    <div className="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-base shrink-0">
+                      {room.name.charAt(0).toUpperCase()}
                     </div>
-
-                    {/* Room Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-baseline">
-                        <h4 className="text-xs md:text-sm font-semibold text-slate-100 truncate">{room.name}</h4>
+                        <h4 className="text-xs font-semibold text-slate-100 truncate">{room.name}</h4>
                         <span className="text-[10px] text-slate-400 shrink-0 ml-2">{room.lastTime}</span>
                       </div>
                       <p className="text-xs text-slate-400 truncate mt-0.5">{room.lastMessage}</p>
                     </div>
                   </button>
                 ))}
-
-                {/* Direct Message Directory */}
-                <div className="pt-3 px-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Directory</span>
-                  <div className="mt-2 space-y-1">
-                    {usersList
-                      .filter((u) => (u.username || u.email).toLowerCase().includes(searchQuery.toLowerCase()))
-                      .map((u) => (
-                        <button
-                          key={u.id}
-                          onClick={() => handleStartDM(u)}
-                          className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-[#1a1f2c] text-xs text-slate-300"
-                        >
-                          <div className="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center font-bold text-xs">
-                            {(u.username || u.email).charAt(0).toUpperCase()}
-                          </div>
-                          <span className="truncate">{u.username || u.email}</span>
-                        </button>
-                      ))}
-                  </div>
-                </div>
               </div>
             </div>
 
             {/* RIGHT CONVERSATION FEED */}
             <div 
-              className={`flex-1 flex flex-col bg-[#0b0d12] overflow-hidden min-h-0 ${
+              className={`flex-1 flex flex-col bg-[#0b0c10] overflow-hidden min-h-0 ${
                 mobileView === 'chat' ? 'flex' : 'hidden md:flex'
               }`}
             >
               {activeRoom ? (
                 <>
-                  {/* Top Bar */}
-                  <div className="px-4 py-3 bg-[#14171f] border-b border-slate-800/80 flex items-center justify-between shrink-0">
+                  {/* Room Header */}
+                  <div className="px-4 py-3 bg-[#12151e] border-b border-slate-800/80 flex items-center justify-between shrink-0">
                     <div className="flex items-center gap-3 min-w-0">
                       <button
                         onClick={() => setMobileView('list')}
-                        className="md:hidden text-slate-300 hover:text-white mr-1"
+                        className="md:hidden text-slate-300 hover:text-white mr-1 text-lg font-bold"
                       >
                         ←
                       </button>
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white shrink-0">
+                      <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white shrink-0 text-sm">
                         {activeRoom.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="truncate">
-                        <h3 className="text-sm font-bold text-slate-100 truncate">{activeRoom.name}</h3>
+                        <h3 className="text-xs font-bold text-slate-100 truncate">{activeRoom.name}</h3>
                         <span className="text-[10px] text-green-400 block">Active now</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Message Stream */}
-                  <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#0e1017] min-h-0">
-                    {messages.length === 0 ? (
-                      <div className="text-center text-xs text-slate-500 pt-16">
-                        No messages yet. Say hello to start the chat!
-                      </div>
-                    ) : (
-                      messages.map((msg) => {
-                        const isMe = msg.sender === myUsername;
-                        return (
-                          <div key={msg.id} className={`flex gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
-                            {!isMe && (
-                              <div className="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-[10px] font-bold shrink-0 self-end">
-                                {msg.sender.charAt(0).toUpperCase()}
-                              </div>
-                            )}
-                            <div className={`flex flex-col max-w-[75%] ${isMe ? 'items-end' : 'items-start'}`}>
-                              <span className="text-[10px] text-slate-400 px-1 mb-0.5">{msg.sender}</span>
-                              <div
-                                className={`px-3.5 py-2 rounded-2xl text-xs md:text-sm leading-relaxed ${
-                                  isMe
-                                    ? 'bg-blue-600 text-white rounded-br-xs'
-                                    : 'bg-[#202531] text-slate-100 rounded-bl-xs'
-                                }`}
-                              >
-                                {msg.text}
-                              </div>
-                              <span className="text-[9px] text-slate-500 px-1 mt-0.5">{msg.timestamp}</span>
+                  {/* Messages Feed with Styled Dark Scrollbar */}
+                  <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#090a0e] min-h-0 custom-dark-scroll">
+                    {messages.map((msg) => {
+                      const isMe = msg.sender === myUsername;
+                      return (
+                        <div key={msg.id} className={`flex gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
+                          {!isMe && (
+                            <div className="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-[10px] font-bold shrink-0 self-end">
+                              {msg.sender.charAt(0).toUpperCase()}
                             </div>
+                          )}
+                          <div className={`flex flex-col max-w-[75%] ${isMe ? 'items-end' : 'items-start'}`}>
+                            <span className="text-[10px] text-slate-400 px-1 mb-0.5">{msg.sender}</span>
+                            <div
+                              className={`px-3.5 py-2 rounded-2xl text-xs md:text-sm leading-relaxed ${
+                                isMe
+                                  ? 'bg-blue-600 text-white rounded-br-xs'
+                                  : 'bg-[#1c212d] text-slate-100 rounded-bl-xs'
+                              }`}
+                            >
+                              {msg.text}
+                            </div>
+                            <span className="text-[9px] text-slate-500 px-1 mt-0.5">{msg.timestamp}</span>
                           </div>
-                        );
-                      })
-                    )}
+                        </div>
+                      );
+                    })}
                     <div ref={chatEndRef} />
                   </div>
 
-                  {/* Input Bar directly above Bottom Nav */}
-                  <form onSubmit={handleSendMessage} className="p-3 bg-[#14171f] border-t border-slate-800/80 flex items-center gap-2 shrink-0">
+                  {/* INPUT BAR - ALWAYS STRICTLY ABOVE BOTTOM NAV */}
+                  <form 
+                    onSubmit={handleSendMessage} 
+                    className="p-3 bg-[#12151e] border-t border-slate-800/80 flex items-center gap-2 shrink-0 z-10"
+                  >
                     <input
                       type="text"
                       placeholder="Aa"
                       value={inputText}
                       onChange={(e) => setInputText(e.target.value)}
-                      className="flex-1 bg-[#202531] border border-slate-700/50 rounded-full px-4 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-400"
+                      className="flex-1 bg-[#1c212d] border border-slate-700/50 rounded-full px-4 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-400"
                     />
 
                     <button
@@ -486,7 +432,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                 </>
               ) : (
                 <div className="flex-1 flex flex-col items-center justify-center text-xs text-slate-500 p-8">
-                  <div className="w-16 h-16 rounded-full bg-[#14171f] flex items-center justify-center text-2xl mb-3">💬</div>
+                  <div className="w-14 h-14 rounded-full bg-[#12151e] flex items-center justify-center text-xl mb-3">💬</div>
                   Select a conversation thread from the list to start messaging.
                 </div>
               )}
@@ -495,35 +441,43 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         )}
       </div>
 
-      {/* FIXED BOTTOM NAVIGATION BAR */}
-      <nav className="h-14 bg-[#14171f] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 shrink-0 z-10">
+      {/* FIXED BOTTOM NAVIGATION BAR - ALWAYS AT THE VERY BOTTOM */}
+      <nav className="h-14 bg-[#12151e] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 shrink-0 z-20">
         {isLeaderOrPastor && (
           <button
             onClick={() => { setActiveTab('staff'); setMobileView('list'); }}
-            className={`flex flex-col items-center gap-1 ${activeTab === 'staff' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
+            className={`flex flex-col items-center gap-0.5 ${activeTab === 'staff' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
           >
-            <span>👥</span>
+            <span className="text-base">👥</span>
             <span>STAFF</span>
           </button>
         )}
 
         <button
           onClick={() => { setActiveTab('chat'); setMobileView('list'); }}
-          className={`flex flex-col items-center gap-1 ${activeTab === 'chat' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
+          className={`flex flex-col items-center gap-0.5 ${activeTab === 'chat' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
         >
-          <span>💬</span>
+          <span className="text-base">💬</span>
           <span>CHAT</span>
         </button>
 
         {isLeaderOrPastor && (
           <button
             onClick={() => { setActiveTab('manage'); setMobileView('list'); }}
-            className={`flex flex-col items-center gap-1 ${activeTab === 'manage' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
+            className={`flex flex-col items-center gap-0.5 ${activeTab === 'manage' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
           >
-            <span>📺</span>
+            <span className="text-base">📺</span>
             <span>MANAGE</span>
           </button>
         )}
+
+        <button
+          onClick={() => { setActiveTab('settings'); setMobileView('list'); }}
+          className={`flex flex-col items-center gap-0.5 ${activeTab === 'settings' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
+        >
+          <span className="text-base">⚙️</span>
+          <span>SETTINGS</span>
+        </button>
       </nav>
     </div>
   );
