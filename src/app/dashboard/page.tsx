@@ -72,7 +72,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white pt-24 px-4 pb-28">
+    <div className="min-h-screen bg-slate-950 text-white pt-6 px-4 pb-28">
       <div className="max-w-5xl mx-auto space-y-6">
 
         {/* 🏠 FIXED TOP: Clean back button placement utilizing the top space */}
@@ -83,43 +83,6 @@ export default function DashboardPage() {
           >
             ← Back to Homepage
           </button>
-        </div>
-
-        {/* Header Summary Strip without the embedded button inside it */}
-        <div className="border border-slate-800 bg-slate-900/50 p-6 rounded-xl backdrop-blur-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-widest">Active Profile Dashboard</span>
-            <h1 className="text-2xl font-bold mt-1 text-slate-100">
-              Welcome, {currentUser?.user_metadata?.username || currentUser?.user_metadata?.name || 'Church Member'}
-            </h1>
-            <p className="text-xs text-slate-400 mt-0.5">Account Email: {currentUser?.email}</p>
-          </div>
-
-          <div className="flex flex-col items-start md:items-end gap-1.5">
-            <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wider shadow-sm">
-              {currentUser?.user_metadata?.ministry 
-                ? `Role: ${currentUser.user_metadata.ministry.replace(" Ministry", "")} Leader` 
-                : `Role Tier: ${userRole}`}
-            </span>
-            {currentUser?.user_metadata?.ministry && (
-              <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 text-[10px] font-semibold px-2.5 py-0.5 rounded">
-                📍 {currentUser.user_metadata.ministry}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* TOP SECTION: Personal Assignment */}
-        <div className="border border-green-500/20 bg-green-500/5 p-5 rounded-xl border-l-4 border-l-green-500">
-          <h2 className="text-sm font-bold tracking-wider text-green-400 uppercase">Your Personal Deployment Status</h2>
-          {currentUser?.user_metadata?.monthly_assignment ? (
-            <div className="mt-2">
-              <p className="text-xs text-slate-400">Assigned Schedule Window: <span className="text-slate-200 font-semibold">{currentUser.user_metadata.assignment_month}</span></p>
-              <p className="text-base text-white font-medium mt-1">🎯 {currentUser.user_metadata.monthly_assignment}</p>
-            </div>
-          ) : (
-            <p className="text-sm text-slate-300 mt-1">You are logged on as active <span className="font-semibold">{userRole}</span>. No individual tactical duty restriction is logged for your profile today.</p>
-          )}
         </div>
 
         {/* MANAGEMENT VIEW */}
@@ -206,6 +169,44 @@ export default function DashboardPage() {
             
             {/* TAB PANEL 1: Roster Management */}
             {activeTab === 'management' && (
+            <div className="space-y-6 animate-fadeIn">
+                  
+                  {/* 💾 MOVED HERE: Header Summary Strip */}
+                  <div className="border border-slate-800 bg-slate-900/50 p-6 rounded-xl backdrop-blur-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                      <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-widest">Active Profile Dashboard</span>
+                      <h1 className="text-2xl font-bold mt-1 text-slate-100">
+                        Welcome, {currentUser?.user_metadata?.username || currentUser?.user_metadata?.name || 'Church Member'}
+                      </h1>
+                      <p className="text-xs text-slate-400 mt-0.5">Account Email: {currentUser?.email}</p>
+                    </div>
+
+                    <div className="flex flex-col items-start md:items-end gap-1.5">
+                      <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wider shadow-sm">
+                        {currentUser?.user_metadata?.ministry 
+                          ? `Role: ${currentUser.user_metadata.ministry.replace(" Ministry", "")} Leader` 
+                          : `Role Tier: ${userRole}`}
+                      </span>
+                      {currentUser?.user_metadata?.ministry && (
+                        <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 text-[10px] font-semibold px-2.5 py-0.5 rounded">
+                          📍 {currentUser.user_metadata.ministry}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 💾 MOVED HERE: Personal Deployment Status Box */}
+                  <div className="border border-green-500/20 bg-green-500/5 p-5 rounded-xl border-l-4 border-l-green-500">
+                    <h2 className="text-sm font-bold tracking-wider text-green-400 uppercase">Your Personal Deployment Status</h2>
+                    {currentUser?.user_metadata?.monthly_assignment ? (
+                      <div className="mt-2">
+                        <p className="text-xs text-slate-400">Assigned Schedule Window: <span className="text-slate-200 font-semibold">{currentUser.user_metadata.assignment_month}</span></p>
+                        <p className="text-base text-white font-medium mt-1">🎯 {currentUser.user_metadata.monthly_assignment}</p>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-slate-300 mt-1">You are logged on as active <span className="font-semibold">{userRole}</span>. No individual tactical duty restriction is logged for your profile today.</p>
+                    )}
+                  </div>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="md:col-span-2 border border-slate-800 bg-slate-900 p-6 rounded-xl space-y-4">
                   <h2 className="text-base font-bold text-amber-400">Current Monthly Management Overview</h2>
@@ -242,6 +243,7 @@ export default function DashboardPage() {
                   </button>
                 </div>
               </div>
+            </div>
             )}
 
             {/* TAB PANEL 2: Website Layout Updates */}
