@@ -232,11 +232,27 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
   });
 
   return (
-    <div className="flex flex-col h-[100dvh] w-full bg-[#11141a] text-slate-100 overflow-hidden font-sans">
+    <div className="fixed inset-0 h-screen w-screen bg-[#11141a] text-slate-100 flex flex-col overflow-hidden font-sans">
 
       {/* MAIN VIEWPORT */}
-      <div className="flex-1 flex overflow-hidden min-h-0 relative">
+      <div className="flex-1 flex overflow-hidden relative min-h-0">
         
+        {/* OTHER TABS */}
+        {activeTab !== 'chat' && (
+          <div className="flex-1 p-5 text-slate-200 overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold capitalize">{activeTab} Section</h2>
+              <button
+                onClick={() => setActiveTab('chat')}
+                className="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg transition"
+              >
+                ← Back to Chats
+              </button>
+            </div>
+            <p className="text-xs text-slate-400">Settings and management features here.</p>
+          </div>
+        )}
+
         {/* MESSENGER CHAT TAB */}
         {activeTab === 'chat' && (
           <div className="flex-1 flex w-full overflow-hidden min-h-0">
@@ -356,7 +372,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                   </button>
                 ))}
 
-                {/* Direct Message Quick Directory List */}
+                {/* Direct Message Directory */}
                 <div className="pt-3 px-2">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Directory</span>
                   <div className="mt-2 space-y-1">
@@ -387,7 +403,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
             >
               {activeRoom ? (
                 <>
-                  {/* Top Bar with Avatar */}
+                  {/* Top Bar */}
                   <div className="px-4 py-3 bg-[#14171f] border-b border-slate-800/80 flex items-center justify-between shrink-0">
                     <div className="flex items-center gap-3 min-w-0">
                       <button
@@ -442,7 +458,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                     <div ref={chatEndRef} />
                   </div>
 
-                  {/* Clean Input Bar */}
+                  {/* Input Bar directly above Bottom Nav */}
                   <form onSubmit={handleSendMessage} className="p-3 bg-[#14171f] border-t border-slate-800/80 flex items-center gap-2 shrink-0">
                     <input
                       type="text"
@@ -452,7 +468,6 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                       className="flex-1 bg-[#202531] border border-slate-700/50 rounded-full px-4 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-400"
                     />
 
-                    {/* Paper Airplane Send Button */}
                     <button
                       type="submit"
                       aria-label="Send message"
@@ -480,8 +495,8 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         )}
       </div>
 
-      {/* BOTTOM NAVIGATION BAR */}
-      <nav className="h-14 bg-[#14171f] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 shrink-0">
+      {/* FIXED BOTTOM NAVIGATION BAR */}
+      <nav className="h-14 bg-[#14171f] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 shrink-0 z-10">
         {isLeaderOrPastor && (
           <button
             onClick={() => { setActiveTab('staff'); setMobileView('list'); }}
@@ -512,4 +527,3 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
       </nav>
     </div>
   );
-}
