@@ -16,40 +16,72 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
   const chatEndRef = useRef<HTMLDivElement>(null);
   
   const myUsername = currentUser?.user_metadata?.username || currentUser?.email || 'User';
+  const currentUserId = currentUser?.id;
 
   useEffect(() => {
-    // 📡 1. Connect to Supabase Realtime Broadcast Channel
-    const channel = supabase.channel('church-live-chat', {
-      config: { broadcast: { self: true } } // Received messages we send ourselves too
-    });
+    if (!currentUserId) return;
 
-    // 2. Listen for incoming message payloads
-    channel.on('broadcast', { event: 'message' }, ({ payload }) => {
-      setMessages((prev) => [...prev, payload]);
-    }).subscribe();
+    // Load past conversations from database on refresh
+    const loadChatHistory = async () => {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .order('created_at', { ascending: true });
 
-    // Scroll to bottom on load
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      if (data && !error) {
+        const formattedMessages: Message[] = data.map((row: any) => ({
+          id: row.id.toString(),
+          sender: row.sender_name || 'User',
+          text: row.message_text || '',
+          timestamp: new Date(row.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }));
+        setMessages(formattedMessages);
+      }
+    };
+
+    loadChatHistory();
+
+    // Listen live for new incoming database rows
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, 
+        (payload) => {
+          const newRow = payload.new;
+          const incomingMsg: Message = {
+            id: newRow.id.toString(),
+            sender: newRow.sender_name || 'User',
+            text: newRow.message_text || '',
+            timestamp: new Date(newRow.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+          setMessages((prev) => prev.some(m => m.id === incomingMsg.id) ? prev : [...prev, incomingMsg]);
+        }
+      ).subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
+  }, [currentUserId]);
+  
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || !currentUserId) return;
 
-    const messagePayload: Message = {
-      id: crypto.randomUUID(),
-      sender: myUsername,
-      text: inputText,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
+    const currentText = inputText;
+    setInputText('');
+
+    // Save directly to your Supabase table rows
+    const { error } = await supabase
+      .from('chat_messages')
+      .insert([
+        {
+          user_id: currentUserId,
+          sender_name: myUsername,
+          message_text: currentText
+        }
+      ]);
+
+    if (error) console.error("Failed to save message:", error.message);
+  };
 
     // 🚀 3. Broadcast message out to everyone listening right now
     await supabase.channel('church-live-chat').send({
