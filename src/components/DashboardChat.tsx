@@ -124,63 +124,95 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
     fetchInitialSidebarData();
   }, [currentUserId]);
 
-  // 2. Realtime Listener for Room Additions
-  useEffect(() => {
-    if (!currentUserId) return;
+  // Realtime Messages Listener (Listens across all chats & updates previews)
+useEffect(() => {
+  if (!currentUserId) return;
 
-    const channel = supabase
-      .channel(`user-memberships:${currentUserId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'room_members',
-          filter: `user_id=eq.${currentUserId}`,
-        },
-        async (payload) => {
-          const newRoomId = payload.new.room_id;
+  // Load chat history for currently selected active room
+  if (activeRoom) {
+    const loadChatHistory = async () => {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('room_id', activeRoom.id)
+        .order('created_at', { ascending: true });
 
-          const { data: roomData } = await supabase
-            .from('chat_rooms')
-            .select('id, name, is_group, room_members(user_id)')
-            .eq('id', newRoomId)
-            .single();
+      if (data && !error) {
+        setMessages(
+          data.map((row: any) => ({
+            id: row.id.toString(),
+            sender_id: row.user_id,
+            sender: row.sender_name || 'User',
+            text: row.message_text || '',
+            timestamp: new Date(row.created_at).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+          }))
+        );
+      }
+    };
 
-          if (roomData) {
-            let otherUser: UserProfile | undefined;
+    loadChatHistory();
+  }
 
-            if (!roomData.is_group) {
-              const otherMember = roomData.room_members?.find(
-                (m: any) => m.user_id !== currentUserId
-              );
-              if (otherMember) {
-                const { data: targetProfile } = await supabase
-                  .from('user_directory')
-                  .select('id, username, email')
-                  .eq('id', otherMember.user_id)
-                  .single();
+  // Real-time listener for NEW incoming messages across ANY chat room
+  const channel = supabase
+    .channel('global-incoming-messages')
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'chat_messages',
+      },
+      (payload) => {
+        const newRow = payload.new;
+        const incomingMsg: Message = {
+          id: newRow.id.toString(),
+          sender_id: newRow.user_id,
+          sender: newRow.sender_name || 'User',
+          text: newRow.message_text || '',
+          timestamp: new Date(newRow.created_at).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+        };
 
-                if (targetProfile) otherUser = targetProfile;
-              }
-            }
-
-            const newChatRoom: ChatRoom = {
-              id: roomData.id,
-              name: roomData.name || 'Direct Message',
-              is_group: roomData.is_group,
-              otherUser,
-              lastMessage: 'New conversation started',
-              lastTime: 'Now',
-            };
-
-            setRooms((prev) =>
-              prev.some((r) => r.id === newChatRoom.id) ? prev : [newChatRoom, ...prev]
-            );
-          }
+        // 1. If the message belongs to the currently active chat room, append it to the chat view
+        if (activeRoom && newRow.room_id === activeRoom.id) {
+          setMessages((prev) =>
+            prev.some((m) => m.id === incomingMsg.id) ? prev : [...prev, incomingMsg]
+          );
         }
-      )
-      .subscribe();
+
+        // 2. Update the Inbox/Sidebar preview text and bring that chat to the top
+        setRooms((prevRooms) => {
+          const roomExists = prevRooms.some((r) => r.id === newRow.room_id);
+          if (!roomExists) return prevRooms;
+
+          return prevRooms
+            .map((room) => {
+              if (room.id === newRow.room_id) {
+                return {
+                  ...room,
+                  lastMessage: incomingMsg.text,
+                  lastTime: incomingMsg.timestamp,
+                };
+              }
+              return room;
+            })
+            // Move the room with the newest message to the top of the list
+            .sort((a, b) => (a.id === newRow.room_id ? -1 : b.id === newRow.room_id ? 1 : 0));
+        });
+      }
+    )
+    .subscribe();
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
+}, [currentUserId, activeRoom?.id]);
 
     return () => {
       supabase.removeChannel(channel);
