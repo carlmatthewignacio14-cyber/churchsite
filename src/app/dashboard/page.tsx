@@ -85,6 +85,15 @@ export default function DashboardPage() {
             <p className="text-xs text-slate-400 mt-0.5">Account Email: {currentUser?.email}</p>
           </div>
 
+          {/* 🏠 ADDED: BACK TO HOMEPAGE ACTION BUTTON */}
+            <button 
+              onClick={() => window.location.href = '/'}
+              className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2.5 rounded-lg border border-slate-700 transition-colors uppercase tracking-wider flex items-center gap-2 self-start md:self-auto shadow-sm"
+            >
+              ← Back to Homepage
+            </button>
+          </div>
+
           <div className="flex flex-col items-start md:items-end gap-1.5">
             {/* 🏷️ FIXED DYNAMIC MINISTRY BADGE DISPLAY */}
             <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wider shadow-sm">
