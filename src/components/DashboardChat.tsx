@@ -375,7 +375,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
 
                 {/* Messages Feed (Scrollable area) */}
                 <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#090a0e] min-h-0 custom-dark-scroll">
-                  {messages.map((msg) => (
+                  {messages.map((msg) => {
                     const isMe = msg.sender === myUsername;
                     return (
                       <div key={msg.id} className={`flex gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
@@ -389,8 +389,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                           <div
                             className={`px-3.5 py-2 rounded-2xl text-xs md:text-sm leading-relaxed ${
                               isMe
-                                ? 'bg-blue-600 text-white rounded-br-xs'
-                                : 'bg-[#1c212d] text-slate-100 rounded-bl-xs'
+                                ? 'bg-blue-600 text-white rounded-br-xs' :'bg-[#1c212d] text-slate-100 rounded-bl-xs'
                             }`}
                           >
                             {msg.text}
