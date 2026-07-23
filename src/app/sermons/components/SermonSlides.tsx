@@ -149,8 +149,7 @@ export default function SermonSlidesSection() {
                       onClick={() => setActiveViewerId(isViewing ? null : slide.id)}
                       className={`w-full sm:w-auto text-center border text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors ${
                         isViewing
-                          ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
-                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                          ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200' :'border-gray-300 text-gray-700 hover:bg-gray-50'
                       }`}
                     >
                       {isViewing ? 'Close Preview' : 'View Slides'}

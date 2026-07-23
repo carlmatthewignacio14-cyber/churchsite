@@ -17,85 +17,85 @@ interface Sermon {
 }
 
 const allSermons: Sermon[] = [
-  {
-    id: '1',
-    title: 'The Peace That Surpasses Understanding',
-    speaker: 'Pastor James Whitfield',
-    series: 'Anchored in Grace',
-    topic: 'Peace',
-    date: 'July 6, 2026',
-    duration: '42 min',
-    thumbnail: 'https://images.unsplash.com/photo-1563373929-625e0424fc70',
-    thumbnailAlt:
-      'Open Bible on wooden table, soft morning light, warm amber glow, peaceful quiet setting',
-    views: '1.2k',
-  },
-  {
-    id: '2',
-    title: 'Walking Through the Valley',
-    speaker: 'Pastor James Whitfield',
-    series: 'Psalms for Every Season',
-    topic: 'Faith',
-    date: 'June 29, 2026',
-    duration: '38 min',
-    thumbnail: 'https://images.unsplash.com/photo-1732466854271-9301c65aa09e',
-    thumbnailAlt:
-      'Misty mountain valley at sunrise, golden light breaking through low clouds, quiet forested hillside',
-    views: '980',
-  },
-  {
-    id: '3',
-    title: 'Called to Something Greater',
-    speaker: 'Pastor Rachel Monroe',
-    series: 'Purpose & Calling',
-    topic: 'Purpose',
-    date: 'June 22, 2026',
-    duration: '45 min',
-    thumbnail: 'https://images.unsplash.com/photo-1547639239-e5383c8ddfed',
-    thumbnailAlt:
-      'People in church sanctuary with hands raised in worship, warm stage lighting, dimly lit atmospheric interior',
-    views: '1.5k',
-  },
-  {
-    id: '4',
-    title: 'When Prayer Feels Hard',
-    speaker: 'Pastor Rachel Monroe',
-    series: 'Anchored in Grace',
-    topic: 'Prayer',
-    date: 'June 15, 2026',
-    duration: '40 min',
-    thumbnail: 'https://img.rocket.new/generatedImages/rocket_gen_img_16a563bd1-1772150370537.png',
-    thumbnailAlt:
-      'Sunlight streaming through tall church windows onto empty pews, golden hour light, quiet sanctuary atmosphere',
-    views: '870',
-  },
-  {
-    id: '5',
-    title: 'Contentment in Every Circumstance',
-    speaker: 'Pastor James Whitfield',
-    series: 'Anchored in Grace',
-    topic: 'Faith',
-    date: 'June 8, 2026',
-    duration: '44 min',
-    thumbnail: 'https://images.unsplash.com/photo-1638783720472-6d6a09b1e78e',
-    thumbnailAlt:
-      'Calm lake at sunrise reflecting golden sky, still water, misty horizon, serene natural landscape',
-    views: '1.1k',
-  },
-  {
-    id: '6',
-    title: 'Generosity as a Spiritual Practice',
-    speaker: 'Pastor Rachel Monroe',
-    series: 'Purpose & Calling',
-    topic: 'Giving',
-    date: 'June 1, 2026',
-    duration: '36 min',
-    thumbnail: 'https://images.unsplash.com/photo-1600552852253-51e06624dd65',
-    thumbnailAlt:
-      'Person extending open hands upward against warm golden light, gesture of offering, spiritual symbolism',
-    views: '790',
-  },
-];
+{
+  id: '1',
+  title: 'The Peace That Surpasses Understanding',
+  speaker: 'Pastor James Whitfield',
+  series: 'Anchored in Grace',
+  topic: 'Peace',
+  date: 'July 6, 2026',
+  duration: '42 min',
+  thumbnail: 'https://images.unsplash.com/photo-1563373929-625e0424fc70',
+  thumbnailAlt:
+  'Open Bible on wooden table, soft morning light, warm amber glow, peaceful quiet setting',
+  views: '1.2k'
+},
+{
+  id: '2',
+  title: 'Walking Through the Valley',
+  speaker: 'Pastor James Whitfield',
+  series: 'Psalms for Every Season',
+  topic: 'Faith',
+  date: 'June 29, 2026',
+  duration: '38 min',
+  thumbnail: 'https://images.unsplash.com/photo-1732466854271-9301c65aa09e',
+  thumbnailAlt:
+  'Misty mountain valley at sunrise, golden light breaking through low clouds, quiet forested hillside',
+  views: '980'
+},
+{
+  id: '3',
+  title: 'Called to Something Greater',
+  speaker: 'Pastor Rachel Monroe',
+  series: 'Purpose & Calling',
+  topic: 'Purpose',
+  date: 'June 22, 2026',
+  duration: '45 min',
+  thumbnail: 'https://images.unsplash.com/photo-1547639239-e5383c8ddfed',
+  thumbnailAlt:
+  'People in church sanctuary with hands raised in worship, warm stage lighting, dimly lit atmospheric interior',
+  views: '1.5k'
+},
+{
+  id: '4',
+  title: 'When Prayer Feels Hard',
+  speaker: 'Pastor Rachel Monroe',
+  series: 'Anchored in Grace',
+  topic: 'Prayer',
+  date: 'June 15, 2026',
+  duration: '40 min',
+  thumbnail: 'https://img.rocket.new/generatedImages/rocket_gen_img_16a563bd1-1772150370537.png',
+  thumbnailAlt:
+  'Sunlight streaming through tall church windows onto empty pews, golden hour light, quiet sanctuary atmosphere',
+  views: '870'
+},
+{
+  id: '5',
+  title: 'Contentment in Every Circumstance',
+  speaker: 'Pastor James Whitfield',
+  series: 'Anchored in Grace',
+  topic: 'Faith',
+  date: 'June 8, 2026',
+  duration: '44 min',
+  thumbnail: 'https://images.unsplash.com/photo-1638783720472-6d6a09b1e78e',
+  thumbnailAlt:
+  'Calm lake at sunrise reflecting golden sky, still water, misty horizon, serene natural landscape',
+  views: '1.1k'
+},
+{
+  id: '6',
+  title: 'Generosity as a Spiritual Practice',
+  speaker: 'Pastor Rachel Monroe',
+  series: 'Purpose & Calling',
+  topic: 'Giving',
+  date: 'June 1, 2026',
+  duration: '36 min',
+  thumbnail: 'https://images.unsplash.com/photo-1600552852253-51e06624dd65',
+  thumbnailAlt:
+  'Person extending open hands upward against warm golden light, gesture of offering, spiritual symbolism',
+  views: '790'
+}];
+
 
 const filters = ['All', 'Anchored in Grace', 'Psalms for Every Season', 'Purpose & Calling'];
 
@@ -134,7 +134,7 @@ export default function SermonsGrid() {
   useScrollReveal(headerRef, 0);
 
   const filtered =
-    activeFilter === 'All' ? allSermons : allSermons.filter((s) => s.series === activeFilter);
+  activeFilter === 'All' ? allSermons : allSermons.filter((s) => s.series === activeFilter);
 
   return (
     <section className="section-pad bg-background relative z-10">
@@ -157,39 +157,39 @@ export default function SermonsGrid() {
 
           {/* Filter Pills */}
           <div className="flex flex-wrap gap-2" role="group" aria-label="Filter sermons by series">
-            {filters.map((f) => (
-              <button
-                key={f}
-                onClick={() => setActiveFilter(f)}
-                className={`filter-pill ${activeFilter === f ? 'active' : ''}`}
-                aria-pressed={activeFilter === f}
-              >
+            {filters.map((f) =>
+            <button
+              key={f}
+              onClick={() => setActiveFilter(f)}
+              className={`filter-pill ${activeFilter === f ? 'active' : ''}`}
+              aria-pressed={activeFilter === f}>
+              
                 {f}
               </button>
-            ))}
+            )}
           </div>
         </div>
 
         {/* Sermon Cards Grid — uniform 3-col, all cs-1 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((sermon, i) => (
-            <SermonCard key={sermon.id} sermon={sermon} index={i} />
-          ))}
+          {filtered.map((sermon, i) =>
+          <SermonCard key={sermon.id} sermon={sermon} index={i} />
+          )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
-function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
+function SermonCard({ sermon, index }: {sermon: Sermon;index: number;}) {
   const cardRef = useRef<HTMLDivElement>(null);
   useScrollReveal(cardRef, index * 80);
 
   return (
     <div
       ref={cardRef}
-      className="group bg-card border border-border overflow-hidden bento-card cursor-pointer"
-    >
+      className="group bg-card border border-border overflow-hidden bento-card cursor-pointer">
+      
       {/* Thumbnail */}
       <div className="relative img-zoom-wrap aspect-video overflow-hidden">
         <AppImage
@@ -197,8 +197,8 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
           alt={sermon.thumbnailAlt}
           width={600}
           height={338}
-          className="w-full h-full object-cover"
-        />
+          className="w-full h-full object-cover" />
+        
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
@@ -211,8 +211,8 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
               viewBox="0 0 24 24"
               fill="white"
               className="ml-0.5"
-              aria-hidden="true"
-            >
+              aria-hidden="true">
+              
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
           </div>
@@ -251,8 +251,8 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
-                aria-hidden="true"
-              >
+                aria-hidden="true">
+                
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
@@ -261,6 +261,6 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
