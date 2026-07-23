@@ -347,7 +347,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
 
           {/* RIGHT CONVERSATION FEED */}
           <div 
-            className={`flex-1 flex flex-col bg-[#0b0c10] h-full min-h-0 overflow-hidden relative ${
+            className={`flex-1 flex flex-col bg-[#0b0c10] h-full min-h-0 overflow-hidden relative pb-16 ${
               mobileView === 'chat' ? 'flex' : 'hidden md:flex'
             }`}
           >
@@ -405,7 +405,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                 {/* Input Bar */}
                 <form 
                   onSubmit={handleSendMessage} 
-                  className="p-3 bg-[#12151e] border-t border-slate-800/80 flex items-center gap-2 shrink-0 h-16 relative z-20"
+                  className="p-3 bg-[#12151e] border-t border-slate-800/80 flex items-center gap-2 shrink-0 h-16 relative z-20 mb-16"
                 >
                   <input
                     type="text"
@@ -432,7 +432,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                 </form>
               </div>
             ) : (
-              <div className="flex-1 flex flex-col items-center justify-center text-xs text-slate-500 p-8">
+              <div className="flex-1 flex flex-col items-center justify-center text-xs text-slate-500 p-8 mb-16">
                 <div className="w-14 h-14 rounded-full bg-[#12151e] flex items-center justify-center text-xl mb-3">💬</div>
                 Select a conversation thread from the list to start messaging.
               </div>
@@ -443,7 +443,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
     </div>
 
     {/* 2. FIXED BOTTOM NAVIGATION BAR (Sits at the very bottom) */}
-    <nav className="h-16 bg-[#12151e] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 shrink-0 z-30">
+    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-[#12151e] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 z-30">
       {isLeaderOrPastor && (
         <button
           onClick={() => { setActiveTab('staff'); setMobileView('list'); }}
