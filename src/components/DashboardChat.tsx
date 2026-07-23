@@ -226,10 +226,21 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
     ]);
   };
 
-  const filteredRooms = rooms.filter((r) => {
-    if (filterCategory === 'groups') return r.is_group;
-    return r.name.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  // Filter existing chat rooms
+const filteredRooms = rooms.filter((r) =>
+  r.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
+// Filter directory users (excluding those you already have a room with)
+const filteredUsers = usersList.filter((u) => {
+  const name = u.username || u.email || '';
+  const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase());
+  // Don't show in user list if already matching a room name
+  const alreadyInRooms = rooms.some(
+    (r) => r.name.toLowerCase() === name.toLowerCase()
+  );
+  return matchesSearch && !alreadyInRooms;
+});
 
   return (
   <div className="fixed inset-0 w-screen h-screen bg-[#0d0f14] text-slate-100 flex flex-col overflow-hidden font-sans">
@@ -342,7 +353,42 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                   </div>
                 </button>
               ))}
-            </div>
+              
+            {/* Show Matching Active Users From Directory */}
+              {searchQuery.trim() !== '' && filteredUsers && filteredUsers.length > 0 && (
+                <div className="pt-2 border-t border-slate-800/50 mt-2">
+                  <div className="px-3 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    More People
+                  </div>
+                  {filteredUsers.map((user) => (
+                    <button
+                      key={user.id}
+                      onClick={() => {
+                        handleStartDM(user);
+                        setSearchQuery('');
+                      }}
+                      className="w-full flex items-center gap-3 p-2.5 rounded-xl text-left hover:bg-[#161a25] transition"
+                    >
+                      <div className="w-11 h-11 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-base shrink-0">
+                        {(user.username || user.email || 'U').charAt(0).toUpperCase()}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-xs font-semibold text-slate-100 truncate">
+                          {user.username || user.email}
+                        </h4>
+                        <p className="text-[10px] text-blue-400 truncate mt-0.5">Start new conversation</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            
+              {/* No Results Found State */}
+              {searchQuery.trim() !== '' && filteredRooms.length === 0 && (!filteredUsers || filteredUsers.length === 0) && (
+                <div className="text-center py-6 text-xs text-slate-500">
+                  No chats or users found matching "{searchQuery}"
+                </div>
+              )}
           </div>
 
           {/* RIGHT CONVERSATION FEED */}
