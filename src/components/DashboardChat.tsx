@@ -352,10 +352,10 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
             }`}
           >
             {activeRoom ? (
-              <div className="flex flex-col h-full w-full min-h-0 overflow-hidden justify-between">
-                
-                {/* 1. Header (Top - Fixed) */}
-                <div className="px-4 py-3 bg-[#12151e] border-b border-slate-800/80 flex items-center justify-between shrink-0 h-14 z-10">
+              <div className="flex flex-col h-full w-full min-h-0 overflow-hidden">
+                          
+                {/* Room Header */}
+                <div className="px-4 py-3 bg-[#12151e] border-b border-slate-800/80 flex items-center justify-between shrink-0 h-14">
                   <div className="flex items-center gap-3 min-w-0">
                     <button
                       onClick={() => setMobileView('list')}
@@ -373,9 +373,9 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                   </div>
                 </div>
 
-                {/* 2. Messages Feed (Middle - Scrollable) */}
+                {/* Messages Feed (Scrollable area) */}
                 <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#090a0e] min-h-0 custom-dark-scroll">
-                  {messages.map((msg) => {
+                  {messages.map((msg) => (
                     const isMe = msg.sender === myUsername;
                     return (
                       <div key={msg.id} className={`flex gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
@@ -403,19 +403,19 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                   <div ref={chatEndRef} />
                 </div>
 
-                {/* 3. INPUT BAR (Bottom - Fixed above Navigation Bar) */}
+                {/* Input Bar */}
                 <form 
                   onSubmit={handleSendMessage} 
-                  className="p-3 bg-[#12151e] border-t border-slate-800/80 flex items-center gap-2 shrink-0 h-16 z-20"
+                  className="p-3 bg-[#12151e] border-t border-slate-800/80 flex items-center gap-2 shrink-0 h-16 relative z-20"
                 >
                   <input
                     type="text"
                     placeholder="Aa"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    className="flex-1 bg-[#1c212d] border border-slate-700/50 rounded-full px-4 py-2.5 text-xs md:text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-400"
+                    className="flex-1 bg-[#1c212d] border border-slate-700/50 rounded-full px-4 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-400"
                   />
-
+          
                   <button
                     type="submit"
                     aria-label="Send message"
@@ -425,13 +425,12 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="w-6 h-6 ml-0.5"
+                      className="w-5 h-5 ml-0.5"
                     >
                       <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.917H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.917a.75.75 0 0 0 .926.941l18-7.5a.75.75 0 0 0 0-1.382l-18-7.5Z" />
                     </svg>
                   </button>
                 </form>
-
               </div>
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-xs text-slate-500 p-8">
