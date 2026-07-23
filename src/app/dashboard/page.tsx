@@ -126,7 +126,7 @@ export default function DashboardPage() {
         </div>
 
         {/* MANAGEMENT VIEW */}
-        {userRole === 'Staff' ? (
+        {userRole === 'Staff' || userRole === 'Members' ? (
           <div className="border border-slate-800 bg-slate-900 p-6 rounded-xl space-y-4">
             <div>
               <h2 className="text-lg font-bold text-slate-100">Monthly Management Roster</h2>
@@ -200,6 +200,11 @@ export default function DashboardPage() {
               </button>
             </div>
             
+            {/* Wrap your roster view table with this check */}
+            {userRole === 'Staff' && (
+              <div className="border border-slate-800 bg-slate-900 p-6 rounded-xl space-y-4">
+                <div>
+                  <h2 className="text-lg font-bold text-slate-100">Monthly Management Roster</h2>
             {/* TAB PANEL 1: Roster Management */}
             {activeTab === 'management' && (
               <div className="grid md:grid-cols-3 gap-6">
