@@ -484,3 +484,4 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
     </nav>
   </div>
 );
+}
