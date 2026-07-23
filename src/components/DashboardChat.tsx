@@ -475,7 +475,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                       </svg>
                     </button>
                   </form>
-                </>
+                
               ) : (
                 <div className="flex-1 flex flex-col items-center justify-center text-xs text-slate-500 p-8">
                   <div className="w-16 h-16 rounded-full bg-[#14171f] flex items-center justify-center text-2xl mb-3">💬</div>
