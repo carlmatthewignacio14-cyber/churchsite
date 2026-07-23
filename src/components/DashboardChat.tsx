@@ -83,16 +83,6 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
     if (error) console.error("Failed to save message:", error.message);
   };
 
-    // 🚀 3. Broadcast message out to everyone listening right now
-    await supabase.channel('church-live-chat').send({
-      type: 'broadcast',
-      event: 'message',
-      payload: messagePayload
-    });
-
-    setInputText('');
-  };
-
   return (
     <div className="border border-slate-800 bg-slate-900 rounded-xl overflow-hidden flex flex-col h-[500px]">
       <div className="p-4 bg-slate-950 border-b border-slate-800">
