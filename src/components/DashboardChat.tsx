@@ -3,18 +3,218 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 
-// ... interfaces ...
+interface Message {
+  id: string;
+  sender: string;
+  text: string;
+  timestamp: string;
+}
+
+interface ChatRoom {
+  id: string;
+  name: string;
+  is_group: boolean;
+}
+
+interface UserProfile {
+  id: string;
+  username: string;
+  email: string;
+}
 
 export default function DashboardChat({ currentUser }: { currentUser: any }) {
-  // ... state & logic ...
+  const [activeTab, setActiveTab] = useState<'chat' | 'staff' | 'manage' | 'settings'>('chat');
+  const [rooms, setRooms] = useState<ChatRoom[]>([]);
+  const [activeRoom, setActiveRoom] = useState<ChatRoom | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [usersList, setUsersList] = useState<UserProfile[]>([]);
+  const [inputText, setInputText] = useState('');
+  const [newGroupName, setNewGroupName] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [userRole, setUserRole] = useState<string>('member');
+
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const myUsername = currentUser?.user_metadata?.username || currentUser?.email || 'User';
+  const currentUserId = currentUser?.id;
+  const isLeaderOrPastor = userRole === 'leader' || userRole === 'pastor';
+
+  // Fetch user role
+  useEffect(() => {
+    if (!currentUserId) return;
+    const fetchRole = async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', currentUserId)
+        .single();
+      if (data?.role) setUserRole(data.role);
+    };
+    fetchRole();
+  }, [currentUserId]);
+
+  // Fetch sidebar data: rooms and users list
+  useEffect(() => {
+    if (!currentUserId) return;
+
+    const fetchInitialSidebarData = async () => {
+      const { data: userRooms } = await supabase
+        .from('chat_rooms')
+        .select(`id, name, is_group, room_members!inner(user_id)`)
+        .eq('room_members.user_id', currentUserId);
+
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('id, username, email')
+        .neq('id', currentUserId);
+
+      if (userRooms) {
+        setRooms(userRooms.map((r: any) => ({ id: r.id, name: r.name || 'Private Message', is_group: r.is_group })));
+      }
+      if (profiles) setUsersList(profiles);
+    };
+
+    fetchInitialSidebarData();
+  }, [currentUserId]);
+
+  // Load messages and subscribe to realtime when active room changes
+  useEffect(() => {
+    if (!currentUserId || !activeRoom) return;
+
+    const loadChatHistory = async () => {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('room_id', activeRoom.id)
+        .order('created_at', { ascending: true });
+
+      if (data && !error) {
+        setMessages(data.map((row: any) => ({
+          id: row.id.toString(),
+          sender: row.sender_name || 'User',
+          text: row.message_text || '',
+          timestamp: new Date(row.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        })));
+      }
+    };
+
+    loadChatHistory();
+
+    const channel = supabase
+      .channel(`room-messages:${activeRoom.id}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `room_id=eq.${activeRoom.id}` },
+        (payload) => {
+          const newRow = payload.new;
+          const incomingMsg: Message = {
+            id: newRow.id.toString(),
+            sender: newRow.sender_name || 'User',
+            text: newRow.message_text || '',
+            timestamp: new Date(newRow.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+          setMessages((prev) => [...prev, incomingMsg]);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [currentUserId, activeRoom]);
+
+  // Auto-scroll to bottom on new messages
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleCreateGroup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newGroupName.trim() || !currentUserId) return;
+
+    const { data: newRoom, error: roomErr } = await supabase
+      .from('chat_rooms')
+      .insert([{ name: newGroupName, is_group: true }])
+      .select()
+      .single();
+
+    if (roomErr || !newRoom) return;
+
+    await supabase.from('room_members').insert([{ room_id: newRoom.id, user_id: currentUserId }]);
+
+    const addedRoom: ChatRoom = { id: newRoom.id, name: newRoom.name, is_group: true };
+    setRooms((prev) => [...prev, addedRoom]);
+    setActiveRoom(addedRoom);
+    setNewGroupName('');
+  };
+
+  const handleStartDM = async (targetUser: UserProfile) => {
+    if (!currentUserId) return;
+
+    const { data: existingMembers } = await supabase
+      .from('room_members')
+      .select('room_id')
+      .eq('user_id', currentUserId);
+
+    let targetRoomId: string | null = null;
+
+    if (existingMembers && existingMembers.length > 0) {
+      const roomIds = existingMembers.map((m: any) => m.room_id);
+      const { data: matchedDM } = await supabase
+        .from('chat_rooms')
+        .select(`id, room_members!inner(user_id)`)
+        .eq('is_group', false)
+        .in('id', roomIds)
+        .eq('room_members.user_id', targetUser.id)
+        .maybeSingle();
+
+      if (matchedDM) targetRoomId = matchedDM.id;
+    }
+
+    if (!targetRoomId) {
+      const { data: newRoom } = await supabase
+        .from('chat_rooms')
+        .insert([{ name: `DM: ${targetUser.username || targetUser.email}`, is_group: false }])
+        .select()
+        .single();
+
+      if (newRoom) {
+        targetRoomId = newRoom.id;
+        await supabase.from('room_members').insert([
+          { room_id: targetRoomId, user_id: currentUserId },
+          { room_id: targetRoomId, user_id: targetUser.id }
+        ]);
+      }
+    }
+
+    if (targetRoomId) {
+      const dmTarget: ChatRoom = { id: targetRoomId, name: targetUser.username || targetUser.email, is_group: false };
+      if (!rooms.some((r) => r.id === targetRoomId)) setRooms((prev) => [...prev, dmTarget]);
+      setActiveRoom(dmTarget);
+    }
+  };
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputText.trim() || !activeRoom || !currentUserId) return;
+
+    const currentText = inputText;
+    setInputText('');
+
+    await supabase.from('chat_messages').insert([
+      {
+        user_id: currentUserId,
+        sender_name: myUsername,
+        message_text: currentText,
+        room_id: activeRoom.id
+      }
+    ]);
+  };
 
   return (
-    // Changed: Uses h-screen w-full to span the full viewport height and width
     <div className="flex flex-col h-screen w-full bg-slate-900 overflow-hidden">
-      
-      {/* TOP HEADER (Back Button / Title) */}
+
+      {/* TOP HEADER */}
       <div className="p-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
-        <button 
+        <button
           onClick={() => window.location.href = '/'}
           className="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 text-xs px-3 py-1.5 rounded-lg font-bold tracking-wide"
         >
@@ -22,9 +222,9 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         </button>
       </div>
 
-      {/* MAIN VIEWPORT AREA (Fills available space) */}
+      {/* MAIN VIEWPORT AREA */}
       <div className="flex-1 flex overflow-hidden">
-        
+
         {/* STAFF TAB VIEW */}
         {activeTab === 'staff' && isLeaderOrPastor && (
           <div className="flex-1 p-6 text-slate-200 overflow-y-auto">
@@ -68,8 +268,8 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         {/* CHAT TAB VIEW */}
         {activeTab === 'chat' && (
           <div className="flex-1 flex w-full overflow-hidden">
-            
-            {/* LEFT SIDEBAR (Width: 320px fixed or 1/4 layout) */}
+
+            {/* LEFT SIDEBAR */}
             <div className="w-80 border-r border-slate-800 bg-slate-950 flex flex-col p-3 space-y-4">
               {isLeaderOrPastor && (
                 <div>
