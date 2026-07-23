@@ -85,9 +85,13 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
 
     // Listen live for new incoming database rows
     const channel = supabase
-      .channel(`room-messages:${activeRoom.id}`)
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `room_id=eq.${activeRoom.id}` }, 
-        (payload) => {
+  .channel(`room-messages:${activeRoom.id}`)
+  .on('postgres_changes', { 
+    event: 'INSERT', 
+    schema: 'public', 
+    table: 'chat_messages',
+    filter: `room_id=eq.${activeRoom.id}` // <-- FIXED with backticks ``
+  }, (payload) => {
           const newRow = payload.new;
           const incomingMsg: Message = {
             id: newRow.id.toString(),
