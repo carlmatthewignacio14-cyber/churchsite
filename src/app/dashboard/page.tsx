@@ -72,15 +72,23 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white pt-28 px-4 pb-12">
+    <div className="min-h-screen bg-slate-950 text-white pt-24 px-4 pb-28">
       <div className="max-w-5xl mx-auto space-y-6">
 
-        {/* Header Summary Strip */}
+        {/* 🏠 FIXED TOP: Clean back button placement utilizing the top space */}
+        <div className="flex justify-start mb-2">
+          <button 
+            onClick={() => window.location.href = '/'}
+            className="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-bold px-4 py-2 rounded-lg border border-slate-800 transition-colors uppercase tracking-wider shadow-md"
+          >
+            ← Back to Homepage
+          </button>
+        </div>
+
+        {/* Header Summary Strip without the embedded button inside it */}
         <div className="border border-slate-800 bg-slate-900/50 p-6 rounded-xl backdrop-blur-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-widest">Active Profile Dashboard</span>
-            
-            {/* 👤 FIXED USERNAME FALLBACK CHECK */}
             <h1 className="text-2xl font-bold mt-1 text-slate-100">
               Welcome, {currentUser?.user_metadata?.username || currentUser?.user_metadata?.name || 'Church Member'}
             </h1>
@@ -88,27 +96,16 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex flex-col items-start md:items-end gap-1.5">
-            {/* 🏷️ FIXED DYNAMIC MINISTRY BADGE DISPLAY */}
             <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wider shadow-sm">
               {currentUser?.user_metadata?.ministry 
                 ? `Role: ${currentUser.user_metadata.ministry.replace(" Ministry", "")} Leader` 
                 : `Role Tier: ${userRole}`}
             </span>
-            
-            {/* Secondary verification badge */}
             {currentUser?.user_metadata?.ministry && (
-              <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 text-[10px] font-semibold px-2 py-0.5 rounded">
+              <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 text-[10px] font-semibold px-2.5 py-0.5 rounded">
                 📍 {currentUser.user_metadata.ministry}
               </span>
             )}
-
-            {/* 🏠 BACK TO HOMEPAGE ACTION BUTTON */}
-            <button 
-              onClick={() => window.location.href = '/'}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2.5 rounded-lg border border-slate-700 transition-colors uppercase tracking-wider flex items-center gap-2 shadow-sm"
-            >
-              ← Back to Homepage
-            </button>
           </div>
         </div>
 
@@ -159,44 +156,51 @@ export default function DashboardPage() {
           /* ADMINISTRATIVE DASHBOARD FOR LEADERS & PASTORS */
           <div className="space-y-6">
 
-            {/* Top Workspace Tab Navs */}
-            <div className="flex border-b border-slate-800 gap-2 overflow-x-auto whitespace-nowrap">
+            {/* 📱 FIXED APP-STYLE BOTTOM NAVIGATION BAR */}
+            <div className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900 border-t border-slate-800 shadow-2xl backdrop-blur-md px-2 py-2 flex justify-around items-center max-w-4xl mx-auto md:rounded-t-2xl">
+              
+              {/* Button 1: Roster changed to Staff */}
               <button 
                 onClick={() => setActiveTab('management')}
-                className={`px-4 py-2 text-xs tracking-widest font-bold uppercase border-b-2 transition-all ${
-                  activeTab === 'management' ? 'border-amber-500 text-amber-400' : 'border-transparent text-slate-400 hover:text-white'
+                className={`flex flex-col items-center justify-center w-16 py-1 text-center transition-all focus:outline-none ${
+                  activeTab === 'management' ? 'text-amber-400 font-bold scale-105' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                👥 Roster Management
+                <span className="text-xl">👥</span>
+                <span className="text-[10px] tracking-wider uppercase mt-1 font-medium">Staff</span>
               </button>
               
-              {/* ➕ ADDED CHAT LINK TAB BUTTON */}
+              {/* Button 2: Live Chat changed to Chat */}
               <button 
                 onClick={() => setActiveTab('chat' as any)}
-                className={`px-4 py-2 text-xs tracking-widest font-bold uppercase border-b-2 transition-all ${
-                  (activeTab as string) === 'chat' ? 'border-green-500 text-green-400' : 'border-transparent text-slate-400 hover:text-white'
+                className={`flex flex-col items-center justify-center w-16 py-1 text-center transition-all focus:outline-none ${
+                  (activeTab as string) === 'chat' ? 'text-green-400 font-bold scale-105' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                💬 Live Chat Room
+                <span className="text-xl">💬</span>
+                <span className="text-[10px] tracking-wider uppercase mt-1 font-medium">Chat</span>
               </button>
 
+              {/* Button 3: Website Manager changed to Manage */}
               <button 
                 onClick={() => setActiveTab('pages')}
-                className={`px-4 py-2 text-xs tracking-widest font-bold uppercase border-b-2 transition-all ${
-                  activeTab === 'pages' ? 'border-purple-500 text-purple-400' : 'border-transparent text-slate-400 hover:text-white'
+                className={`flex flex-col items-center justify-center w-16 py-1 text-center transition-all focus:outline-none ${
+                  activeTab === 'pages' ? 'text-purple-400 font-bold scale-105' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                🖥️ Website Page Manager
+                <span className="text-xl">🖥️</span>
+                <span className="text-[10px] tracking-wider uppercase mt-1 font-medium">Manage</span>
               </button>
 
-              {/* ➕ ADDED SETTINGS LINK TAB BUTTON */}
+              {/* Button 4: Account Settings stays Settings */}
               <button 
                 onClick={() => setActiveTab('settings' as any)}
-                className={`px-4 py-2 text-xs tracking-widest font-bold uppercase border-b-2 transition-all ${
-                  (activeTab as string) === 'settings' ? 'border-blue-500 text-blue-400' : 'border-transparent text-slate-400 hover:text-white'
+                className={`flex flex-col items-center justify-center w-16 py-1 text-center transition-all focus:outline-none ${
+                  (activeTab as string) === 'settings' ? 'text-blue-400 font-bold scale-105' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                ⚙️ Account Settings
+                <span className="text-xl">⚙️</span>
+                <span className="text-[10px] tracking-wider uppercase mt-1 font-medium">Settings</span>
               </button>
             </div>
             
