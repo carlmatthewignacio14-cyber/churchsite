@@ -77,7 +77,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
           sender: row.sender_name || 'User',
           text: row.message_text || '',
           timestamp: new Date(row.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }));
+        })));
       }
     };
 
@@ -270,29 +270,34 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                   return (
                     <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                       <span className="text-[10px] text-slate-400 mb-0.5 px-1">{msg.sender}</span>
-                      <div className={p-2.5 rounded-xl max-w-xs text-sm ${ isMe ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-slate-800 text-slate-100 rounded-tl-none' }}>
-                      {msg.text}
-                      {msg.timestamp}
-
-
+                      <div className={`p-2.5 rounded-xl max-w-xs text-sm ${isMe ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-slate-800 text-slate-100 rounded-tl-none'}`}>
+                        {msg.text}
+                      </div>
+                      <span className="text-[10px] text-slate-500 mt-0.5 px-1">{msg.timestamp}</span>
+                    </div>
                   );
                 })
               )}
+              <div ref={chatEndRef} />
+            </div>
 
-
-                      <input
-                        type="text"
-                        placeholder="Type your message here..."
-                        value={inputText}
-                        onChange={(e) => setInputText(e.target.value)}
-                        className="flex-1 bg-slate-900 border border-slate-800 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-blue-500"
-                        />
-                          Send
-                    </>
-                  ):(
-                  Select a conversation thread or create a group room from the sidebar menu to start messaging.
-
-              )}
-
-          );
-        }
+            <form onSubmit={handleSendMessage} className="p-3 border-t border-slate-800 flex gap-2">
+              <input
+                type="text"
+                placeholder="Type your message here..."
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                className="flex-1 bg-slate-900 border border-slate-800 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-blue-500"
+              />
+              <button type="submit" className="bg-blue-600 px-4 py-2 rounded-lg text-sm text-white font-bold">Send</button>
+            </form>
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center text-xs text-slate-500 text-center p-8">
+            Select a conversation thread or create a group room from the sidebar menu to start messaging.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
