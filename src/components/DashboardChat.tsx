@@ -486,8 +486,10 @@ const filteredUsers = usersList.filter((u) => {
       </div>
     </div>
 
-    {/* 2. FIXED BOTTOM NAVIGATION BAR (Sits at the very bottom) */}
+    {/* FIXED BOTTOM NAVIGATION BAR */}
     <nav className="fixed bottom-0 left-0 right-0 h-16 bg-[#12151e] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 z-30">
+      
+      {/* STAFF TAB - Only visible to Leaders & Pastors */}
       {isLeaderOrPastor && (
         <button
           onClick={() => { setActiveTab('staff'); setMobileView('list'); }}
@@ -498,6 +500,7 @@ const filteredUsers = usersList.filter((u) => {
         </button>
       )}
 
+      {/* CHAT TAB - Visible to ALL roles */}
       <button
         onClick={() => { setActiveTab('chat'); setMobileView('list'); }}
         className={`flex flex-col items-center gap-0.5 ${activeTab === 'chat' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
@@ -506,6 +509,7 @@ const filteredUsers = usersList.filter((u) => {
         <span>CHAT</span>
       </button>
 
+      {/* MANAGE TAB - Only visible to Leaders & Pastors */}
       {isLeaderOrPastor && (
         <button
           onClick={() => { setActiveTab('manage'); setMobileView('list'); }}
@@ -516,6 +520,7 @@ const filteredUsers = usersList.filter((u) => {
         </button>
       )}
 
+      {/* SETTINGS TAB - Visible to ALL roles */}
       <button
         onClick={() => { setActiveTab('settings'); setMobileView('list'); }}
         className={`flex flex-col items-center gap-0.5 ${activeTab === 'settings' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
@@ -523,6 +528,7 @@ const filteredUsers = usersList.filter((u) => {
         <span className="text-base">⚙️</span>
         <span>SETTINGS</span>
       </button>
+
     </nav>
   </div>
 );
