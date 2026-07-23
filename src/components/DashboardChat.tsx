@@ -232,16 +232,6 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
 
   return (
     <div className="flex flex-col h-[100dvh] w-full bg-[#11141a] text-slate-100 overflow-hidden font-sans">
-      
-      {/* TOP HEADER BAR */}
-      <div className="p-2.5 bg-[#181c24] border-b border-slate-800/80 flex items-center justify-between shrink-0">
-        <button 
-          onClick={() => window.location.href = '/'}
-          className="bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/50 text-slate-200 text-xs px-3 py-1.5 rounded-lg font-bold tracking-wide transition"
-        >
-          ← BACK TO HOMEPAGE
-        </button>
-      </div>
 
       {/* MAIN VIEWPORT */}
       <div className="flex-1 flex overflow-hidden min-h-0 relative">
@@ -258,7 +248,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         {activeTab === 'chat' && (
           <div className="flex-1 flex w-full overflow-hidden min-h-0">
             
-            {/* LEFT SIDEBAR: MESSENGER LIST (Image 2 style) */}
+            {/* LEFT SIDEBAR: MESSENGER LIST */}
             <div 
               className={`w-full md:w-96 border-r border-slate-800/80 bg-[#14171f] flex flex-col shrink-0 min-h-0 ${
                 mobileView === 'list' ? 'flex' : 'hidden md:flex'
@@ -367,7 +357,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
               </div>
             </div>
 
-            {/* RIGHT CONVERSATION FEED (Image 3 style) */}
+            {/* RIGHT CONVERSATION FEED */}
             <div 
               className={`flex-1 flex flex-col bg-[#0b0d12] overflow-hidden min-h-0 ${
                 mobileView === 'chat' ? 'flex' : 'hidden md:flex'
