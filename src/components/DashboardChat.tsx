@@ -335,69 +335,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                 >
                   Unread
                 </button>
-                <button
-                  onClick={() => setFilterCategory('groups')}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition ${
-                    filterCategory === 'groups' ? 'bg-blue-600/30 text-blue-400 border border-blue-500/30' : 'bg-[#202531] text-slate-300 hover:bg-slate-800'
-                  }`}
-                >
-                  Groups
-                </button>
-              </div>
-
-              {/* Chat Thread List */}
-              <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 min-h-0">
-                {filteredRooms.map((room) => (
-                  <button
-                    key={room.id}
-                    onClick={() => selectRoom(room)}
-                    className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition ${
-                      activeRoom?.id === room.id ? 'bg-[#212735]' : 'hover:bg-[#1a1f2c]'
-                    }`}
-                  >
-                    {/* Circle Avatar */}
-                    <div className="relative shrink-0">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-lg">
-                        {room.name.charAt(0).toUpperCase()}
-                      </div>
-                      <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-[#14171f] rounded-full"></span>
-                    </div>
-
-                    {/* Room Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-baseline">
-                        <h4 className="text-xs md:text-sm font-semibold text-slate-100 truncate">{room.name}</h4>
-                        <span className="text-[10px] text-slate-400 shrink-0 ml-2">{room.lastTime}</span>
-                      </div>
-                      <p className="text-xs text-slate-400 truncate mt-0.5">{room.lastMessage}</p>
-                    </div>
-                  </button>
-                ))}
-
-                {/* Direct Message Quick Directory List */}
-                <div className="pt-3 px-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Directory</span>
-                  <div className="mt-2 space-y-1">
-                    {usersList
-                      .filter((u) => (u.username || u.email).toLowerCase().includes(searchQuery.toLowerCase()))
-                      .map((u) => (
-                        <button
-                          key={u.id}
-                          onClick={() => handleStartDM(u)}
-                          className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-[#1a1f2c] text-xs text-slate-300"
-                        >
-                          <div className="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center font-bold text-xs">
-                            {(u.username || u.email).charAt(0).toUpperCase()}
-                          </div>
-                          <span className="truncate">{u.username || u.email}</span>
-                        </button>
-                      ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT CONVERSATION FEED */}
+                {/* RIGHT CONVERSATION FEED */}
             <div 
               className={`flex-1 flex flex-col bg-[#0b0d12] overflow-hidden min-h-0 ${
                 mobileView === 'chat' ? 'flex' : 'hidden md:flex'
@@ -405,7 +343,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
             >
               {activeRoom ? (
                 <>
-                  {/* Top Bar with Avatar & Actions */}
+                  {/* Top Bar with Avatar */}
                   <div className="px-4 py-3 bg-[#14171f] border-b border-slate-800/80 flex items-center justify-between shrink-0">
                     <div className="flex items-center gap-3 min-w-0">
                       <button
@@ -422,6 +360,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                         <span className="text-[10px] text-green-400 block">Active now</span>
                       </div>
                     </div>
+                  </div>
 
                   {/* Message Stream */}
                   <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#0e1017] min-h-0">
@@ -459,6 +398,16 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                     <div ref={chatEndRef} />
                   </div>
 
+                  {/* Clean Input Bar */}
+                  <form onSubmit={handleSendMessage} className="p-3 bg-[#14171f] border-t border-slate-800/80 flex items-center gap-2 shrink-0">
+                    <input
+                      type="text"
+                      placeholder="Aa"
+                      value={inputText}
+                      onChange={(e) => setInputText(e.target.value)}
+                      className="flex-1 bg-[#202531] border border-slate-700/50 rounded-full px-4 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-400"
+                    />
+
                     {/* Paper Airplane Send Button */}
                     <button
                       type="submit"
@@ -475,7 +424,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                       </svg>
                     </button>
                   </form>
-                
+                </>
               ) : (
                 <div className="flex-1 flex flex-col items-center justify-center text-xs text-slate-500 p-8">
                   <div className="w-16 h-16 rounded-full bg-[#14171f] flex items-center justify-center text-2xl mb-3">💬</div>
