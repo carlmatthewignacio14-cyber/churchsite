@@ -214,11 +214,6 @@ useEffect(() => {
   };
 }, [currentUserId, activeRoom?.id]);
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [currentUserId]);
-
   // 3. Realtime Messages Listener
   useEffect(() => {
     if (!currentUserId || !activeRoom) return;
