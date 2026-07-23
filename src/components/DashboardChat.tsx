@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 
 interface Message {
   id: string;
+  sender_id: string;
   sender: string;
   text: string;
   timestamp: string;
@@ -14,9 +15,9 @@ interface ChatRoom {
   id: string;
   name: string;
   is_group: boolean;
+  otherUser?: UserProfile;
   lastMessage?: string;
   lastTime?: string;
-  avatarUrl?: string;
 }
 
 interface UserProfile {
@@ -26,14 +27,22 @@ interface UserProfile {
 }
 
 export default function DashboardChat({ currentUser }: { currentUser: any }) {
+  // Extract user role
   const rawRole = currentUser?.user_metadata?.role || currentUser?.role || 'member';
   const userRole = rawRole.toString().toLowerCase();
-  const isLeaderOrPastor = ['leader', 'pastor'].includes(userRole);
 
-  const [activeTab, setActiveTab] = useState<'staff' | 'chat' | 'manage' | 'settings'>('chat');
+  // ONLY Members are restricted from seeing the Staff/Manage tab
+  const canAccessStaffTab = ['staff', 'leader', 'pastor'].includes(userRole);
+
+  const [activeTab, setActiveTab] = useState<'chat' | 'manage' | 'settings'>('chat');
   const [mobileView, setMobileView] = useState<'list' | 'chat'>('list');
-  const [filterCategory, setFilterCategory] = useState<'all' | 'unread' | 'groups'>('all');
   const [isThreeDotsOpen, setIsThreeDotsOpen] = useState(false);
+
+  // New Message / Group Modal State (Pencil Icon)
+  const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
+  const [groupName, setGroupName] = useState('');
+  const [newMessageSearch, setNewMessageSearch] = useState('');
 
   const [rooms, setRooms] = useState<ChatRoom[]>([]);
   const [activeRoom, setActiveRoom] = useState<ChatRoom | null>(null);
@@ -43,14 +52,29 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const myUsername = currentUser?.user_metadata?.username || currentUser?.email || 'User';
   const currentUserId = currentUser?.id;
+  const myUsername =
+    currentUser?.user_metadata?.username || currentUser?.email || 'User';
 
-  // 1. Initial Fetch
+  // HELPER: Returns the proper display name (User name/email or Group Name)
+  const getRoomDisplayName = (room: ChatRoom) => {
+    if (room.is_group) return room.name;
+    return room.otherUser?.username || room.otherUser?.email || 'Direct Message';
+  };
+
+  // 1. Fetch Directory & User Rooms
   useEffect(() => {
     if (!currentUserId) return;
 
     const fetchInitialSidebarData = async () => {
+      const { data: profiles } = await supabase
+        .from('user_directory')
+        .select('id, username, email');
+
+      const allUsers = profiles || [];
+      const otherUsersOnly = allUsers.filter((u) => u.id !== currentUserId);
+      setUsersList(otherUsersOnly);
+
       const { data: userMemberships } = await supabase
         .from('room_members')
         .select('room_id')
@@ -58,36 +82,112 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
 
       if (userMemberships && userMemberships.length > 0) {
         const roomIds = userMemberships.map((m) => m.room_id);
+
         const { data: userRooms } = await supabase
           .from('chat_rooms')
-          .select('id, name, is_group')
+          .select(`
+            id, 
+            name, 
+            is_group,
+            room_members(user_id)
+          `)
           .in('id', roomIds);
 
         if (userRooms) {
-          setRooms(
-            userRooms.map((r: any) => ({
+          const parsedRooms: ChatRoom[] = userRooms.map((r: any) => {
+            let otherUser: UserProfile | undefined;
+
+            if (!r.is_group) {
+              const otherMember = r.room_members?.find(
+                (m: any) => m.user_id !== currentUserId
+              );
+              if (otherMember) {
+                otherUser = allUsers.find((u) => u.id === otherMember.user_id);
+              }
+            }
+
+            return {
               id: r.id,
-              name: r.name || 'Private Message',
+              name: r.name || 'Direct Message',
               is_group: r.is_group,
+              otherUser,
               lastMessage: 'Tap to view conversation',
               lastTime: 'Now',
-            }))
-          );
+            };
+          });
+
+          setRooms(parsedRooms);
         }
       }
-
-      const { data: profiles } = await supabase
-        .from('user_directory')
-        .select('id, username, email')
-        .neq('id', currentUserId);
-
-      if (profiles) setUsersList(profiles);
     };
 
     fetchInitialSidebarData();
   }, [currentUserId]);
 
-  // 2. Realtime Messages
+  // 2. Realtime Listener for Room Additions
+  useEffect(() => {
+    if (!currentUserId) return;
+
+    const channel = supabase
+      .channel(`user-memberships:${currentUserId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'room_members',
+          filter: `user_id=eq.${currentUserId}`,
+        },
+        async (payload) => {
+          const newRoomId = payload.new.room_id;
+
+          const { data: roomData } = await supabase
+            .from('chat_rooms')
+            .select('id, name, is_group, room_members(user_id)')
+            .eq('id', newRoomId)
+            .single();
+
+          if (roomData) {
+            let otherUser: UserProfile | undefined;
+
+            if (!roomData.is_group) {
+              const otherMember = roomData.room_members?.find(
+                (m: any) => m.user_id !== currentUserId
+              );
+              if (otherMember) {
+                const { data: targetProfile } = await supabase
+                  .from('user_directory')
+                  .select('id, username, email')
+                  .eq('id', otherMember.user_id)
+                  .single();
+
+                if (targetProfile) otherUser = targetProfile;
+              }
+            }
+
+            const newChatRoom: ChatRoom = {
+              id: roomData.id,
+              name: roomData.name || 'Direct Message',
+              is_group: roomData.is_group,
+              otherUser,
+              lastMessage: 'New conversation started',
+              lastTime: 'Now',
+            };
+
+            setRooms((prev) =>
+              prev.some((r) => r.id === newChatRoom.id) ? prev : [newChatRoom, ...prev]
+            );
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [currentUserId]);
+
+  // 3. Realtime Messages Listener
   useEffect(() => {
     if (!currentUserId || !activeRoom) return;
 
@@ -102,6 +202,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         setMessages(
           data.map((row: any) => ({
             id: row.id.toString(),
+            sender_id: row.user_id,
             sender: row.sender_name || 'User',
             text: row.message_text || '',
             timestamp: new Date(row.created_at).toLocaleTimeString([], {
@@ -129,6 +230,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
           const newRow = payload.new;
           const incomingMsg: Message = {
             id: newRow.id.toString(),
+            sender_id: newRow.user_id,
             sender: newRow.sender_name || 'User',
             text: newRow.message_text || '',
             timestamp: new Date(newRow.created_at).toLocaleTimeString([], {
@@ -139,6 +241,14 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
 
           setMessages((prev) =>
             prev.some((m) => m.id === incomingMsg.id) ? prev : [...prev, incomingMsg]
+          );
+
+          setRooms((prev) =>
+            prev.map((r) =>
+              r.id === activeRoom.id
+                ? { ...r, lastMessage: incomingMsg.text, lastTime: incomingMsg.timestamp }
+                : r
+            )
           );
         }
       )
@@ -161,6 +271,16 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
   const handleStartDM = async (targetUser: UserProfile) => {
     if (!currentUserId) return;
 
+    const existingRoom = rooms.find(
+      (r) => !r.is_group && r.otherUser?.id === targetUser.id
+    );
+
+    if (existingRoom) {
+      selectRoom(existingRoom);
+      setIsNewMessageOpen(false);
+      return;
+    }
+
     const { data: myMemberships } = await supabase
       .from('room_members')
       .select('room_id')
@@ -182,12 +302,10 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
       if (sharedDM) targetRoomId = sharedDM.room_id;
     }
 
-    const dmName = targetUser.username || targetUser.email;
-
     if (!targetRoomId) {
       const { data: newRoom } = await supabase
         .from('chat_rooms')
-        .insert([{ name: dmName, is_group: false }])
+        .insert([{ name: 'Direct Message', is_group: false }])
         .select()
         .single();
 
@@ -201,12 +319,63 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
     }
 
     if (targetRoomId) {
-      const dmTarget = { id: targetRoomId, name: dmName, is_group: false, lastMessage: 'Direct Message', lastTime: 'Now' };
+      const dmTarget: ChatRoom = {
+        id: targetRoomId,
+        name: 'Direct Message',
+        is_group: false,
+        otherUser: targetUser,
+        lastMessage: 'Direct Message',
+        lastTime: 'Now',
+      };
+
       setRooms((prev) =>
-        prev.some((r) => r.id === targetRoomId) ? prev : [...prev, dmTarget]
+        prev.some((r) => r.id === targetRoomId) ? prev : [dmTarget, ...prev]
       );
       selectRoom(dmTarget);
+      setIsNewMessageOpen(false);
     }
+  };
+
+  const handleCreateGroup = async () => {
+    if (!currentUserId || selectedUserIds.length === 0) return;
+
+    const finalGroupName = groupName.trim() || 'New Group';
+
+    const { data: newRoom, error } = await supabase
+      .from('chat_rooms')
+      .insert([{ name: finalGroupName, is_group: true }])
+      .select()
+      .single();
+
+    if (newRoom && !error) {
+      const membersToInsert = [
+        { room_id: newRoom.id, user_id: currentUserId },
+        ...selectedUserIds.map((id) => ({ room_id: newRoom.id, user_id: id })),
+      ];
+
+      await supabase.from('room_members').insert(membersToInsert);
+
+      const createdGroupRoom: ChatRoom = {
+        id: newRoom.id,
+        name: finalGroupName,
+        is_group: true,
+        lastMessage: 'Group created',
+        lastTime: 'Now',
+      };
+
+      setRooms((prev) => [createdGroupRoom, ...prev]);
+      selectRoom(createdGroupRoom);
+
+      setSelectedUserIds([]);
+      setGroupName('');
+      setIsNewMessageOpen(false);
+    }
+  };
+
+  const toggleUserSelection = (userId: string) => {
+    setSelectedUserIds((prev) =>
+      prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]
+    );
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -226,22 +395,24 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
     ]);
   };
 
-  // Filter existing chat rooms
   const filteredRooms = rooms.filter((r) =>
-    r.name.toLowerCase().includes(searchQuery.toLowerCase())
+    getRoomDisplayName(r).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Filter directory users (excluding those you already have a room with)
   const filteredUsers = usersList.filter((u) => {
     const name = u.username || u.email || '';
     const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch && !rooms.some((r) => r.name.toLowerCase() === name.toLowerCase());
+    const alreadyHasRoom = rooms.some((r) => !r.is_group && r.otherUser?.id === u.id);
+    return matchesSearch && !alreadyHasRoom;
+  });
+
+  const modalFilteredUsers = usersList.filter((u) => {
+    const name = u.username || u.email || '';
+    return name.toLowerCase().includes(newMessageSearch.toLowerCase());
   });
 
   return (
     <div className="fixed inset-0 w-screen h-screen bg-[#0d0f14] text-slate-100 flex flex-col overflow-hidden font-sans">
-      
-      {/* Custom Dark Scrollbar Styles */}
       <style jsx global>{`
         .custom-dark-scroll::-webkit-scrollbar {
           width: 6px;
@@ -258,10 +429,8 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         }
       `}</style>
 
-      {/* 1. TOP MAIN VIEWPORT */}
+      {/* MAIN CONTENT VIEWPORT */}
       <div className="flex-1 flex overflow-hidden min-h-0 w-full relative">
-        
-        {/* OTHER TABS */}
         {activeTab !== 'chat' && (
           <div className="flex-1 p-5 text-slate-200 overflow-y-auto custom-dark-scroll">
             <div className="flex items-center justify-between mb-4">
@@ -273,25 +442,22 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                 ← Back to Chats
               </button>
             </div>
-            <p className="text-xs text-slate-400">Management & Settings Section</p>
+            <p className="text-xs text-slate-400">Section details for {activeTab}.</p>
           </div>
         )}
 
-        {/* CHAT TAB */}
         {activeTab === 'chat' && (
           <div className="flex-1 flex w-full h-full overflow-hidden min-h-0">
-            
-            {/* LEFT SIDEBAR: CHAT THREADS */}
-            <div 
+            {/* LEFT SIDEBAR - CHAT THREADS */}
+            <div
               className={`w-full md:w-96 border-r border-slate-800/60 bg-[#12151e] flex flex-col shrink-0 h-full min-h-0 ${
                 mobileView === 'list' ? 'flex' : 'hidden md:flex'
               }`}
             >
-              {/* Header */}
               <div className="p-4 pb-2 flex items-center justify-between shrink-0 relative">
                 <h1 className="text-2xl font-black tracking-tight text-white">Chats</h1>
                 <div className="flex gap-2 relative">
-                  <button 
+                  <button
                     onClick={() => setIsThreeDotsOpen(!isThreeDotsOpen)}
                     className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-sm transition"
                     aria-label="More options"
@@ -312,11 +478,22 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                       </button>
                     </div>
                   )}
-                  <button className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-sm">✏️</button>
+
+                  {/* PENCIL ICON - NEW MESSAGE / GROUP MODAL */}
+                  <button
+                    onClick={() => {
+                      setIsNewMessageOpen(true);
+                      setSelectedUserIds([]);
+                      setGroupName('');
+                    }}
+                    className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-sm transition"
+                    aria-label="New Message"
+                  >
+                    ✏️
+                  </button>
                 </div>
               </div>
 
-              {/* Search */}
               <div className="px-4 py-2 shrink-0">
                 <input
                   type="text"
@@ -327,31 +504,33 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                 />
               </div>
 
-              {/* Thread List */}
+              {/* Chat Thread List */}
               <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 min-h-0 custom-dark-scroll">
-                {filteredRooms.map((room) => (
-                  <button
-                    key={room.id}
-                    onClick={() => selectRoom(room)}
-                    className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition ${
-                      activeRoom?.id === room.id ? 'bg-[#1e2433]' : 'hover:bg-[#161a25]'
-                    }`}
-                  >
-                    <div className="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-base shrink-0">
-                      {room.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-baseline">
-                        <h4 className="text-xs font-semibold text-slate-100 truncate">{room.name}</h4>
-                        <span className="text-[10px] text-slate-400 shrink-0 ml-2">{room.lastTime}</span>
+                {filteredRooms.map((room) => {
+                  const displayName = getRoomDisplayName(room);
+                  return (
+                    <button
+                      key={room.id}
+                      onClick={() => selectRoom(room)}
+                      className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition ${
+                        activeRoom?.id === room.id ? 'bg-[#1e2433]' : 'hover:bg-[#161a25]'
+                      }`}
+                    >
+                      <div className="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-base shrink-0">
+                        {displayName.charAt(0).toUpperCase()}
                       </div>
-                      <p className="text-xs text-slate-400 truncate mt-0.5">{room.lastMessage}</p>
-                    </div>
-                  </button>
-                ))}
-                
-                {/* Show Matching Active Users From Directory */}
-                {searchQuery.trim() !== '' && filteredUsers && filteredUsers.length > 0 && (
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-baseline">
+                          <h4 className="text-xs font-semibold text-slate-100 truncate">{displayName}</h4>
+                          <span className="text-[10px] text-slate-400 shrink-0 ml-2">{room.lastTime}</span>
+                        </div>
+                        <p className="text-xs text-slate-400 truncate mt-0.5">{room.lastMessage}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+
+                {searchQuery.trim() !== '' && filteredUsers.length > 0 && (
                   <div className="pt-2 border-t border-slate-800/50 mt-2">
                     <div className="px-3 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                       More People
@@ -378,26 +557,17 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                     ))}
                   </div>
                 )}
-              
-                {/* No Results Found State */}
-                {searchQuery.trim() !== '' && filteredRooms.length === 0 && (!filteredUsers || filteredUsers.length === 0) && (
-                  <div className="text-center py-6 text-xs text-slate-500">
-                    No chats or users found matching "{searchQuery}"
-                  </div>
-                )}
               </div>
             </div>
 
-            {/* RIGHT CONVERSATION FEED */}
-            <div 
+            {/* RIGHT SIDEBAR - ACTIVE CONVERSATION FEED */}
+            <div
               className={`flex-1 flex flex-col bg-[#0b0c10] h-full min-h-0 overflow-hidden relative pb-16 ${
                 mobileView === 'chat' ? 'flex' : 'hidden md:flex'
               }`}
             >
               {activeRoom ? (
                 <div className="flex flex-col h-full w-full min-h-0 overflow-hidden">
-                            
-                  {/* Room Header */}
                   <div className="px-4 py-3 bg-[#12151e] border-b border-slate-800/80 flex items-center justify-between shrink-0 h-14">
                     <div className="flex items-center gap-3 min-w-0">
                       <button
@@ -407,10 +577,12 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                         ←
                       </button>
                       <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white shrink-0 text-sm">
-                        {activeRoom.name.charAt(0).toUpperCase()}
+                        {getRoomDisplayName(activeRoom).charAt(0).toUpperCase()}
                       </div>
                       <div className="truncate">
-                        <h3 className="text-xs font-bold text-slate-100 truncate">{activeRoom.name}</h3>
+                        <h3 className="text-xs font-bold text-slate-100 truncate">
+                          {getRoomDisplayName(activeRoom)}
+                        </h3>
                         <span className="text-[10px] text-green-400 block">Active now</span>
                       </div>
                     </div>
@@ -419,7 +591,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                   {/* Messages Feed */}
                   <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#090a0e] min-h-0 custom-dark-scroll">
                     {messages.map((msg) => {
-                      const isMe = msg.sender === myUsername;
+                      const isMe = msg.sender_id === currentUserId;
                       return (
                         <div key={msg.id} className={`flex gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
                           {!isMe && (
@@ -446,9 +618,9 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                     <div ref={chatEndRef} />
                   </div>
 
-                  {/* Input Bar */}
-                  <form 
-                    onSubmit={handleSendMessage} 
+                  {/* Message Input Box */}
+                  <form
+                    onSubmit={handleSendMessage}
                     className="p-3 bg-[#12151e] border-t border-slate-800/80 flex items-center gap-2 shrink-0 h-16 relative z-20 mb-16"
                   >
                     <input
@@ -458,18 +630,12 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
                       onChange={(e) => setInputText(e.target.value)}
                       className="flex-1 bg-[#1c212d] border border-slate-700/50 rounded-full px-4 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-400"
                     />
-            
                     <button
                       type="submit"
                       aria-label="Send message"
                       className="p-2 text-blue-500 hover:text-blue-400 hover:scale-105 transition shrink-0 flex items-center justify-center"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="w-5 h-5 ml-0.5"
-                      >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 ml-0.5">
                         <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.917H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.917a.75.75 0 0 0 .926.941l18-7.5a.75.75 0 0 0 0-1.382l-18-7.5Z" />
                       </svg>
                     </button>
@@ -486,21 +652,101 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
         )}
       </div>
 
-      {/* FIXED BOTTOM NAVIGATION BAR */}
-      <nav className="fixed bottom-0 left-0 right-0 h-16 bg-[#12151e] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 z-30">
-        
-        {/* STAFF TAB - Only visible to Leaders & Pastors */}
-        {isLeaderOrPastor && (
-          <button
-            onClick={() => { setActiveTab('staff'); setMobileView('list'); }}
-            className={`flex flex-col items-center gap-0.5 ${activeTab === 'staff' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
-          >
-            <span className="text-base">👥</span>
-            <span>STAFF</span>
-          </button>
-        )}
+      {/* NEW MESSAGE / CREATE GROUP MODAL (PENCIL ICON MODAL) */}
+      {isNewMessageOpen && (
+        <div className="fixed inset-0 bg-[#000000] z-50 flex flex-col overflow-hidden text-slate-100">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800/80">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setIsNewMessageOpen(false)}
+                className="text-xl font-bold text-slate-200 hover:text-white"
+              >
+                ←
+              </button>
+              <h2 className="text-lg font-bold text-white">New message</h2>
+            </div>
+            {selectedUserIds.length > 1 && (
+              <button
+                onClick={handleCreateGroup}
+                className="text-xs bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-1.5 rounded-full transition"
+              >
+                Create Group ({selectedUserIds.length})
+              </button>
+            )}
+          </div>
 
-        {/* CHAT TAB - Visible to ALL roles */}
+          {selectedUserIds.length > 1 && (
+            <div className="px-4 py-2 border-b border-slate-800 bg-[#12151e]">
+              <input
+                type="text"
+                placeholder="Group Chat Name (optional)..."
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+                className="w-full bg-[#1c212d] text-white placeholder-slate-400 text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+          )}
+
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-slate-800/60">
+            <span className="text-sm font-medium text-slate-400">To:</span>
+            <input
+              type="text"
+              placeholder="Type a name..."
+              value={newMessageSearch}
+              onChange={(e) => setNewMessageSearch(e.target.value)}
+              className="flex-1 bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none"
+              autoFocus
+            />
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4 custom-dark-scroll space-y-3">
+            <div className="text-xs font-semibold text-slate-400 mb-1">Suggested</div>
+
+            {modalFilteredUsers.map((user) => {
+              const displayName = user.username || user.email;
+              const isSelected = selectedUserIds.includes(user.id);
+
+              return (
+                <div
+                  key={user.id}
+                  onClick={() => {
+                    if (selectedUserIds.length > 0) {
+                      toggleUserSelection(user.id);
+                    } else {
+                      handleStartDM(user);
+                    }
+                  }}
+                  className="flex items-center justify-between p-2 rounded-xl hover:bg-[#161a25] cursor-pointer transition"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                      {displayName.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="text-sm font-medium text-slate-100">{displayName}</span>
+                  </div>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleUserSelection(user.id);
+                    }}
+                    className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs transition ${
+                      isSelected
+                        ? 'bg-blue-600 border-blue-600 text-white'
+                        : 'border-slate-600 text-transparent hover:border-slate-400'
+                    }`}
+                  >
+                    ✓
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* BOTTOM NAVIGATION BAR */}
+      <nav className="fixed bottom-0 left-0 right-0 h-16 bg-[#12151e] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 z-30">
         <button
           onClick={() => { setActiveTab('chat'); setMobileView('list'); }}
           className={`flex flex-col items-center gap-0.5 ${activeTab === 'chat' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
@@ -509,18 +755,17 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
           <span>CHAT</span>
         </button>
 
-        {/* MANAGE TAB - Only visible to Leaders & Pastors */}
-        {isLeaderOrPastor && (
+        {/* STAFF TAB: Hidden ONLY for 'member' role */}
+        {canAccessStaffTab && (
           <button
             onClick={() => { setActiveTab('manage'); setMobileView('list'); }}
             className={`flex flex-col items-center gap-0.5 ${activeTab === 'manage' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
           >
             <span className="text-base">📺</span>
-            <span>MANAGE</span>
+            <span>STAFF</span>
           </button>
         )}
 
-        {/* SETTINGS TAB - Visible to ALL roles */}
         <button
           onClick={() => { setActiveTab('settings'); setMobileView('list'); }}
           className={`flex flex-col items-center gap-0.5 ${activeTab === 'settings' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
@@ -528,9 +773,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
           <span className="text-base">⚙️</span>
           <span>SETTINGS</span>
         </button>
-
       </nav>
-
     </div>
   );
 }
