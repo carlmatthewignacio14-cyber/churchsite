@@ -99,7 +99,7 @@ export default function DashboardSettings({ currentUser }: { currentUser: any })
               <span className="text-xs font-semibold text-slate-200 block">Duty Schedule Shifts</span>
               <span className="text-[10px] text-slate-400">Notify me when my role is updated.</span>
             </div>
-            <input type="checkbox" checked={scheduleAlerts} onChange={() => scheduleAlerts(!scheduleAlerts)} className="w-4 h-4 accent-blue-500 cursor-pointer" />
+            <input type="checkbox" checked={scheduleAlerts} onChange={() => setScheduleAlerts(!scheduleAlerts)} className="w-4 h-4 accent-blue-500 cursor-pointer" />
           </div>
         </div>
       </div>
