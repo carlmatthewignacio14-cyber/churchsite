@@ -185,21 +185,33 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
   };
   
   const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputText.trim() || !currentUserId) return;
+  e.preventDefault();
+  if (!inputText.trim() || !currentUserId || !activeRoom) return;
 
-    const currentText = inputText;
-    setInputText('');
+  const currentText = inputText;
+  setInputText('');
 
-    await supabase.from('chat_messages').insert([
-      {
-        user_id: currentUserId,
-        sender_name: myUsername,
-        message_text: currentText,
-        room_id: activeRoom.id
-      }
-    ]);
+  // 1. Create a local message object to show on your screen instantly
+  const localMsg: Message = {
+    id: crypto.randomUUID(), // temporary unique ID
+    sender: myUsername,
+    text: currentText,
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   };
+
+  // 2. Put it directly onto your screen right now
+  setMessages((prev) => [...prev, localMsg]);
+
+  // 3. Save it to the database silently in the background
+  await supabase.from('chat_messages').insert([
+    {
+      user_id: currentUserId,
+      sender_name: myUsername,
+      message_text: currentText,
+      room_id: activeRoom.id
+    }
+  ]);
+};
 
   return (
     <div className="border border-slate-800 bg-slate-900 rounded-xl overflow-hidden flex h-[500px]">
