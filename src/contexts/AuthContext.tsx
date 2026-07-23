@@ -17,9 +17,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+
+  let supabase: ReturnType<typeof createClient> | null = null;
+  try {
+    supabase = createClient();
+  } catch {
+    // Supabase env vars not configured yet
+  }
 
   useEffect(() => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -45,6 +56,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     password: string,
     metadata: { fullName?: string; avatarUrl?: string } = {}
   ) => {
+    if (!supabase) throw new Error('Supabase is not configured.');
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -62,6 +74,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Email/Password Sign In
   const signIn = async (email: string, password: string) => {
+    if (!supabase) throw new Error('Supabase is not configured.');
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -72,12 +85,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Sign Out
   const signOut = async () => {
+    if (!supabase) throw new Error('Supabase is not configured.');
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
   };
 
   // Get Current User
   const getCurrentUser = async () => {
+    if (!supabase) throw new Error('Supabase is not configured.');
     const {
       data: { user },
       error,
@@ -93,7 +108,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Get User Profile from Database
   const getUserProfile = async () => {
-    if (!user) return null;
+    if (!supabase || !user) return null;
     const { data, error } = await supabase
       .from('user_profiles')
       .select('*')
