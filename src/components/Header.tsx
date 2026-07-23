@@ -60,7 +60,7 @@ export default function Header() {
 
   const getAvatarInitial = () => {
     const name = userSession?.user?.user_metadata?.username || userSession?.user?.user_metadata?.name || userSession?.user?.email || 'U';
-    return name.charAt(0).toUpperCase();
+    return name?.charAt(0)?.toUpperCase();
   };
 
   return (
@@ -106,11 +106,11 @@ export default function Header() {
             ))}
           </div>
 
-           {/* Right Interface Controls (Authentication / Profile Section) */}
+          {/* Right Interface Controls (Authentication / Profile Section) */}
           <div className="flex items-center gap-3 relative">
             {userSession ? (
               // ✅ SIGNED IN ACTION GRID: Interactive Profile Menu
-              <div className="relative">
+              (<div className="relative">
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   className="w-9 h-9 bg-primary text-primary-foreground font-bold rounded-full flex items-center justify-center text-sm border-2 border-primary/20 hover:scale-105 transition-transform shadow-md focus:outline-none"
@@ -118,17 +118,16 @@ export default function Header() {
                 >
                   {getAvatarInitial()}
                 </button>
-
-                {/* 🪟 Interactive Profile Dropdown Card Layer */}
+                {/* Interactive Profile Dropdown Card Layer */}
                 {profileDropdownOpen && (
                   <div className="absolute right-0 mt-3 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-4 text-white z-50 animate-fadeIn space-y-3">
                     <div className="border-b border-slate-800 pb-2">
                       <p className="text-xs text-slate-400 font-semibold tracking-wider uppercase">Account User</p>
                       <p className="text-sm font-bold truncate text-slate-100">
-                        {userSession.user?.user_metadata?.username || userSession.user?.user_metadata?.name || 'Church Member'}
+                        {userSession?.user?.user_metadata?.username || userSession?.user?.user_metadata?.name || 'Church Member'}
                       </p>
                       <p className="text-[10px] bg-blue-600/20 text-blue-400 border border-blue-500/20 w-fit px-1.5 py-0.5 rounded font-bold uppercase tracking-wider mt-1">
-                        {userSession.user?.user_metadata?.role || 'New'}
+                        {userSession?.user?.user_metadata?.role || 'New'}
                       </p>
                     </div>
 
@@ -149,41 +148,41 @@ export default function Header() {
                     </div>
                   </div>
                 )}
-              </div>
+              </div>)
             ) : (
               // ❌ SIGNED OUT ACTION GRID: Prompt login panel overlay modal trigger
-              <button
+              (<button
                 onClick={() => setIsAuthOpen(true)}
                 className="bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-all rounded shadow-md"
-              >
-                Log In
-              </button>
+              >Log In
+                              </button>)
             )}
-        
-          {/* Mobile Hamburger */}
-          <button
-            className="md:hidden flex flex-col justify-center items-center w-11 h-11 gap-1.5 focus:outline-none"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={menuOpen}
-            suppressHydrationWarning
-          >
-            <span
-              className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
-                menuOpen ? 'rotate-45 translate-y-2' : ''
-              }`}
-            />
-            <span
-              className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
-                menuOpen ? 'opacity-0' : ''
-              }`}
-            />
-            <span
-              className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
-                menuOpen ? '-rotate-45 -translate-y-2' : ''
-              }`}
-            />
-          </button>
+
+            {/* Mobile Hamburger */}
+            <button
+              className="md:hidden flex flex-col justify-center items-center w-11 h-11 gap-1.5 focus:outline-none"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={menuOpen}
+              suppressHydrationWarning
+            >
+              <span
+                className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
+                  menuOpen ? 'rotate-45 translate-y-2' : ''
+                }`}
+              />
+              <span
+                className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
+                  menuOpen ? 'opacity-0' : ''
+                }`}
+              />
+              <span
+                className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
+                  menuOpen ? '-rotate-45 -translate-y-2' : ''
+                }`}
+              />
+            </button>
+          </div>
         </div>
       </nav>
       {/* Mobile Menu Overlay */}
@@ -204,7 +203,7 @@ export default function Header() {
           </Link>
         ))}
         
-       {/* 6. Dynamic Dashboard routing link injected inside Mobile Overlay view */}
+        {/* Dynamic Dashboard routing link injected inside Mobile Overlay view */}
         {userSession && (
           <Link
             href="/dashboard"
@@ -234,7 +233,7 @@ export default function Header() {
           </button>
         )}
       </div>
-      {/* 7. Connect the underlying authorization popup view components */}
+      {/* Connect the underlying authorization popup view components */}
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </>
   );
