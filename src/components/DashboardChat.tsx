@@ -486,50 +486,52 @@ const filteredUsers = usersList.filter((u) => {
       </div>
     </div>
 
-    {/* FIXED BOTTOM NAVIGATION BAR */}
-    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-[#12151e] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 z-30">
-      
-      {/* STAFF TAB - Only visible to Leaders & Pastors */}
-      {isLeaderOrPastor && (
-        <button
-          onClick={() => { setActiveTab('staff'); setMobileView('list'); }}
-          className={`flex flex-col items-center gap-0.5 ${activeTab === 'staff' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
-        >
-          <span className="text-base">👥</span>
-          <span>STAFF</span>
-        </button>
-      )}
+        {/* FIXED BOTTOM NAVIGATION BAR */}
+        <nav className="fixed bottom-0 left-0 right-0 h-16 bg-[#12151e] border-t border-slate-800/80 flex items-center justify-around px-2 text-[11px] font-medium text-slate-400 z-30">
+          
+          {/* STAFF TAB - Only visible to Leaders & Pastors */}
+          {isLeaderOrPastor && (
+            <button
+              onClick={() => { setActiveTab('staff'); setMobileView('list'); }}
+              className={`flex flex-col items-center gap-0.5 ${activeTab === 'staff' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
+            >
+              <span className="text-base">👥</span>
+              <span>STAFF</span>
+            </button>
+          )}
 
-      {/* CHAT TAB - Visible to ALL roles */}
-      <button
-        onClick={() => { setActiveTab('chat'); setMobileView('list'); }}
-        className={`flex flex-col items-center gap-0.5 ${activeTab === 'chat' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
-      >
-        <span className="text-base">💬</span>
-        <span>CHAT</span>
-      </button>
+          {/* CHAT TAB - Visible to ALL roles */}
+          <button
+            onClick={() => { setActiveTab('chat'); setMobileView('list'); }}
+            className={`flex flex-col items-center gap-0.5 ${activeTab === 'chat' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
+          >
+            <span className="text-base">💬</span>
+            <span>CHAT</span>
+          </button>
 
-      {/* MANAGE TAB - Only visible to Leaders & Pastors */}
-      {isLeaderOrPastor && (
-        <button
-          onClick={() => { setActiveTab('manage'); setMobileView('list'); }}
-          className={`flex flex-col items-center gap-0.5 ${activeTab === 'manage' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
-        >
-          <span className="text-base">📺</span>
-          <span>MANAGE</span>
-        </button>
-      )}
+          {/* MANAGE TAB - Only visible to Leaders & Pastors */}
+          {isLeaderOrPastor && (
+            <button
+              onClick={() => { setActiveTab('manage'); setMobileView('list'); }}
+              className={`flex flex-col items-center gap-0.5 ${activeTab === 'manage' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
+            >
+              <span className="text-base">📺</span>
+              <span>MANAGE</span>
+            </button>
+          )}
 
-      {/* SETTINGS TAB - Visible to ALL roles */}
-      <button
-        onClick={() => { setActiveTab('settings'); setMobileView('list'); }}
-        className={`flex flex-col items-center gap-0.5 ${activeTab === 'settings' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
-      >
-        <span className="text-base">⚙️</span>
-        <span>SETTINGS</span>
-      </button>
+          {/* SETTINGS TAB - Visible to ALL roles */}
+          <button
+            onClick={() => { setActiveTab('settings'); setMobileView('list'); }}
+            className={`flex flex-col items-center gap-0.5 ${activeTab === 'settings' ? 'text-blue-500 font-bold' : 'hover:text-slate-200'}`}
+          >
+            <span className="text-base">⚙️</span>
+            <span>SETTINGS</span>
+          </button>
 
-    </nav>
+        </nav>
+
+    </div>
   </div>
 );
 }
