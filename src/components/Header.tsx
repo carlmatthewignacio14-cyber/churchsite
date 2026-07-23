@@ -216,15 +216,7 @@ export default function Header() {
         )}
 
         {/* Mobile Authentication buttons */}
-        {userSession ? (
-          <button
-            onClick={handleLogoutAction}
-            className="mt-4 bg-red-600 text-white px-8 py-4 text-sm font-semibold tracking-widest uppercase w-64 text-center"
-            suppressHydrationWarning
-          >
-            Log Out
-          </button>
-        ) : (
+        {!userSession && (
           <button
             onClick={() => { setMenuOpen(false); setIsAuthOpen(true); }}
             className="mt-4 bg-primary text-primary-foreground px-8 py-4 text-sm font-semibold tracking-widest uppercase w-64 text-center"
