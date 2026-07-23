@@ -28,6 +28,7 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [usersList, setUsersList] = useState<UserProfile[]>([]);
   const [inputText, setInputText] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [newGroupName, setNewGroupName] = useState('');
   
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -49,10 +50,10 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
 
       // Fetch all system users to allow starting a Direct Message thread
       const { data: profiles } = await supabase
-        .from('profiles') // Adjust table name if your users live somewhere else like profiles
+        .from('user_directory') 
         .select('id, username, email')
         .neq('id', currentUserId);
-
+      
       if (userRooms) setRooms(userRooms.map((r: any) => ({ id: r.id, name: r.name || 'Private Message', is_group: r.is_group })));
       if (profiles) setUsersList(profiles);
     };
@@ -239,9 +240,22 @@ export default function DashboardChat({ currentUser }: { currentUser: any }) {
 
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Direct Messages</h4>
+            
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-slate-900 border border-slate-800 rounded p-1 text-xs text-white w-full mb-2 focus:outline-none"
+            />
+          
             <div className="space-y-1">
-              {usersList.map((user) => (
-                <button
+              {usersList
+                .filter(user => 
+                  (user.username || user.email || '').toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((user) => (
+                  <button
                   key={user.id}
                   onClick={() => handleStartDM(user)}
                   className="w-full text-left text-xs p-2 rounded bg-slate-900 text-slate-300 hover:bg-slate-800 block truncate"
