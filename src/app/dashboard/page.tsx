@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { DashboardChat } from '@/components/DashboardChat';
+import { DashboardSettings } from '@/components/DashboardSettings';
 
 export default function DashboardPage() {
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -157,9 +159,9 @@ export default function DashboardPage() {
           /* ADMINISTRATIVE DASHBOARD FOR LEADERS & PASTORS */
           <div className="space-y-6">
 
-            {/* Tab Navigation */}
-            <div className="flex border-b border-slate-800 gap-2">
-              <button
+            {/* Top Workspace Tab Navs */}
+            <div className="flex border-b border-slate-800 gap-2 overflow-x-auto whitespace-nowrap">
+              <button 
                 onClick={() => setActiveTab('management')}
                 className={`px-4 py-2 text-xs tracking-widest font-bold uppercase border-b-2 transition-all ${
                   activeTab === 'management' ? 'border-amber-500 text-amber-400' : 'border-transparent text-slate-400 hover:text-white'
@@ -167,7 +169,18 @@ export default function DashboardPage() {
               >
                 👥 Roster Management
               </button>
-              <button
+              
+              {/* ➕ ADDED CHAT LINK TAB BUTTON */}
+              <button 
+                onClick={() => setActiveTab('chat' as any)}
+                className={`px-4 py-2 text-xs tracking-widest font-bold uppercase border-b-2 transition-all ${
+                  (activeTab as string) === 'chat' ? 'border-green-500 text-green-400' : 'border-transparent text-slate-400 hover:text-white'
+                }`}
+              >
+                💬 Live Chat Room
+              </button>
+
+              <button 
                 onClick={() => setActiveTab('pages')}
                 className={`px-4 py-2 text-xs tracking-widest font-bold uppercase border-b-2 transition-all ${
                   activeTab === 'pages' ? 'border-purple-500 text-purple-400' : 'border-transparent text-slate-400 hover:text-white'
@@ -175,8 +188,18 @@ export default function DashboardPage() {
               >
                 🖥️ Website Page Manager
               </button>
-            </div>
 
+              {/* ➕ ADDED SETTINGS LINK TAB BUTTON */}
+              <button 
+                onClick={() => setActiveTab('settings' as any)}
+                className={`px-4 py-2 text-xs tracking-widest font-bold uppercase border-b-2 transition-all ${
+                  (activeTab as string) === 'settings' ? 'border-blue-500 text-blue-400' : 'border-transparent text-slate-400 hover:text-white'
+                }`}
+              >
+                ⚙️ Account Settings
+              </button>
+            </div>
+            
             {/* TAB PANEL 1: Roster Management */}
             {activeTab === 'management' && (
               <div className="grid md:grid-cols-3 gap-6">
@@ -299,6 +322,16 @@ export default function DashboardPage() {
                   </form>
                 </div>
               </div>
+            )}
+
+            {/* ➕ ADDED: Chat Screen View Port */}
+            {(activeTab as string) === 'chat' && (
+              <DashboardChat currentUser={currentUser} />
+            )}
+
+            {/* ➕ ADDED: Profile Settings Screen View Port */}
+            {(activeTab as string) === 'settings' && (
+              <DashboardSettings currentUser={currentUser} />
             )}
 
           </div>
