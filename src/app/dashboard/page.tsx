@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { DashboardChat } from '@/components/DashboardChat';
-import { DashboardSettings } from '@/components/DashboardSettings';
+import DashboardChat from '@/components/DashboardChat';
+import DashboardSettings from '@/components/DashboardSettings';
 
 export default function DashboardPage() {
   const [currentUser, setCurrentUser] = useState<any>(null);
