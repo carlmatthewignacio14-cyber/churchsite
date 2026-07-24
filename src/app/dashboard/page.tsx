@@ -250,16 +250,15 @@ export default function DashboardPage() {
                   </div>
 
                   {/* Matching Layout Badge (Role + Sub-role Ministry) */}
-                  <div className="flex flex-col items-start md:items-end gap-2">
-                    <div className="bg-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
-                      ROLE: {userRole.toUpperCase()} {userSubRole ? `(${userSubRole.toUpperCase()})` : ''}
-                    </div>
-                    {userSubRole && (
-                      <div className="inline-flex items-center gap-1.5 bg-purple-950/80 border border-purple-500/30 text-purple-300 px-3 py-1 rounded-full text-xs font-medium">
-                        📍 {userSubRole} Ministry
-                      </div>
-                    )}
+                <div className="flex flex-col items-start md:items-end gap-2">
+                  <div className="bg-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+                    ROLE: {userRole.toUpperCase()}
                   </div>
+                  {userSubRole && (
+                    <div className="inline-flex items-center gap-1.5 bg-purple-950/80 border border-purple-500/30 text-purple-300 px-3 py-1 rounded-full text-xs font-medium">
+                      📍 {userSubRole.toLowerCase().includes('ministry') ? userSubRole : `${userSubRole} Ministry`}
+                    </div>
+                  )}
                 </div>
 
                 {/* Personal Deployment Status Box */}
