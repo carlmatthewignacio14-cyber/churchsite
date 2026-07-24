@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase'; // Adjust this path if your Supabase client import is located elsewhere
+import { supabase } from '@/lib/supabase';
 
 interface PowerPointSlide {
   id: string;
@@ -65,71 +65,50 @@ const sermonSlides: PowerPointSlide[] = [
 export default function SermonSlidesSection() {
   const [showAll, setShowAll] = useState(false);
   const [activeViewerId, setActiveViewerId] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [selectedSlideForShare, setSelectedSlideForShare] = useState<PowerPointSlide | null>(null);
+  const [copied, setCopied] = useState(false);
 
-  // Check Supabase session on component mount
-  // Check Supabase session on component mount
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        setIsLoggedIn(true);
-      }
-    };
-    checkAuth();
-  }, []);
-
-  const handleShare = async (title: string, url: string) => {
-    // 1. Instant check on click to avoid race conditions
+  const handleShareClick = async (slide: PowerPointSlide) => {
+    // Check session instantly on click
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       setShowLoginModal(true);
       return;
     }
-
-    // 2. Try native mobile share sheet if available
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: title,
-          text: `Check out these sermon slides: "${title}"`,
-          url: url,
-        });
-        return;
-      } catch (error: any) {
-        if (error.name === 'AbortError') return; // User cancelled share sheet, do nothing
-      }
-    }
-
-    // 3. Fallback to clipboard copy (with safety backup for all browsers)
-    try {
-      await navigator.clipboard.writeText(url);
-      alert('Presentation share link copied to clipboard!');
-    } catch (err) {
-      // Backup method if clipboard API is restricted by the browser
-      const textArea = document.createElement('textarea');
-      textArea.value = url;
-      document.body.appendChild(textArea);
-      textArea.select();
-      try {
-        document.execCommand('copy');
-        alert('Presentation share link copied to clipboard!');
-      } catch (fallbackErr) {
-        prompt('Copy this link manually:', url);
-      }
-      document.body.removeChild(textArea);
-    }
+    // Open the multi-option share modal
+    setSelectedSlideForShare(slide);
+    setCopied(false);
   };
 
   const handleDownload = async (downloadUrl: string) => {
-    // Instant session check on click
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       setShowLoginModal(true);
       return;
     }
     window.location.href = downloadUrl;
+  };
+
+  const copyToClipboard = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
+    } catch (err) {
+      const textArea = document.createElement('textarea');
+      textArea.value = url;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000);
+      } catch (fallbackErr) {
+        prompt('Copy this link manually:', url);
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
   const visibleSlides = showAll ? sermonSlides : sermonSlides.slice(0, 3);
@@ -212,7 +191,7 @@ export default function SermonSlidesSection() {
                       </button>
 
                       <button
-                        onClick={() => handleShare(slide.title, slide.viewUrl)}
+                        onClick={() => handleShareClick(slide)}
                         className="p-2.5 border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-center shrink-0 cursor-pointer"
                         title="Share Presentation"
                         aria-label="Share Presentation"
@@ -266,7 +245,82 @@ export default function SermonSlidesSection() {
         )}
       </div>
 
-      {/* Login Prompt Modal for Visitors Trying to Download/Share */}
+      {/* Share Options Modal */}
+      {selectedSlideForShare && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4 backdrop-blur-sm">
+          <div className="bg-white border border-gray-200 p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-gray-900">Share Presentation</h3>
+              <button 
+                onClick={() => setSelectedSlideForShare(null)}
+                className="text-gray-400 hover:text-gray-600 text-sm font-bold p-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 line-clamp-1">
+              {selectedSlideForShare.title}
+            </p>
+
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              {/* Facebook Share */}
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(selectedSlideForShare.viewUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl text-xs font-semibold transition"
+              >
+                🌐 Facebook
+              </a>
+
+              {/* Messenger Share */}
+              <a
+                href={`https://www.facebook.com/dialog/send?link=${encodeURIComponent(selectedSlideForShare.viewUrl)}&app_id=123456789&redirect_uri=${encodeURIComponent(selectedSlideForShare.viewUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-xl text-xs font-semibold transition"
+              >
+                💬 Messenger
+              </a>
+
+              {/* Viber Share */}
+              <a
+                href={`viber://forward?text=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.title} - ${selectedSlideForShare.viewUrl}`)}`}
+                className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-xl text-xs font-semibold transition"
+              >
+                📱 Viber
+              </a>
+
+              {/* Email Share */}
+              <a
+                href={`mailto:?subject=${encodeURIComponent(`Sermon Slides: ${selectedSlideForShare.title}`)}&body=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.viewUrl}`)}`}
+                className="flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-800 text-white p-3 rounded-xl text-xs font-semibold transition"
+              >
+                ✉️ Email
+              </a>
+            </div>
+
+            {/* Copy Link Option */}
+            <div className="pt-2">
+              <button
+                onClick={() => copyToClipboard(selectedSlideForShare.viewUrl)}
+                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
+              >
+                {copied ? '✅ Link Copied Successfully!' : '🔗 Copy Link to Clipboard'}
+              </button>
+            </div>
+
+            <button
+              onClick={() => setSelectedSlideForShare(null)}
+              className="w-full mt-2 py-2 text-gray-500 hover:text-gray-700 text-xs font-semibold transition"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Login Prompt Modal for Visitors */}
       {showLoginModal && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4 backdrop-blur-sm">
           <div className="bg-white border border-gray-200 p-6 rounded-2xl max-w-md w-full text-center space-y-4 shadow-2xl">
