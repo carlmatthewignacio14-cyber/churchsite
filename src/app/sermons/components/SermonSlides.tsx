@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { ChurchRole } from '../contexts/auth-types';
+import { registerChurchLeader } from '../app/dashboard/signupAction';
+import { loginWithPasscodeOnly } from '../app/dashboard/passcodeAction';
 
 interface PowerPointSlide {
   id: string;
@@ -65,21 +68,36 @@ const sermonSlides: PowerPointSlide[] = [
 export default function SermonSlidesSection() {
   const [showAll, setShowAll] = useState(false);
   const [activeViewerId, setActiveViewerId] = useState<string | null>(null);
-  
-  // Auth Modal States matching your app style
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
-  const [isLeaderOrPastor, setIsLeaderOrPastor] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [authError, setAuthError] = useState<string | null>(null);
-  const [authLoading, setAuthLoading] = useState(false);
-  const [authSuccessMessage, setAuthSuccessMessage] = useState<string | null>(null);
 
+  // Modal Control States
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [modalView, setModalView] = useState<'login' | 'signup'>('login');
+  const [pendingAction, setPendingAction] = useState<{ type: 'download' | 'share'; slide: PowerPointSlide } | null>(null);
   const [selectedSlideForShare, setSelectedSlideForShare] = useState<PowerPointSlide | null>(null);
   const [copied, setCopied] = useState(false);
 
-  // Automatically open the specific slide viewer if someone opens a shared website link with ?slide=ID
+  // Sign Up Form States
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+  const [role, setRole] = useState<ChurchRole>('New');
+  const [ministry, setMinistry] = useState('');
+  const [tierCode, setTierCode] = useState('');
+  const [personalPasscode, setPersonalPasscode] = useState('');
+  const [signupErrorMsg, setSignupErrorMsg] = useState('');
+  const [signupSuccess, setSignupSuccess] = useState(false);
+  const [signupLoading, setSignupLoading] = useState(false);
+
+  // Login Form States
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [passcodeOnly, setPasscodeOnly] = useState('');
+  const [isLeaderOrPastorLogin, setIsLeaderOrPastorLogin] = useState(false);
+  const [loginErrorMsg, setLoginErrorMsg] = useState('');
+  const [loginLoading, setLoginLoading] = useState(false);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const slideParam = params.get('slide');
@@ -100,76 +118,155 @@ export default function SermonSlidesSection() {
     return `${baseUrl}?slide=${slideId}`;
   };
 
+  const executePostAuthAction = (action: { type: 'download' | 'share'; slide: PowerPointSlide }) => {
+    if (action.type === 'download') {
+      window.location.href = action.slide.downloadUrl;
+    } else if (action.type === 'share') {
+      const websiteShareUrl = getWebsiteShareUrl(action.slide.id);
+      const isMobileOrTablet = window.innerWidth < 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+      if (isMobileOrTablet && navigator.share) {
+        navigator.share({
+          title: action.slide.title,
+          text: `Check out these sermon slides on our website: ${action.slide.title}`,
+          url: websiteShareUrl,
+        }).catch(() => {});
+        return;
+      }
+      setSelectedSlideForShare(action.slide);
+    }
+  };
+
   const handleShareClick = async (slide: PowerPointSlide) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-      setAuthMode('login');
-      setAuthError(null);
-      setAuthSuccessMessage(null);
-      setShowLoginModal(true);
+      setPendingAction({ type: 'share', slide });
+      setModalView('login');
+      setShowAuthModal(true);
       return;
     }
-
-    const websiteShareUrl = getWebsiteShareUrl(slide.id);
-    const isMobileOrTablet = window.innerWidth < 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    if (isMobileOrTablet && navigator.share) {
-      try {
-        await navigator.share({
-          title: slide.title,
-          text: `Check out these sermon slides on our website: ${slide.title}`,
-          url: websiteShareUrl,
-        });
-        return;
-      } catch (error: any) {
-        if (error.name === 'AbortError') return;
-      }
-    }
-
-    setSelectedSlideForShare(slide);
+    executePostAuthAction({ type: 'share', slide });
   };
 
-  const handleDownload = async (downloadUrl: string) => {
+  const handleDownloadClick = async (slide: PowerPointSlide) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-      setAuthMode('login');
-      setAuthError(null);
-      setAuthSuccessMessage(null);
-      setShowLoginModal(true);
+      setPendingAction({ type: 'download', slide });
+      setModalView('login');
+      setShowAuthModal(true);
       return;
     }
-    window.location.href = downloadUrl;
+    window.location.href = slide.downloadUrl;
   };
 
-  const handleAuthSubmit = async (e: React.FormEvent) => {
+  // Sign Up Submission Handler
+  const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setAuthError(null);
-    setAuthSuccessMessage(null);
-    setAuthLoading(true);
+    setSignupErrorMsg('');
+    setSignupSuccess(false);
+    setSignupLoading(true);
+
+    const isLeaderOrPastor = role === 'Leaders' || role === 'Pastors';
 
     try {
-      if (authMode === 'login') {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        setShowLoginModal(false);
-        setEmail('');
-        setPassword('');
-      } else if (authMode === 'signup') {
-        const { error } = await supabase.auth.signUp({ 
-          email, 
-          password,
-          options: {
-            data: { is_leader: isLeaderOrPastor }
+      if (role !== 'New') {
+        const { data: verification, error: rpcError } = await supabase.rpc('signup_church_member', {
+          p_first_name: firstName,
+          p_last_name: lastName,
+          p_code: tierCode,
+        });
+
+        if (rpcError) throw rpcError;
+
+        if (!verification.success) {
+          setSignupErrorMsg(verification.message);
+          setSignupLoading(false);
+          return;
+        }
+      }
+
+      if (isLeaderOrPastor) {
+        if (personalPasscode.length < 4) {
+          setSignupErrorMsg('Your private passcode must be at least 4 digits long.');
+          setSignupLoading(false);
+          return;
+        }
+
+        const result = await registerChurchLeader(
+          signupEmail,
+          signupPassword,
+          role,
+          tierCode,
+          username,
+          ministry,
+          firstName,
+          lastName
+        );
+        
+        if (!result.success) {
+          setSignupErrorMsg(result.message);
+          setSignupSuccess(false);
+        } else {
+          setSignupSuccess(true);
+          if (pendingAction) {
+            setShowAuthModal(false);
+            executePostAuthAction(pendingAction);
+            setPendingAction(null);
           }
+        }
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email: signupEmail,
+          password: signupPassword,
+          options: { data: { role, username, firstName, lastName } }
         });
         if (error) throw error;
-        setAuthSuccessMessage('Registration successful! Please check your email or log in.');
-        setAuthMode('login');
+        setSignupSuccess(true);
+        if (pendingAction) {
+          setShowAuthModal(false);
+          executePostAuthAction(pendingAction);
+          setPendingAction(null);
+        }
       }
     } catch (err: any) {
-      setAuthError(err.message || 'An error occurred during authentication.');
+      setSignupErrorMsg(err.message || 'An unexpected error occurred during signup.');
     } finally {
-      setAuthLoading(false);
+      setSignupLoading(false);
+    }
+  };
+
+  // Login Submission Handler
+  const handleLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginErrorMsg('');
+    setLoginLoading(true);
+
+    if (isLeaderOrPastorLogin) {
+      const result = await loginWithPasscodeOnly(passcodeOnly);
+      if (!result.success) {
+        setLoginErrorMsg(result.message);
+        setLoginLoading(false);
+      } else {
+        setShowAuthModal(false);
+        setLoginLoading(false);
+        if (pendingAction) {
+          executePostAuthAction(pendingAction);
+          setPendingAction(null);
+        }
+      }
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({ email: loginEmail, password: loginPassword });
+      if (error) {
+        setLoginErrorMsg(error.message);
+        setLoginLoading(false);
+      } else {
+        setShowAuthModal(false);
+        setLoginLoading(false);
+        if (pendingAction) {
+          executePostAuthAction(pendingAction);
+          setPendingAction(null);
+        }
+      }
     }
   };
 
@@ -179,18 +276,7 @@ export default function SermonSlidesSection() {
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);
     } catch (err) {
-      const textArea = document.createElement('textarea');
-      textArea.value = url;
-      document.body.appendChild(textArea);
-      textArea.select();
-      try {
-        document.execCommand('copy');
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000);
-      } catch (fallbackErr) {
-        prompt('Copy this link manually:', url);
-      }
-      document.body.removeChild(textArea);
+      prompt('Copy this link manually:', url);
     }
   };
 
@@ -268,7 +354,7 @@ export default function SermonSlidesSection() {
 
                     <div className="flex items-center gap-2 w-full sm:flex-1">
                       <button
-                        onClick={() => handleDownload(slide.downloadUrl)}
+                        onClick={() => handleDownloadClick(slide)}
                         className="text-center bg-gray-900 hover:bg-gray-800 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors flex-1 cursor-pointer"
                       >
                         Download
@@ -329,10 +415,233 @@ export default function SermonSlidesSection() {
         )}
       </div>
 
-      {/* Share Modal */}
+      {/* Auth Modal Housing Exact Login & Signup Forms */}
+      {showAuthModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4 backdrop-blur-sm overflow-y-auto py-6">
+          <div className="bg-slate-950 border border-slate-800 text-white p-6 sm:p-8 rounded-2xl max-w-md w-full relative shadow-2xl my-auto">
+            <button
+              onClick={() => { setShowAuthModal(false); setPendingAction(null); }}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white text-sm font-bold w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center transition cursor-pointer z-10"
+            >
+              ✕
+            </button>
+
+            {/* Switch Tab Header */}
+            <div className="flex border-b border-slate-800 mb-5 pb-3">
+              <button
+                type="button"
+                onClick={() => setModalView('login')}
+                className={`flex-1 text-xs font-bold uppercase tracking-wider pb-2 border-b-2 transition ${
+                  modalView === 'login' ? 'border-blue-600 text-white' : 'border-transparent text-slate-500 hover:text-slate-300'
+                }`}
+              >
+                Log In
+              </button>
+              <button
+                type="button"
+                onClick={() => setModalView('signup')}
+                className={`flex-1 text-xs font-bold uppercase tracking-wider pb-2 border-b-2 transition ${
+                  modalView === 'signup' ? 'border-blue-600 text-white' : 'border-transparent text-slate-500 hover:text-slate-300'
+                }`}
+              >
+                Create Account
+              </button>
+            </div>
+
+            {/* CONDITIONAL RENDER: LOGIN FORM */}
+            {modalView === 'login' ? (
+              <div className="w-full text-white bg-slate-950">
+                <h3 className="text-lg font-bold mb-4 text-center">Church Portal Sign In</h3>
+                
+                {loginErrorMsg && <p className="bg-red-500/20 text-red-400 p-2 text-xs rounded mb-4 text-center border border-red-500/30">{loginErrorMsg}</p>}
+
+                <div className="flex items-center justify-between bg-slate-900 p-3 rounded-lg border border-slate-800 mb-4">
+                  <span className="text-xs font-semibold text-slate-300">Are you a Leader or Pastor?</span>
+                  <button
+                    type="button"
+                    onClick={() => { setIsLeaderOrPastorLogin(!isLeaderOrPastorLogin); setLoginErrorMsg(''); }}
+                    className={`text-xs font-bold px-3 py-1 rounded transition-all uppercase tracking-wider cursor-pointer ${
+                      isLeaderOrPastorLogin ? 'bg-amber-500 text-slate-950 shadow-md' : 'bg-slate-800 text-slate-400'
+                    }`}
+                  >
+                    {isLeaderOrPastorLogin ? 'Yes (Passcode Only)' : 'No'}
+                  </button>
+                </div>
+
+                <form onSubmit={handleLoginSubmit} className="space-y-4">
+                  {!isLeaderOrPastorLogin ? (
+                    <>
+                      <div>
+                        <label className="text-xs font-semibold text-slate-400 block mb-1">Email Address</label>
+                        <input type="email" required value={loginEmail} onChange={e => setLoginEmail(e.target.value)} className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-semibold text-slate-400 block mb-1">Password</label>
+                        <input type="password" required value={loginPassword} onChange={e => setLoginPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
+                      </div>
+                    </>
+                  ) : (
+                    <div className="bg-amber-500/5 border border-amber-500/20 p-4 rounded-lg space-y-2">
+                      <label className="text-xs font-bold text-amber-400 uppercase tracking-wider block">Enter Your Personal Passcode</label>
+                      <p className="text-[11px] text-slate-400 leading-normal">No email or password required. Type your private code to enter:</p>
+                      <input 
+                        type="password" 
+                        placeholder="••••••"
+                        required 
+                        value={passcodeOnly} 
+                        onChange={e => setPasscodeOnly(e.target.value)} 
+                        className="w-full bg-slate-900 border border-amber-500/30 p-3 rounded text-white text-center font-mono text-lg tracking-widest focus:border-amber-500 outline-none mt-1" 
+                      />
+                    </div>
+                  )}
+
+                  <button 
+                    type="submit" 
+                    disabled={loginLoading}
+                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-bold p-2.5 rounded-lg text-xs tracking-widest uppercase transition-all shadow-md mt-2 cursor-pointer"
+                  >
+                    {loginLoading ? 'Authorizing...' : 'Log In'}
+                  </button>
+                </form>
+
+                <div className="text-center mt-4">
+                  <p className="text-xs text-slate-400">
+                    Don't have an account?{' '}
+                    <button
+                      type="button"
+                      onClick={() => setModalView('signup')}
+                      className="text-blue-400 hover:underline font-semibold cursor-pointer"
+                    >
+                      Create one here
+                    </button>
+                  </p>
+                </div>
+              </div>
+            ) : (
+              /* CONDITIONAL RENDER: SIGNUP FORM */
+              <div className="w-full text-white bg-slate-950 max-h-[75vh] overflow-y-auto pr-1">
+                <h3 className="text-lg font-bold mb-4 text-center">Create Church Account</h3>
+                
+                {signupErrorMsg && <p className="bg-red-500/20 text-red-400 p-2.5 text-xs rounded mb-4 text-center border border-red-500/30">{signupErrorMsg}</p>}
+                {signupSuccess && <p className="bg-green-500/20 text-green-400 p-2.5 text-xs rounded mb-4 text-center border border-green-500/30">🎉 Success! Account successfully registered.</p>}
+
+                <form onSubmit={handleSignUpSubmit} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-xs font-semibold text-slate-400 block mb-1">First Name</label>
+                      <input type="text" required value={firstName} onChange={e => setFirstName(e.target.value)} placeholder="First Name" className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-slate-400 block mb-1">Last Name</label>
+                      <input type="text" required value={lastName} onChange={e => setLastName(e.target.value)} placeholder="Last Name" className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-semibold text-slate-400 block mb-1">Username</label>
+                    <input type="text" required value={username} onChange={e => setUsername(e.target.value)} placeholder="Enter unique username" className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
+                  </div>
+                  
+                  <div>
+                    <label className="text-xs font-semibold text-slate-400 block mb-1">Email Address</label>
+                    <input type="email" required value={signupEmail} onChange={e => setSignupEmail(e.target.value)} className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-semibold text-slate-400 block mb-1">Password</label>
+                    <input type="password" required value={signupPassword} onChange={e => setSignupPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-semibold text-slate-400 block mb-1">Your Position Status</label>
+                    <select 
+                      value={role} 
+                      onChange={e => { setRole(e.target.value as ChurchRole); setTierCode(''); setPersonalPasscode(''); setSignupErrorMsg(''); }}
+                      className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none cursor-pointer"
+                    >
+                      <option value="New">New (Visitor / Guest)</option>
+                      <option value="Members">Members</option>
+                      <option value="Leaders">Leaders</option>
+                      <option value="Pastors">Pastors</option>
+                    </select>
+                  </div>
+
+                  {role === 'Leaders' && (
+                    <div className="animate-fadeIn">
+                      <label className="text-xs font-semibold text-amber-400 block mb-1">Ministry Assignment</label>
+                      <select value={ministry} onChange={e => setMinistry(e.target.value)} className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-amber-500 outline-none cursor-pointer">
+                        <option value="">-- Select Your Ministry Team --</option>
+                        <option value="Pastoral Team">Pastoral Team</option>
+                        <option value="Men's Ministry">Men's Ministry</option>
+                        <option value="Women's Ministry">Women's Ministry</option>
+                        <option value="Youth Ministry">Youth Ministry</option>
+                        <option value="Kids Ministry">Kids Ministry</option>
+                        <option value="Multimedia Ministry">Multimedia Ministry</option>
+                      </select>
+                    </div>
+                  )}
+                  
+                  {role !== 'New' && (
+                    <div className="bg-amber-500/5 border border-amber-500/20 p-3 rounded-lg space-y-3">
+                      <div>
+                        <label className="text-xs font-semibold text-amber-400 block mb-1">Church Membership / Tier Code</label>
+                        <input 
+                          type="text" 
+                          placeholder="e.g. MEMBER2026, LEAD2026"
+                          required 
+                          value={tierCode} 
+                          onChange={e => setTierCode(e.target.value)} 
+                          className="w-full bg-slate-900 border border-amber-500/20 p-2.5 rounded text-white text-sm focus:border-amber-400 outline-none uppercase font-mono" 
+                        />
+                      </div>
+
+                      {(role === 'Leaders' || role === 'Pastors') && (
+                        <div className="border-t border-slate-800 pt-3 animate-fadeIn">
+                          <label className="text-xs font-semibold text-green-400 block mb-1">Set Up Your Private Passcode</label>
+                          <input 
+                            type="password" 
+                            placeholder="Create your personal login passcode"
+                            required 
+                            value={personalPasscode} 
+                            onChange={e => setPersonalPasscode(e.target.value)} 
+                            className="w-full bg-slate-900 border border-green-500/20 p-2.5 rounded text-white text-sm focus:border-green-400 outline-none font-mono tracking-widest text-center" 
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <button 
+                    type="submit" 
+                    disabled={signupLoading}
+                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-bold p-2.5 rounded-lg text-xs tracking-widest uppercase transition-all shadow-md mt-2 cursor-pointer"
+                  >
+                    {signupLoading ? 'Verifying Roster...' : 'Create Account'}
+                  </button>
+                </form>
+
+                <div className="text-center mt-4">
+                  <p className="text-xs text-slate-400">
+                    Already have an account?{' '}
+                    <button
+                      type="button"
+                      onClick={() => setModalView('login')}
+                      className="text-blue-400 hover:underline font-semibold cursor-pointer"
+                    >
+                      Log In
+                    </button>
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Share Modal Link Screen */}
       {selectedSlideForShare && (
         <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 backdrop-blur-sm p-4">
-          <div className="bg-[#18181b] border border-gray-800 text-white rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl transition-transform duration-300">
+          <div className="bg-[#18181b] border border-gray-800 text-white rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
             <div className="flex justify-between items-center border-b border-gray-800 pb-4">
               <h3 className="text-base font-bold text-white tracking-wide">Sharing website link</h3>
               <button 
@@ -405,132 +714,6 @@ export default function SermonSlidesSection() {
           </div>
         </div>
       )}
-
-      {/* Exact Dark-Themed Portal Sign In & Create Account Modal */}
-      {showLoginModal && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4 backdrop-blur-sm">
-          <div className="bg-[#161922] border border-gray-800 text-white p-6 sm:p-8 rounded-2xl max-w-md w-full space-y-5 shadow-2xl relative">
-            <button
-              onClick={() => setShowLoginModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white text-sm font-bold w-8 h-8 rounded-full bg-gray-800/80 flex items-center justify-center transition cursor-pointer"
-            >
-              ✕
-            </button>
-
-            <form onSubmit={handleAuthSubmit} className="space-y-4">
-              <div className="text-center pb-1">
-                <h3 className="text-xl font-bold text-white tracking-wide">
-                  {authMode === 'login' ? 'Church Portal Sign In' : 'Create an Account'}
-                </h3>
-                <p className="text-xs text-gray-400 mt-1">
-                  {authMode === 'login' 
-                    ? 'Sign in to download and share sermon slides' 
-                    : 'Sign up to download and share sermon slides'}
-                </p>
-              </div>
-
-              {authSuccessMessage && (
-                <div className="p-3 text-xs text-emerald-400 bg-emerald-950/60 rounded-xl border border-emerald-800/50 font-medium text-center">
-                  {authSuccessMessage}
-                </div>
-              )}
-
-              {authError && (
-                <div className="p-3 text-xs text-red-400 bg-red-950/60 rounded-xl border border-red-800/50 font-medium text-center">
-                  {authError}
-                </div>
-              )}
-
-              {authMode === 'signup' && (
-                <div className="bg-[#1e2330] border border-gray-800 rounded-xl p-3.5 flex items-center justify-between">
-                  <span className="text-xs font-medium text-gray-200">Are you a Leader or Pastor?</span>
-                  <button
-                    type="button"
-                    onClick={() => setIsLeaderOrPastor(!isLeaderOrPastor)}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
-                      isLeaderOrPastor 
-                        ? 'bg-blue-600 text-white' 
-                        : 'bg-gray-800 text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    {isLeaderOrPastor ? 'YES' : 'NO'}
-                  </button>
-                </div>
-              )}
-
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-medium text-gray-300 mb-1">Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="w-full px-3.5 py-2.5 bg-[#1e2330] border border-gray-800 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-300 mb-1">Password</label>
-                  <input
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full px-3.5 py-2.5 bg-[#1e2330] border border-gray-800 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={authLoading}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer disabled:opacity-50 shadow-lg shadow-blue-600/25"
-              >
-                {authLoading ? 'Processing...' : (authMode === 'login' ? 'Log In' : 'Sign Up')}
-              </button>
-
-              <div className="text-center pt-2">
-                {authMode === 'login' ? (
-                  <p className="text-xs text-gray-400">
-                    Don't have an account?{' '}
-                    <button
-                      type="button"
-                      onClick={() => { setAuthMode('signup'); setAuthError(null); setAuthSuccessMessage(null); }}
-                      className="text-blue-400 hover:underline font-semibold cursor-pointer"
-                    >
-                      Create one here
-                    </button>
-                  </p>
-                ) : (
-                  <p className="text-xs text-gray-400">
-                    Already have an account?{' '}
-                    <button
-                      type="button"
-                      onClick={() => { setAuthMode('login'); setAuthError(null); setAuthSuccessMessage(null); }}
-                      className="text-blue-400 hover:underline font-semibold cursor-pointer"
-                    >
-                      Log In
-                    </button>
-                  </p>
-                )}
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      <style jsx global>{`
-        .scrollbar-none::-webkit-scrollbar {
-          display: none;
-        }
-        .scrollbar-none {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
     </section>
   );
 }
