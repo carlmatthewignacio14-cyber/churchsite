@@ -70,28 +70,11 @@ export default function SermonSlidesSection() {
   const [copied, setCopied] = useState(false);
 
   const handleShareClick = async (slide: PowerPointSlide) => {
-    // 1. Check if user is logged in
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       setShowLoginModal(true);
       return;
     }
-
-    // 2. Trigger the device's native system share sheet (picks up Quick Share, Bluetooth, Instagram, etc.)
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: slide.title,
-          text: `Check out these sermon slides: ${slide.title}`,
-          url: slide.viewUrl,
-        });
-        return;
-      } catch (error: any) {
-        if (error.name === 'AbortError') return; // User cancelled share drawer
-      }
-    }
-
-    // 3. Fallback for desktop browsers or environments without native share support
     setSelectedSlideForShare(slide);
   };
 
@@ -122,6 +105,24 @@ export default function SermonSlidesSection() {
         prompt('Copy this link manually:', url);
       }
       document.body.removeChild(textArea);
+    }
+  };
+
+  const triggerSystemShare = async (slide: PowerPointSlide) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: slide.title,
+          text: `Check out these sermon slides: ${slide.title}`,
+          url: slide.viewUrl,
+        });
+        setSelectedSlideForShare(null);
+        return;
+      } catch (error: any) {
+        if (error.name === 'AbortError') return;
+      }
+    } else {
+      alert('Native system share (Quick Share, AirDrop, Bluetooth, etc.) is not supported on this browser/device.');
     }
   };
 
@@ -259,10 +260,13 @@ export default function SermonSlidesSection() {
         )}
       </div>
 
-      {/* Fallback Modal for Desktop / Unsupported Browsers */}
+      {/* Bottom Sheet Modal with Exact Brand Logos & System Share */}
       {selectedSlideForShare && (
-        <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 backdrop-blur-sm p-4">
-          <div className="bg-[#18181b] border border-gray-800 text-white rounded-2xl max-w-md w-full p-6 space-y-6 shadow-2xl">
+        <div className="fixed inset-0 bg-black/75 flex items-end sm:items-center justify-center z-50 backdrop-blur-sm p-0 sm:p-4">
+          <div className="bg-[#18181b] border-t sm:border border-gray-800 text-white rounded-t-3xl sm:rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl transition-transform duration-300">
+            {/* Drag Handle indicator for mobile bottom sheet */}
+            <div className="w-12 h-1.5 bg-gray-700 rounded-full mx-auto sm:hidden mb-1"></div>
+
             <div className="flex justify-between items-center border-b border-gray-800 pb-4">
               <h3 className="text-base font-bold text-white tracking-wide">Share Presentation</h3>
               <button 
@@ -273,6 +277,7 @@ export default function SermonSlidesSection() {
               </button>
             </div>
 
+            {/* Link Preview Bar */}
             <div className="bg-[#27272a] border border-gray-700/60 rounded-xl p-3.5 flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <h4 className="text-xs font-semibold text-white truncate">{selectedSlideForShare.title}</h4>
@@ -290,43 +295,86 @@ export default function SermonSlidesSection() {
               </button>
             </div>
 
+            {/* Exact Logo App Grid */}
             <div className="space-y-3">
-              <button
-                onClick={async () => {
-                  if (navigator.share) {
-                    try {
-                      await navigator.share({
-                        title: selectedSlideForShare.title,
-                        text: `Check out these sermon slides: ${selectedSlideForShare.title}`,
-                        url: selectedSlideForShare.viewUrl,
-                      });
-                      setSelectedSlideForShare(null);
-                    } catch (err) {}
-                  } else {
-                    alert('Native system share is not supported on this browser/device.');
-                  }
-                }}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold transition cursor-pointer flex items-center justify-center gap-2"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-                Open Device System Share Menu
-              </button>
-
-              <div className="grid grid-cols-2 gap-2">
+              <p className="text-xs font-medium text-gray-400">Share to apps</p>
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center">
+                
+                {/* Facebook */}
                 <a
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(selectedSlideForShare.viewUrl)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-2.5 bg-gray-800 hover:bg-gray-700 text-center text-xs font-medium rounded-xl text-gray-200 transition"
+                  className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-gray-800 transition group"
                 >
-                  Facebook
+                  <div className="w-11 h-11 bg-[#1877F2] rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  </div>
+                  <span className="text-[10px] text-gray-300">Facebook</span>
                 </a>
+
+                {/* Messenger */}
+                <a
+                  href={`fb-messenger://share/?link=${encodeURIComponent(selectedSlideForShare.viewUrl)}`}
+                  className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-gray-800 transition group"
+                >
+                  <div className="w-11 h-11 bg-gradient-to-tr from-[#006AFF] to-[#A333FF] rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.084 0 11.356c0 3.178 1.354 6.04 3.528 8.083V24l3.322-1.825c1.472.41 3.036.634 4.65 .634 6.627 0 12-5.084 12-11.356S18.627 0 12 0zm1.189 15.05l-3.079-3.282-6.01 3.282 6.608-7.014 3.15 3.283 5.939-3.283-6.608 7.014z"/></svg>
+                  </div>
+                  <span className="text-[10px] text-gray-300">Messenger</span>
+                </a>
+
+                {/* Instagram */}
+                <a
+                  href={`https://instagram.com/`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    copyToClipboard(selectedSlideForShare.viewUrl);
+                    alert('Link copied! Open Instagram to paste and share.');
+                  }}
+                  className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-gray-800 transition group"
+                >
+                  <div className="w-11 h-11 bg-gradient-to-tr from-[#feda75] via-[#d62976] to-[#962fbf] rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </div>
+                  <span className="text-[10px] text-gray-300">Instagram</span>
+                </a>
+
+                {/* Messages (SMS) */}
+                <a
+                  href={`sms:?body=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.viewUrl}`)}`}
+                  className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-gray-800 transition group"
+                >
+                  <div className="w-11 h-11 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                    <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                  </div>
+                  <span className="text-[10px] text-gray-300">Messages</span>
+                </a>
+
+                {/* Gmail */}
                 <a
                   href={`mailto:?subject=${encodeURIComponent(`Sermon Slides: ${selectedSlideForShare.title}`)}&body=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.viewUrl}`)}`}
-                  className="py-2.5 bg-gray-800 hover:bg-gray-700 text-center text-xs font-medium rounded-xl text-gray-200 transition"
+                  className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-gray-800 transition group"
                 >
-                  Email
+                  <div className="w-11 h-11 bg-red-600 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                    <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </div>
+                  <span className="text-[10px] text-gray-300">Gmail</span>
                 </a>
+
+                {/* More / Native System Share (Quick Share, AirDrop, Bluetooth, etc.) */}
+                <button
+                  onClick={() => triggerSystemShare(selectedSlideForShare)}
+                  className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-gray-800 transition group cursor-pointer"
+                >
+                  <div className="w-11 h-11 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                    <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="17" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                  </div>
+                  <span className="text-[10px] text-gray-300 font-bold text-blue-400">More...</span>
+                </button>
+
               </div>
             </div>
 
