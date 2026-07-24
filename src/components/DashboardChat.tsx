@@ -631,8 +631,7 @@ useEffect(() => {
                             <div
                               className={`px-3.5 py-2 rounded-2xl text-xs md:text-sm leading-relaxed ${
                                 isMe
-                                  ? 'bg-blue-600 text-white rounded-br-xs'
-                                  : 'bg-[#1c212d] text-slate-100 rounded-bl-xs'
+                                  ? 'bg-blue-600 text-white rounded-br-xs' :'bg-[#1c212d] text-slate-100 rounded-bl-xs'
                               }`}
                             >
                               {msg.text}
@@ -759,8 +758,7 @@ useEffect(() => {
                     }}
                     className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs transition ${
                       isSelected
-                        ? 'bg-blue-600 border-blue-600 text-white'
-                        : 'border-slate-600 text-transparent hover:border-slate-400'
+                        ? 'bg-blue-600 border-blue-600 text-white' :'border-slate-600 text-transparent hover:border-slate-400'
                     }`}
                   >
                     ✓
