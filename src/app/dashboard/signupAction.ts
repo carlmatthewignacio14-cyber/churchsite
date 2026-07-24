@@ -30,7 +30,7 @@ export async function registerChurchLeader(
 
   // 2. Insert profile link and unique passcode into 'rosterlist1'
   const { error: dbError } = await supabaseAdmin
-    .from('rosterlist1') // 👈 CHANGED: from 'church_passcodes' to 'rosterlist1'
+    .from('rosterlist') // 👈 CHANGED: from 'church_passcodes' to 'rosterlist1'
     .insert([
       { 
         id: authData.user.id, 
