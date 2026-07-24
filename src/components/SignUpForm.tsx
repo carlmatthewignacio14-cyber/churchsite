@@ -57,12 +57,14 @@ export default function SignUpForm() {
 
         // 👑 ROUTE A: Use the safe server background builder for Leaders & Pastors
         const result = await registerChurchLeader(
-          email, 
-          password, 
-          role, 
-          personalPasscode, 
+          email,
+          password,
+          role,
+          tierCode,
           username,
-          ministry 
+          ministry,
+          firstName, // 👈 Make sure this is passed here
+          lastName   // 👈 Make sure this is passed here
         );
         
         if (!result.success) {
