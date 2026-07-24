@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase'; // Adjust this path if your Supabase client import is located elsewhere
 
 interface PowerPointSlide {
   id: string;
@@ -64,8 +65,26 @@ const sermonSlides: PowerPointSlide[] = [
 export default function SermonSlidesSection() {
   const [showAll, setShowAll] = useState(false);
   const [activeViewerId, setActiveViewerId] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // Check Supabase session on component mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        setIsLoggedIn(true);
+      }
+    };
+    checkAuth();
+  }, []);
 
   const handleShare = async (title: string, url: string) => {
+    if (!isLoggedIn) {
+      setShowLoginModal(true);
+      return;
+    }
+
     if (navigator.share) {
       try {
         await navigator.share({
@@ -86,7 +105,16 @@ export default function SermonSlidesSection() {
     }
   };
 
+  const handleDownload = (downloadUrl: string) => {
+    if (!isLoggedIn) {
+      setShowLoginModal(true);
+      return;
+    }
+    window.location.href = downloadUrl;
+  };
+
   const visibleSlides = showAll ? sermonSlides : sermonSlides.slice(0, 3);
+
   return (
     <section className="py-16 bg-gray-50 border-t border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -149,23 +177,24 @@ export default function SermonSlidesSection() {
                       onClick={() => setActiveViewerId(isViewing ? null : slide.id)}
                       className={`w-full sm:w-auto text-center border text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors ${
                         isViewing
-                          ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200' :'border-gray-300 text-gray-700 hover:bg-gray-50'
+                          ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-250'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                       }`}
                     >
                       {isViewing ? 'Close Preview' : 'View Slides'}
                     </button>
 
                     <div className="flex items-center gap-2 w-full sm:flex-1">
-                      <a
-                        href={slide.downloadUrl}
-                        className="text-center bg-gray-900 hover:bg-gray-800 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors flex-1"
+                      <button
+                        onClick={() => handleDownload(slide.downloadUrl)}
+                        className="text-center bg-gray-900 hover:bg-gray-800 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors flex-1 cursor-pointer"
                       >
                         Download
-                      </a>
+                      </button>
 
                       <button
                         onClick={() => handleShare(slide.title, slide.viewUrl)}
-                        className="p-2.5 border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-center shrink-0"
+                        className="p-2.5 border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-center shrink-0 cursor-pointer"
                         title="Share Presentation"
                         aria-label="Share Presentation"
                       >
@@ -217,6 +246,35 @@ export default function SermonSlidesSection() {
           </div>
         )}
       </div>
+
+      {/* Login Prompt Modal for Visitors Trying to Download/Share */}
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4 backdrop-blur-sm">
+          <div className="bg-white border border-gray-200 p-6 rounded-2xl max-w-md w-full text-center space-y-4 shadow-2xl">
+            <div className="w-12 h-12 bg-orange-50 border border-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">
+              🔒
+            </div>
+            <h3 className="text-xl font-bold text-gray-900">Member Access Required</h3>
+            <p className="text-gray-600 text-sm">
+              You can freely preview sermon slides online, but downloading files and sharing links requires a registered account.
+            </p>
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={() => window.location.href = '/login'}
+                className="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition cursor-pointer"
+              >
+                Log In Now
+              </button>
+              <button
+                onClick={() => setShowLoginModal(false)}
+                className="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-bold uppercase tracking-wider transition cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
