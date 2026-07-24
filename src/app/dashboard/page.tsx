@@ -41,9 +41,34 @@ export default function DashboardPage() {
 
       const user = session.user;
       
-      // Pull role and sub_role directly from user_metadata saved during signup
-      const fetchedRole = user?.user_metadata?.role || 'Member';
-      const fetchedSubRole = user?.user_metadata?.sub_role || user?.user_metadata?.subRole || '';
+      // 1. Check all possible metadata key variations saved during signup
+      const fetchedRole = user?.user_metadata?.role || 'Leader';
+      let fetchedSubRole = 
+        user?.user_metadata?.sub_role || 
+        user?.user_metadata?.subRole || 
+        user?.user_metadata?.ministry || 
+        user?.user_metadata?.department || '';
+
+      // 2. If still empty, fetch directly from your 'rosterlist' database table
+      if (!fetchedSubRole && user?.email) {
+        try {
+          const { data: rosterData } = await supabase
+            .from('rosterlist')
+            .select('*')
+            .or(`email.eq.${user.email},user_email.eq.${user.email}`)
+            .maybeSingle();
+
+          if (rosterData) {
+            fetchedSubRole = 
+              rosterData.sub_role || 
+              rosterData.subRole || 
+              rosterData.ministry || 
+              rosterData.department || '';
+          }
+        } catch (err) {
+          console.error('Roster fetch error:', err);
+        }
+      }
 
       if (!isMounted) return;
 
