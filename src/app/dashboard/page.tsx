@@ -29,56 +29,59 @@ export default function DashboardPage() {
   ];
 
   useEffect(() => {
-  let isMounted = true;
+    let isMounted = true;
 
-  const fetchUserAndRole = async () => {
-    // 1. Get auth session
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      router.push('/');
-      return;
-    }
+    const fetchUserAndRole = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/');
+        return;
+      }
 
-    const user = session.user;
-    let fetchedRole = 'Member'; // Fallback default
+      const user = session.user;
+      let fetchedRole = 'Member'; // Fallback default
 
-    // 2. Fetch the user's actual role from the 'rosterlist' table
-    // Adjust 'email' if you link rosterlist by another column like 'user_id' or 'name'
-    const { data: rosterData, error } = await supabase
-      .from('rosterlist')
-      .select('role')
-      .eq('email', user.email)
-      .single();
+      // 1. Check rosterlist table (try matching email or user_id)
+      const { data: rosterData } = await supabase
+        .from('rosterlist')
+        .select('role')
+        .eq('email', user.email)
+        .single();
 
-    if (rosterData && rosterData.role) {
-      fetchedRole = rosterData.role;
-    } else if (user?.user_metadata?.role) {
-      // Fallback to metadata if rosterlist entry isn't found
-      fetchedRole = user.user_metadata.role;
-    }
+      if (rosterData && rosterData.role) {
+        fetchedRole = rosterData.role;
+      } else if (user?.user_metadata?.role) {
+        // Fallback to metadata
+        fetchedRole = user.user_metadata.role;
+      }
 
-    if (!isMounted) return;
+      if (!isMounted) return;
 
-    setCurrentUser(user);
-    setUserRole(fetchedRole);
+      setCurrentUser(user);
+      setUserRole(fetchedRole);
 
-    // 3. Automatically route initial tab based on the role from rosterlist
-    const lowerRole = fetchedRole.toLowerCase();
-    if (lowerRole === 'leader' || lowerRole === 'pastor' || lowerRole === 'staff') {
-      setActiveTab('management');
-    } else {
-      setActiveTab('chat');
-    }
+      // 2. Flexible check for leadership roles
+      const lowerRole = fetchedRole.toLowerCase();
+      const isElevated = 
+        lowerRole.includes('leader') || 
+        lowerRole.includes('pastor') || 
+        lowerRole.includes('staff');
 
-    setLoading(false);
-  };
+      if (isElevated) {
+        setActiveTab('management');
+      } else {
+        setActiveTab('chat');
+      }
 
-  fetchUserAndRole();
+      setLoading(false);
+    };
 
-  return () => {
-    isMounted = false;
-  };
-}, [router]);
+    fetchUserAndRole();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [router]);
 
   const handleContentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,8 +117,8 @@ export default function DashboardPage() {
   }
 
   const normalizedRole = userRole.toLowerCase();
-  const isLeaderOrPastor = normalizedRole === 'leader' || normalizedRole === 'pastor';
-  const isStaff = normalizedRole === 'staff';
+  const isLeaderOrPastor = normalizedRole.includes('leader') || normalizedRole.includes('pastor');
+  const isStaff = normalizedRole.includes('staff') || isLeaderOrPastor;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white pt-6 px-4 pb-28">
