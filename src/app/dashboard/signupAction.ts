@@ -28,15 +28,17 @@ export async function registerChurchLeader(
     return { success: false, message: authError?.message || 'Authentication registration failure.' };
   }
 
-  // 2. Insert their profile link and unique passcode into your existing church_passcodes table
+  // 2. Insert profile link and unique passcode into 'rosterlist1'
   const { error: dbError } = await supabaseAdmin
-    .from('church_passcodes')
+    .from('rosterlist1') // 👈 CHANGED: from 'church_passcodes' to 'rosterlist1'
     .insert([
       { 
         id: authData.user.id, 
         email, 
         role, 
-        personal_code: personalCode 
+        allowed_code: personalCode, // 👈 CHANGED: from 'personal_code' to 'allowed_code'
+        username,                   // 👈 ADDED: matches your rosterlist1 column
+        ministry: role === 'Leaders' ? ministry : null
       }
     ]);
 
