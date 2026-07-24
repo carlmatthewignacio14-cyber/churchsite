@@ -77,7 +77,7 @@ export default function SermonSlidesSection() {
       return;
     }
 
-    // 2. Try triggering the phone's native system share drawer first
+    // 2. Trigger the device's native system share sheet (picks up Quick Share, Bluetooth, Instagram, etc.)
     if (navigator.share) {
       try {
         await navigator.share({
@@ -87,11 +87,11 @@ export default function SermonSlidesSection() {
         });
         return;
       } catch (error: any) {
-        if (error.name === 'AbortError') return; // User cancelled
+        if (error.name === 'AbortError') return; // User cancelled share drawer
       }
     }
 
-    // 3. Fallback for desktop or unsupported browsers: Open custom dark bottom sheet
+    // 3. Fallback for desktop browsers or environments without native share support
     setSelectedSlideForShare(slide);
   };
 
@@ -259,14 +259,12 @@ export default function SermonSlidesSection() {
         )}
       </div>
 
-      {/* Dark Bottom-Sheet Share Modal (Matches Screenshot Style) */}
+      {/* Fallback Modal for Desktop / Unsupported Browsers */}
       {selectedSlideForShare && (
-        <div className="fixed inset-0 bg-black/75 flex items-end sm:items-center justify-center z-50 backdrop-blur-sm p-0 sm:p-4">
-          <div className="bg-[#18181b] border border-gray-800 text-white rounded-t-3xl sm:rounded-2xl max-w-lg w-full p-6 space-y-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
-            
-            {/* Header */}
+        <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 backdrop-blur-sm p-4">
+          <div className="bg-[#18181b] border border-gray-800 text-white rounded-2xl max-w-md w-full p-6 space-y-6 shadow-2xl">
             <div className="flex justify-between items-center border-b border-gray-800 pb-4">
-              <h3 className="text-base font-bold text-white tracking-wide">Sharing link</h3>
+              <h3 className="text-base font-bold text-white tracking-wide">Share Presentation</h3>
               <button 
                 onClick={() => setSelectedSlideForShare(null)}
                 className="text-gray-400 hover:text-white text-sm font-bold p-1 cursor-pointer bg-gray-800/60 rounded-full w-8 h-8 flex items-center justify-center transition"
@@ -275,20 +273,14 @@ export default function SermonSlidesSection() {
               </button>
             </div>
 
-            {/* Link Preview Card (Matches screenshot card style) */}
-            <div className="bg-[#27272a] border border-gray-700/60 rounded-xl p-3.5 flex items-center justify-between gap-3 shadow-inner">
-              <div className="flex items-center gap-3 overflow-hidden">
-                <div className="w-12 h-12 rounded-lg bg-gray-800 shrink-0 overflow-hidden relative border border-gray-700">
-                  <img src={selectedSlideForShare.imageUrl} alt="" className="w-full h-full object-cover" />
-                </div>
-                <div className="min-w-0">
-                  <h4 className="text-xs font-semibold text-white truncate">{selectedSlideForShare.title}</h4>
-                  <p className="text-[11px] text-gray-400 truncate">{selectedSlideForShare.viewUrl}</p>
-                </div>
+            <div className="bg-[#27272a] border border-gray-700/60 rounded-xl p-3.5 flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <h4 className="text-xs font-semibold text-white truncate">{selectedSlideForShare.title}</h4>
+                <p className="text-[11px] text-gray-400 truncate">{selectedSlideForShare.viewUrl}</p>
               </div>
               <button
                 onClick={() => copyToClipboard(selectedSlideForShare.viewUrl)}
-                className="p-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition shrink-0 flex items-center justify-center cursor-pointer border border-gray-600 shadow-sm"
+                className="p-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition shrink-0 flex items-center justify-center cursor-pointer border border-gray-600"
                 title="Copy Link"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -298,52 +290,42 @@ export default function SermonSlidesSection() {
               </button>
             </div>
 
-            {/* Apps Share Grid */}
-            <div>
-              <p className="text-xs font-medium text-gray-400 mb-3">Share to apps</p>
-              <div className="grid grid-cols-4 gap-4 text-center">
+            <div className="space-y-3">
+              <button
+                onClick={async () => {
+                  if (navigator.share) {
+                    try {
+                      await navigator.share({
+                        title: selectedSlideForShare.title,
+                        text: `Check out these sermon slides: ${selectedSlideForShare.title}`,
+                        url: selectedSlideForShare.viewUrl,
+                      });
+                      setSelectedSlideForShare(null);
+                    } catch (err) {}
+                  } else {
+                    alert('Native system share is not supported on this browser/device.');
+                  }
+                }}
+                className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold transition cursor-pointer flex items-center justify-center gap-2"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                Open Device System Share Menu
+              </button>
+
+              <div className="grid grid-cols-2 gap-2">
                 <a
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(selectedSlideForShare.viewUrl)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1.5 group cursor-pointer"
+                  className="py-2.5 bg-gray-800 hover:bg-gray-700 text-center text-xs font-medium rounded-xl text-gray-200 transition"
                 >
-                  <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-lg shadow-md group-hover:scale-105 transition">
-                    🌐
-                  </div>
-                  <span className="text-[11px] text-gray-300 truncate w-full">Facebook</span>
+                  Facebook
                 </a>
-
-                <a
-                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.title} - ${selectedSlideForShare.viewUrl}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1.5 group cursor-pointer"
-                >
-                  <div className="w-12 h-12 rounded-full bg-emerald-600 flex items-center justify-center text-white text-lg shadow-md group-hover:scale-105 transition">
-                    💬
-                  </div>
-                  <span className="text-[11px] text-gray-300 truncate w-full">WhatsApp</span>
-                </a>
-
-                <a
-                  href={`viber://forward?text=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.title} - ${selectedSlideForShare.viewUrl}`)}`}
-                  className="flex flex-col items-center gap-1.5 group cursor-pointer"
-                >
-                  <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center text-white text-lg shadow-md group-hover:scale-105 transition">
-                    📱
-                  </div>
-                  <span className="text-[11px] text-gray-300 truncate w-full">Viber</span>
-                </a>
-
                 <a
                   href={`mailto:?subject=${encodeURIComponent(`Sermon Slides: ${selectedSlideForShare.title}`)}&body=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.viewUrl}`)}`}
-                  className="flex flex-col items-center gap-1.5 group cursor-pointer"
+                  className="py-2.5 bg-gray-800 hover:bg-gray-700 text-center text-xs font-medium rounded-xl text-gray-200 transition"
                 >
-                  <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-white text-lg shadow-md group-hover:scale-105 transition">
-                    ✉️
-                  </div>
-                  <span className="text-[11px] text-gray-300 truncate w-full">Email</span>
+                  Email
                 </a>
               </div>
             </div>
@@ -358,7 +340,7 @@ export default function SermonSlidesSection() {
               onClick={() => setSelectedSlideForShare(null)}
               className="w-full py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-xl text-xs font-semibold transition cursor-pointer"
             >
-              Cancel
+              Close
             </button>
           </div>
         </div>
