@@ -33,8 +33,6 @@ export default function SignUpForm() {
       // 🔒 1. Check Roster Verification for Members, Leaders, or Pastors
       if (role !== 'New') {
         const { data: verification, error: rpcError } = await supabase.rpc('signup_church_member', {
-          p_email: email,
-          p_password: password,
           p_first_name: firstName,
           p_last_name: lastName,
           p_code: tierCode,
