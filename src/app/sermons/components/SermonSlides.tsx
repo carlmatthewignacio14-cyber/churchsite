@@ -69,6 +69,27 @@ export default function SermonSlidesSection() {
   const [selectedSlideForShare, setSelectedSlideForShare] = useState<PowerPointSlide | null>(null);
   const [copied, setCopied] = useState(false);
 
+  // Automatically open the specific slide viewer if someone opens a shared website link with ?slide=ID
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const slideParam = params.get('slide');
+    if (slideParam) {
+      setActiveViewerId(slideParam);
+      setTimeout(() => {
+        const element = document.getElementById(`slide-card-${slideParam}`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300);
+    }
+  }, []);
+
+  const getWebsiteShareUrl = (slideId: string) => {
+    if (typeof window === 'undefined') return '';
+    const baseUrl = window.location.origin + window.location.pathname;
+    return `${baseUrl}?slide=${slideId}`;
+  };
+
   const handleShareClick = async (slide: PowerPointSlide) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
@@ -76,15 +97,15 @@ export default function SermonSlidesSection() {
       return;
     }
 
-    // Directly trigger native device share on phones and tablets if available
+    const websiteShareUrl = getWebsiteShareUrl(slide.id);
     const isMobileOrTablet = window.innerWidth < 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     if (isMobileOrTablet && navigator.share) {
       try {
         await navigator.share({
           title: slide.title,
-          text: `Check out these sermon slides: ${slide.title}`,
-          url: slide.viewUrl,
+          text: `Check out these sermon slides on our website: ${slide.title}`,
+          url: websiteShareUrl,
         });
         return;
       } catch (error: any) {
@@ -147,6 +168,7 @@ export default function SermonSlidesSection() {
             return (
               <div
                 key={slide.id}
+                id={`slide-card-${slide.id}`}
                 className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden"
               >
                 <div>
@@ -260,12 +282,12 @@ export default function SermonSlidesSection() {
         )}
       </div>
 
-      {/* Laptop Share Modal (Facebook, Gmail, Copy Link) */}
+      {/* Laptop Share Modal (Facebook, Gmail, Copy Website Link) */}
       {selectedSlideForShare && (
         <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 backdrop-blur-sm p-4">
           <div className="bg-[#18181b] border border-gray-800 text-white rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl transition-transform duration-300">
             <div className="flex justify-between items-center border-b border-gray-800 pb-4">
-              <h3 className="text-base font-bold text-white tracking-wide">Sharing link</h3>
+              <h3 className="text-base font-bold text-white tracking-wide">Sharing website link</h3>
               <button 
                 onClick={() => setSelectedSlideForShare(null)}
                 className="text-gray-400 hover:text-white text-sm font-bold p-1 cursor-pointer bg-gray-800/60 rounded-full w-8 h-8 flex items-center justify-center transition"
@@ -274,14 +296,14 @@ export default function SermonSlidesSection() {
               </button>
             </div>
 
-            {/* Link Preview Bar */}
+            {/* Link Preview Bar (Website Link) */}
             <div className="bg-[#27272a] border border-gray-700/60 rounded-xl p-3.5 flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <h4 className="text-xs font-semibold text-white truncate">{selectedSlideForShare.title}</h4>
-                <p className="text-[11px] text-gray-400 truncate">{selectedSlideForShare.viewUrl}</p>
+                <p className="text-[11px] text-gray-400 truncate">{getWebsiteShareUrl(selectedSlideForShare.id)}</p>
               </div>
               <button
-                onClick={() => copyToClipboard(selectedSlideForShare.viewUrl)}
+                onClick={() => copyToClipboard(getWebsiteShareUrl(selectedSlideForShare.id))}
                 className="p-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition shrink-0 flex items-center justify-center cursor-pointer border border-gray-600"
                 title="Copy Link"
               >
@@ -292,11 +314,11 @@ export default function SermonSlidesSection() {
               </button>
             </div>
 
-            {/* Laptop Share Options: Facebook & Gmail */}
+            {/* Laptop Share Options: Facebook & Gmail sharing website URL */}
             <div className="flex items-center justify-center gap-8 py-3">
               {/* Facebook */}
               <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(selectedSlideForShare.viewUrl)}`}
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getWebsiteShareUrl(selectedSlideForShare.id))}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-col items-center gap-1.5 shrink-0 w-16 group cursor-pointer"
@@ -309,7 +331,7 @@ export default function SermonSlidesSection() {
 
               {/* Gmail */}
               <a
-                href={`mailto:?subject=${encodeURIComponent(`Sermon Slides: ${selectedSlideForShare.title}`)}&body=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.viewUrl}`)}`}
+                href={`mailto:?subject=${encodeURIComponent(`Sermon Slides: ${selectedSlideForShare.title}`)}&body=${encodeURIComponent(`Check out these sermon slides on our church website: ${getWebsiteShareUrl(selectedSlideForShare.id)}`)}`}
                 className="flex flex-col items-center gap-1.5 shrink-0 w-16 group cursor-pointer"
               >
                 <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md group-hover:scale-105 transition">
@@ -327,7 +349,7 @@ export default function SermonSlidesSection() {
 
             {copied && (
               <div className="text-center text-xs text-emerald-400 font-semibold bg-emerald-950/60 py-2.5 rounded-xl border border-emerald-800/50">
-                ✅ Link copied to clipboard successfully!
+                ✅ Website link copied successfully!
               </div>
             )}
 
