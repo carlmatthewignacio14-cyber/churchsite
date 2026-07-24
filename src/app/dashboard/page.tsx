@@ -1,11 +1,13 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import DashboardChat from '@/components/DashboardChat';
 import DashboardSettings from '@/components/DashboardSettings';
 
 export default function DashboardPage() {
+  const router = userRouter();
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<string>('New');
   const [loading, setLoading] = useState(true);
