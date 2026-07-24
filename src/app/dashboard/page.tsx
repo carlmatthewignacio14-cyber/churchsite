@@ -40,42 +40,18 @@ export default function DashboardPage() {
       }
 
       const user = session.user;
-      let fetchedRole = 'Member'; 
-      let fetchedSubRole = '';
-
-      // 1. Check rosterlist table matching email to get both role & sub_role
-      const { data: rosterData } = await supabase
-        .from('rosterlist')
-        .select('role, sub_role')
-        .eq('email', user.email)
-        .single();
-
-      if (rosterData) {
-        if (rosterData.role) fetchedRole = rosterData.role;
-        if (rosterData.sub_role) fetchedSubRole = rosterData.sub_role;
-      } else {
-        // Fallback to metadata if roster row lookup fails
-        if (user?.user_metadata?.role) fetchedRole = user.user_metadata.role;
-        if (user?.user_metadata?.sub_role) fetchedSubRole = user.user_metadata.sub_role;
-      }
+      
+      // Pull role and sub_role directly from user_metadata saved during signup
+      const fetchedRole = user?.user_metadata?.role || 'Member';
+      const fetchedSubRole = user?.user_metadata?.sub_role || user?.user_metadata?.subRole || '';
 
       if (!isMounted) return;
 
-      // Attach fetched sub_role into currentUser metadata object for seamless usage
-      const updatedUser = {
-        ...user,
-        user_metadata: {
-          ...user.user_metadata,
-          role: fetchedRole,
-          sub_role: fetchedSubRole
-        }
-      };
-
-      setCurrentUser(updatedUser);
+      setCurrentUser(user);
       setUserRole(fetchedRole);
       setUserSubRole(fetchedSubRole);
 
-      // 2. Flexible check for leadership roles
+      // Flexible check for leadership roles
       const lowerRole = fetchedRole.toLowerCase();
       const isElevated = 
         lowerRole.includes('leader') || 
