@@ -65,9 +65,8 @@ const deleteCookie = (name: string) => {
 };
 
 const getToken = () =>
-  (canUseCookies() ? fromCookies() : fromStorage()).find((c) =>
-    c.name.includes('auth-token')
-  )?.value ?? null;
+  (canUseCookies() ? fromCookies() : fromStorage()).find((c) => c.name.includes('auth-token'))
+    ?.value ?? null;
 
 if (typeof window !== 'undefined' && !(window as any).__sb_patched__) {
   (window as any).__sb_patched__ = true;
@@ -88,9 +87,18 @@ if (typeof window !== 'undefined' && !(window as any).__sb_patched__) {
 }
 
 export function createClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl === 'your-supabase-url-here' || supabaseAnonKey === 'your-supabase-anon-key-here') {
+    throw new Error(
+      'Supabase URL and Anon Key are required. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your .env file.'
+    );
+  }
+
   return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll: () => (canUseCookies() ? fromCookies() : fromStorage()),
@@ -103,10 +111,14 @@ export function createClient() {
           } else {
             cookiesToSet.forEach(({ name, value, options }) => {
               try {
-                value
-                  ? localStorage.setItem(`${PFX}${name}`, value)
-                  : localStorage.removeItem(`${PFX}${name}`);
-              } catch {}
+                if (value) {
+                  localStorage.setItem(`${PFX}${name}`, value);
+                } else {
+                  localStorage.removeItem(`${PFX}${name}`);
+                }
+              } catch {
+                void 0;
+              }
               if (value) setCookie(name, value, options);
             });
           }

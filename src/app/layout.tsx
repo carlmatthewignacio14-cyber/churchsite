@@ -31,29 +31,25 @@ export const metadata: Metadata = {
     'Join Church of God of Prophecy Marikina for Sunday services, sermons, events, and ministries. New visitors are always welcome. Find service times, give online, and request prayer.',
   icons: {
     icon: [
-      { 
-        url: '/logo.png', 
-        type: 'image/png', 
-        sizes: 'any' 
-      }
+      {
+        url: '/logo.png',
+        type: 'image/png',
+        sizes: 'any',
+      },
     ],
   },
   openGraph: {
     title: 'Church of God of Prophecy Marikina',
     description: 'A welcoming church community. Services, sermons, events, and more.',
-    images: [{ url: '/assets/images/og-cover.png', width: 2048, height: 1152}],
+    images: [{ url: '/assets/images/og-cover.png', width: 2048, height: 1152 }],
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${fraunces.variable} ${dmSans.variable}`} suppressHydrationWarning>
       <body className={dmSans.className}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
 
         <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fchurchsite2784back.builtwithrocket.new&_be=https%3A%2F%2Fappanalytics.rocket.new&_v=0.1.19" />
         <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.2" /></body>

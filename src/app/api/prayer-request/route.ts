@@ -35,8 +35,7 @@ async function getAccessToken(): Promise<string> {
 
     if (errorCode === 'unauthorized_client') {
       throw new Error(
-        'Google OAuth configuration error: The OAuth client credentials do not match the refresh token. ' +
-        'Please ensure your GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are from a "Web application" type OAuth client '+ 'in Google Cloud Console, and that the GOOGLE_REFRESH_TOKEN was generated using those same credentials. '+ 'You may need to regenerate the refresh token.'
+        'Google OAuth configuration error: The OAuth client credentials do not match the refresh token. Please ensure your GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are from a "Web application" type client in Google Cloud Console, and that the GOOGLE_REFRESH_TOKEN was generated using those same credentials. You may need to regenerate the refresh token.'
       );
     }
 
@@ -83,14 +82,7 @@ export async function POST(request: NextRequest) {
       second: '2-digit',
     });
 
-    const values = [[
-      timestamp,
-      name,
-      email || '',
-      prayerRequest,
-      isPrivate ? 'Yes' : 'No',
-      'New',
-    ]];
+    const values = [[timestamp, name, email || '', prayerRequest, isPrivate ? 'Yes' : 'No', 'New']];
 
     const appendUrl = `${GOOGLE_SHEETS_API_BASE}/${SPREADSHEET_ID}/values/${encodeURIComponent(SHEET_NAME)}!A:F:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
 
@@ -135,12 +127,16 @@ export async function POST(request: NextRequest) {
                   <p style="font-size: 16px; line-height: 1.7; color: #374151;">
                     Thank you for trusting us with your heart. We have received your prayer request and our dedicated prayer team will be lifting you up before God.
                   </p>
-                  ${!isPrivate ? `
+                  ${
+                    !isPrivate
+                      ? `
                   <div style="background: #f9fafb; border-left: 3px solid #6366f1; padding: 16px 20px; margin: 24px 0;">
                     <p style="font-size: 13px; color: #6b7280; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 0.08em;">Your Request</p>
                     <p style="font-size: 15px; color: #374151; margin: 0; line-height: 1.6; font-style: italic;">"${prayerRequest}"</p>
                   </div>
-                  ` : ''}
+                  `
+                      : ''
+                  }
                   <p style="font-size: 16px; line-height: 1.7; color: #374151;">
                     You are never alone. We believe in the power of prayer and are honored to stand with you.
                   </p>
@@ -159,16 +155,24 @@ export async function POST(request: NextRequest) {
           });
 
           if (emailResult.error) {
-            console.error('Resend API returned an error:', JSON.stringify(emailResult.error, null, 2));
+            console.error(
+              'Resend API returned an error:',
+              JSON.stringify(emailResult.error, null, 2)
+            );
           } else {
-            console.log('Confirmation email sent successfully. ID:', emailResult.data?.id);
+            console.info('Confirmation email sent successfully. ID:', emailResult.data?.id);
           }
         } else {
-          console.warn('Resend API key is missing or not configured — skipping confirmation email.');
+          console.warn(
+            'Resend API key is missing or not configured — skipping confirmation email.'
+          );
         }
       } catch (emailError) {
         // Log email error but don't fail the whole request
-        console.error('Failed to send confirmation email:', emailError instanceof Error ? emailError.message : emailError);
+        console.error(
+          'Failed to send confirmation email:',
+          emailError instanceof Error ? emailError.message : emailError
+        );
       }
     }
 

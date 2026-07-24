@@ -13,7 +13,8 @@ export default function GiveHero() {
     el.style.transform = 'translateY(32px)';
     setTimeout(() => {
       if (el) {
-        el.style.transition = 'opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)';
+        el.style.transition =
+        'opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)';
         el.style.opacity = '1';
         el.style.transform = 'translateY(0)';
       }
@@ -39,11 +40,13 @@ export default function GiveHero() {
           Generosity
         </span>
         <h1 className="font-display text-hero-display font-light italic text-white leading-none">
-          Give With<br />
+          Give With
+          <br />
           <span className="not-italic font-bold">Open Hands</span>
         </h1>
         <p className="text-white/70 text-lg font-light mt-6 max-w-xl leading-relaxed">
-          Every gift — large or small — helps us love our neighbors, grow our community, and share hope across Nashville.
+          Every gift — large or small — helps us love our neighbors, grow our community, and share
+          hope across Nashville.
         </p>
       </div>
     </section>);

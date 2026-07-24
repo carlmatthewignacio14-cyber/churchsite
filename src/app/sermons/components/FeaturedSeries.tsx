@@ -18,7 +18,8 @@ const series: Series[] = [
   {
     id: 1,
     title: 'Walking in Faith',
-    description: 'A journey through the foundations of Christian faith and what it means to trust God in every season of life.',
+    description:
+      'A journey through the foundations of Christian faith and what it means to trust God in every season of life.',
     sermonCount: 6,
     imageUrl: '/assets/images/sermonsherophoto.png',
     alt: 'Open Bible on a wooden table with soft light streaming through a window',
@@ -26,7 +27,8 @@ const series: Series[] = [
   {
     id: 2,
     title: 'Rooted in Love',
-    description: "Exploring the depth of God's love and how it transforms our relationships, families, and communities.",
+    description:
+      "Exploring the depth of God's love and how it transforms our relationships, families, and communities.",
     sermonCount: 5,
     imageUrl: '/assets/images/congregation-photo-1783621144580.png',
     alt: 'Church congregation gathered together in worship with hands raised',
@@ -34,7 +36,8 @@ const series: Series[] = [
   {
     id: 3,
     title: 'The Great Commission',
-    description: 'Unpacking the call to go and make disciples of all nations and what that looks like in our everyday lives.',
+    description:
+      'Unpacking the call to go and make disciples of all nations and what that looks like in our everyday lives.',
     sermonCount: 4,
     imageUrl: '/assets/images/720318355_975915628579816_5709777563636170972_n.jpg',
     alt: 'Church members serving and ministering to the community outdoors',

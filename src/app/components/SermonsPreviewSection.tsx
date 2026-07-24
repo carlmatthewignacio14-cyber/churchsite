@@ -19,22 +19,29 @@ interface SundayService {
 // facebookVideoUrl: the direct link to the Facebook video post (for card links)
 // ─────────────────────────────────────────────────────────────────────────────
 const sundayServices: SundayService[] = [
-   {
+  {
     id: '4',
+    title: 'Restored By Jesus: Peters Renewal | John 21:15-19',
+    date: 'July 19, 2026',
+    facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1684916209440809',
+    featured: true,
+  },
+  {
+    id: '1',
     title: 'Crossing For One Broken Life | Mark 5:1-20',
     date: 'July 12, 2026',
     facebookVideoUrl: 'https://web.facebook.com/cogopmarikinaph/videos/1989221781731174/',
     featured: true,
   },
   {
-    id: '1',
+    id: '2',
     title: 'They Came To The Other Side | Mark 5:1',
     date: 'July 5, 2026',
     facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1822311055408975/',
     featured: false,
   },
   {
-    id: '2',
+    id: '3',
     title: 'Anchored Fathers, Anchored Families | Hebrews 6:19',
     date: 'June 21, 2026',
     facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/4263437017240191/',
@@ -138,11 +145,9 @@ function FacebookVideoCard({
       aria-label={`Watch ${service.title} on Facebook`}
     >
       {/* Thumbnail area */}
-      <div
-        className="relative w-full bg-gray-900 overflow-hidden"
-        style={{ paddingTop: '56.25%' }}
-      >
+      <div className="relative w-full bg-gray-900 overflow-hidden" style={{ paddingTop: '56.25%' }}>
         {service.thumbnailUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={service.thumbnailUrl}
             alt={`${service.title} thumbnail`}
@@ -214,7 +219,13 @@ function FacebookVideoCard({
 
         {/* Watch on Facebook button */}
         <span className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-[#1877F2] border border-[#1877F2]/30 px-3 py-1.5 group-hover:bg-[#1877F2] group-hover:text-white group-hover:border-[#1877F2] transition-all duration-200 whitespace-nowrap">
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 shrink-0" aria-hidden="true" suppressHydrationWarning>
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-3.5 h-3.5 shrink-0"
+            aria-hidden="true"
+            suppressHydrationWarning
+          >
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
           </svg>
           Watch on Facebook
@@ -230,8 +241,8 @@ export default function SermonsPreviewSection() {
   const isVisible = useScrollReveal(sectionRef, 0);
 
   return (
-    <section 
-      ref={sectionRef} 
+    <section
+      ref={sectionRef}
       className={`py-16 bg-background transition-all duration-700 ease-out ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
@@ -290,7 +301,6 @@ export default function SermonsPreviewSection() {
             </svg>
           </Link>
         </div>
-        
       </div>
     </section>
   );

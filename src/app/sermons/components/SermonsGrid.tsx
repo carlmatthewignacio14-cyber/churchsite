@@ -25,8 +25,9 @@ const allSermons: Sermon[] = [
   topic: 'Peace',
   date: 'July 6, 2026',
   duration: '42 min',
-  thumbnail: "https://images.unsplash.com/photo-1563373929-625e0424fc70",
-  thumbnailAlt: 'Open Bible on wooden table, soft morning light, warm amber glow, peaceful quiet setting',
+  thumbnail: 'https://images.unsplash.com/photo-1563373929-625e0424fc70',
+  thumbnailAlt:
+  'Open Bible on wooden table, soft morning light, warm amber glow, peaceful quiet setting',
   views: '1.2k'
 },
 {
@@ -37,8 +38,9 @@ const allSermons: Sermon[] = [
   topic: 'Faith',
   date: 'June 29, 2026',
   duration: '38 min',
-  thumbnail: "https://images.unsplash.com/photo-1732466854271-9301c65aa09e",
-  thumbnailAlt: 'Misty mountain valley at sunrise, golden light breaking through low clouds, quiet forested hillside',
+  thumbnail: 'https://images.unsplash.com/photo-1732466854271-9301c65aa09e',
+  thumbnailAlt:
+  'Misty mountain valley at sunrise, golden light breaking through low clouds, quiet forested hillside',
   views: '980'
 },
 {
@@ -49,8 +51,9 @@ const allSermons: Sermon[] = [
   topic: 'Purpose',
   date: 'June 22, 2026',
   duration: '45 min',
-  thumbnail: "https://images.unsplash.com/photo-1547639239-e5383c8ddfed",
-  thumbnailAlt: 'People in church sanctuary with hands raised in worship, warm stage lighting, dimly lit atmospheric interior',
+  thumbnail: 'https://images.unsplash.com/photo-1547639239-e5383c8ddfed',
+  thumbnailAlt:
+  'People in church sanctuary with hands raised in worship, warm stage lighting, dimly lit atmospheric interior',
   views: '1.5k'
 },
 {
@@ -61,8 +64,9 @@ const allSermons: Sermon[] = [
   topic: 'Prayer',
   date: 'June 15, 2026',
   duration: '40 min',
-  thumbnail: "https://img.rocket.new/generatedImages/rocket_gen_img_16a563bd1-1772150370537.png",
-  thumbnailAlt: 'Sunlight streaming through tall church windows onto empty pews, golden hour light, quiet sanctuary atmosphere',
+  thumbnail: 'https://img.rocket.new/generatedImages/rocket_gen_img_16a563bd1-1772150370537.png',
+  thumbnailAlt:
+  'Sunlight streaming through tall church windows onto empty pews, golden hour light, quiet sanctuary atmosphere',
   views: '870'
 },
 {
@@ -73,8 +77,9 @@ const allSermons: Sermon[] = [
   topic: 'Faith',
   date: 'June 8, 2026',
   duration: '44 min',
-  thumbnail: "https://images.unsplash.com/photo-1638783720472-6d6a09b1e78e",
-  thumbnailAlt: 'Calm lake at sunrise reflecting golden sky, still water, misty horizon, serene natural landscape',
+  thumbnail: 'https://images.unsplash.com/photo-1638783720472-6d6a09b1e78e',
+  thumbnailAlt:
+  'Calm lake at sunrise reflecting golden sky, still water, misty horizon, serene natural landscape',
   views: '1.1k'
 },
 {
@@ -85,8 +90,9 @@ const allSermons: Sermon[] = [
   topic: 'Giving',
   date: 'June 1, 2026',
   duration: '36 min',
-  thumbnail: "https://images.unsplash.com/photo-1600552852253-51e06624dd65",
-  thumbnailAlt: 'Person extending open hands upward against warm golden light, gesture of offering, spiritual symbolism',
+  thumbnail: 'https://images.unsplash.com/photo-1600552852253-51e06624dd65',
+  thumbnailAlt:
+  'Person extending open hands upward against warm golden light, gesture of offering, spiritual symbolism',
   views: '790'
 }];
 
@@ -127,7 +133,8 @@ export default function SermonsGrid() {
 
   useScrollReveal(headerRef, 0);
 
-  const filtered = activeFilter === 'All' ? allSermons : allSermons.filter((s) => s.series === activeFilter);
+  const filtered =
+  activeFilter === 'All' ? allSermons : allSermons.filter((s) => s.series === activeFilter);
 
   return (
     <section className="section-pad bg-background relative z-10">
@@ -136,12 +143,16 @@ export default function SermonsGrid() {
         <div ref={headerRef} className="mb-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
             <div>
-              <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-2">Browse All</span>
+              <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-2">
+                Browse All
+              </span>
               <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground">
                 All Messages
               </h2>
             </div>
-            <p className="text-muted-foreground text-sm">{filtered.length} message{filtered.length !== 1 ? 's' : ''} found</p>
+            <p className="text-muted-foreground text-sm">
+              {filtered.length} message{filtered.length !== 1 ? 's' : ''} found
+            </p>
           </div>
 
           {/* Filter Pills */}
@@ -188,12 +199,20 @@ function SermonCard({ sermon, index }: {sermon: Sermon;index: number;}) {
           height={338}
           className="w-full h-full object-cover" />
         
+
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
         {/* Play button */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="play-btn-wrap w-12 h-12 bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-300">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="white" className="ml-0.5" aria-hidden="true">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="white"
+              className="ml-0.5"
+              aria-hidden="true">
+              
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
           </div>
@@ -206,13 +225,17 @@ function SermonCard({ sermon, index }: {sermon: Sermon;index: number;}) {
 
         {/* Series badge */}
         <div className="absolute top-3 left-3 bg-primary/80 backdrop-blur-sm px-2 py-1">
-          <span className="text-[10px] text-white font-bold uppercase tracking-wider">{sermon.topic}</span>
+          <span className="text-[10px] text-white font-bold uppercase tracking-wider">
+            {sermon.topic}
+          </span>
         </div>
       </div>
 
       {/* Info */}
       <div className="p-5">
-        <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">{sermon.series}</p>
+        <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+          {sermon.series}
+        </p>
         <h3 className="font-display text-base font-semibold text-foreground mb-3 leading-snug group-hover:text-primary transition-colors line-clamp-2">
           {sermon.title}
         </h3>
@@ -221,7 +244,15 @@ function SermonCard({ sermon, index }: {sermon: Sermon;index: number;}) {
           <div className="flex items-center gap-3">
             <span className="text-xs text-muted-foreground">{sermon.date}</span>
             <div className="flex items-center gap-1 text-muted-foreground">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true">
+                
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
