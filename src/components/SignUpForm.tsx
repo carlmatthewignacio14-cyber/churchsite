@@ -15,13 +15,11 @@ export default function SignUpForm() {
   const [tierCode, setTierCode] = useState('');
   
   const [errorMsg, setErrorMsg] = useState('');
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
-    setSuccess(false);
     setLoading(true);
 
     try {
@@ -43,21 +41,17 @@ export default function SignUpForm() {
       }
 
       // ✉️ Standard signup for Visitors & Members
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: { data: { role, username, firstName, lastName } }
       });
       if (error) throw error;
       
-      setSuccess(true);
-      setTierCode('');
-      setUsername('');
-      setFirstName('');
-      setLastName('');
+      // Automatically signed in by Supabase session, redirect straight to dashboard
+      window.location.href = '/dashboard';
     } catch (err: any) {
       setErrorMsg(err.message || 'An unexpected error occurred during signup.');
-    } finally {
       setLoading(false);
     }
   };
@@ -67,7 +61,6 @@ export default function SignUpForm() {
       <h3 className="text-lg font-bold mb-4 text-center">Create Church Account</h3>
       
       {errorMsg && <p className="bg-red-500/20 text-red-400 p-2.5 text-xs rounded mb-4 text-center border border-red-500/30">{errorMsg}</p>}
-      {success && <p className="bg-green-500/20 text-green-400 p-2.5 text-xs rounded mb-4 text-center border border-green-500/30">🎉 Success! Account successfully registered.</p>}
 
       <form onSubmit={handleSignUpSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-2">
@@ -108,7 +101,6 @@ export default function SignUpForm() {
           </select>
         </div>
         
-        {/* 🔑 STEP A: Input Tier Code for Members */}
         {role !== 'New' && (
           <div className="bg-amber-500/5 border border-amber-500/20 p-3 rounded-lg space-y-3">
             <div>
@@ -130,7 +122,7 @@ export default function SignUpForm() {
           disabled={loading}
           className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-bold p-2.5 rounded-lg text-xs tracking-widest uppercase transition-all shadow-md mt-2 cursor-pointer"
         >
-          {loading ? 'Verifying Roster...' : 'Create Account'}
+          {loading ? 'Creating Account...' : 'Create Account'}
         </button>
       </form>
     </div>
