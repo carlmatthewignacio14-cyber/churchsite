@@ -469,6 +469,8 @@ export default function SermonSlidesSection() {
                     >
                       <option value="New">New (Visitor / Guest)</option>
                       <option value="Members">Members</option>
+                      <option value="Leader">Leader</option>
+                      <option value="Pastor">Pastor</option>
                     </select>
                   </div>
                   
