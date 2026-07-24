@@ -66,9 +66,10 @@ export default function SermonSlidesSection() {
   const [showAll, setShowAll] = useState(false);
   const [activeViewerId, setActiveViewerId] = useState<string | null>(null);
   
-  // Auth Modal States
+  // Auth Modal States matching your app style
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [authMode, setAuthMode] = useState<'prompt' | 'login' | 'signup'>('prompt');
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [isLeaderOrPastor, setIsLeaderOrPastor] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
@@ -102,7 +103,7 @@ export default function SermonSlidesSection() {
   const handleShareClick = async (slide: PowerPointSlide) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-      setAuthMode('prompt');
+      setAuthMode('login');
       setAuthError(null);
       setAuthSuccessMessage(null);
       setShowLoginModal(true);
@@ -131,7 +132,7 @@ export default function SermonSlidesSection() {
   const handleDownload = async (downloadUrl: string) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-      setAuthMode('prompt');
+      setAuthMode('login');
       setAuthError(null);
       setAuthSuccessMessage(null);
       setShowLoginModal(true);
@@ -154,7 +155,13 @@ export default function SermonSlidesSection() {
         setEmail('');
         setPassword('');
       } else if (authMode === 'signup') {
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { error } = await supabase.auth.signUp({ 
+          email, 
+          password,
+          options: {
+            data: { is_leader: isLeaderOrPastor }
+          }
+        });
         if (error) throw error;
         setAuthSuccessMessage('Registration successful! Please check your email or log in.');
         setAuthMode('login');
@@ -322,7 +329,7 @@ export default function SermonSlidesSection() {
         )}
       </div>
 
-      {/* Laptop Share Modal (Facebook, Gmail, Copy Website Link) */}
+      {/* Share Modal */}
       {selectedSlideForShare && (
         <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 backdrop-blur-sm p-4">
           <div className="bg-[#18181b] border border-gray-800 text-white rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl transition-transform duration-300">
@@ -399,122 +406,118 @@ export default function SermonSlidesSection() {
         </div>
       )}
 
-      {/* Integrated Login / Signup Modal */}
+      {/* Exact Dark-Themed Portal Sign In & Create Account Modal */}
       {showLoginModal && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4 backdrop-blur-sm">
-          <div className="bg-white border border-gray-200 p-6 sm:p-8 rounded-2xl max-w-md w-full text-left space-y-5 shadow-2xl relative">
+          <div className="bg-[#161922] border border-gray-800 text-white p-6 sm:p-8 rounded-2xl max-w-md w-full space-y-5 shadow-2xl relative">
             <button
               onClick={() => setShowLoginModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-sm font-bold w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center transition cursor-pointer"
+              className="absolute top-4 right-4 text-gray-400 hover:text-white text-sm font-bold w-8 h-8 rounded-full bg-gray-800/80 flex items-center justify-center transition cursor-pointer"
             >
               ✕
             </button>
 
-            {authMode === 'prompt' && (
-              <div className="text-center space-y-4">
-                <div className="w-12 h-12 bg-orange-50 border border-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">
-                  🔒
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">Member Access Required</h3>
-                <p className="text-gray-600 text-sm">
-                  You can freely preview sermon slides online, but downloading files and sharing links requires a registered account.
+            <form onSubmit={handleAuthSubmit} className="space-y-4">
+              <div className="text-center pb-1">
+                <h3 className="text-xl font-bold text-white tracking-wide">
+                  {authMode === 'login' ? 'Church Portal Sign In' : 'Create an Account'}
+                </h3>
+                <p className="text-xs text-gray-400 mt-1">
+                  {authMode === 'login' 
+                    ? 'Sign in to download and share sermon slides' 
+                    : 'Sign up to download and share sermon slides'}
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              </div>
+
+              {authSuccessMessage && (
+                <div className="p-3 text-xs text-emerald-400 bg-emerald-950/60 rounded-xl border border-emerald-800/50 font-medium text-center">
+                  {authSuccessMessage}
+                </div>
+              )}
+
+              {authError && (
+                <div className="p-3 text-xs text-red-400 bg-red-950/60 rounded-xl border border-red-800/50 font-medium text-center">
+                  {authError}
+                </div>
+              )}
+
+              {authMode === 'signup' && (
+                <div className="bg-[#1e2330] border border-gray-800 rounded-xl p-3.5 flex items-center justify-between">
+                  <span className="text-xs font-medium text-gray-200">Are you a Leader or Pastor?</span>
                   <button
-                    onClick={() => { setAuthMode('login'); setAuthError(null); }}
-                    className="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer"
+                    type="button"
+                    onClick={() => setIsLeaderOrPastor(!isLeaderOrPastor)}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                      isLeaderOrPastor 
+                        ? 'bg-blue-600 text-white' 
+                        : 'bg-gray-800 text-gray-400 hover:text-white'
+                    }`}
                   >
-                    Log In
+                    {isLeaderOrPastor ? 'YES' : 'NO'}
                   </button>
-                  <button
-                    onClick={() => { setAuthMode('signup'); setAuthError(null); }}
-                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer"
-                  >
-                    Sign Up
-                  </button>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-300 mb-1">Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full px-3.5 py-2.5 bg-[#1e2330] border border-gray-800 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-gray-300 mb-1">Password</label>
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full px-3.5 py-2.5 bg-[#1e2330] border border-gray-800 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                  />
                 </div>
               </div>
-            )}
 
-            {(authMode === 'login' || authMode === 'signup') && (
-              <form onSubmit={handleAuthSubmit} className="space-y-4">
-                <div className="text-center pb-2">
-                  <h3 className="text-xl font-bold text-gray-900">
-                    {authMode === 'login' ? 'Welcome Back' : 'Create an Account'}
-                  </h3>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {authMode === 'login' ? 'Enter your credentials to access downloads & sharing' : 'Sign up to download and share sermon slides'}
+              <button
+                type="submit"
+                disabled={authLoading}
+                className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer disabled:opacity-50 shadow-lg shadow-blue-600/25"
+              >
+                {authLoading ? 'Processing...' : (authMode === 'login' ? 'Log In' : 'Sign Up')}
+              </button>
+
+              <div className="text-center pt-2">
+                {authMode === 'login' ? (
+                  <p className="text-xs text-gray-400">
+                    Don't have an account?{' '}
+                    <button
+                      type="button"
+                      onClick={() => { setAuthMode('signup'); setAuthError(null); setAuthSuccessMessage(null); }}
+                      className="text-blue-400 hover:underline font-semibold cursor-pointer"
+                    >
+                      Create one here
+                    </button>
                   </p>
-                </div>
-
-                {authSuccessMessage && (
-                  <div className="p-3 text-xs text-emerald-700 bg-emerald-50 rounded-lg border border-emerald-200 font-medium text-center">
-                    {authSuccessMessage}
-                  </div>
+                ) : (
+                  <p className="text-xs text-gray-400">
+                    Already have an account?{' '}
+                    <button
+                      type="button"
+                      onClick={() => { setAuthMode('login'); setAuthError(null); setAuthSuccessMessage(null); }}
+                      className="text-blue-400 hover:underline font-semibold cursor-pointer"
+                    >
+                      Log In
+                    </button>
+                  </p>
                 )}
-
-                {authError && (
-                  <div className="p-3 text-xs text-red-600 bg-red-50 rounded-lg border border-red-200 font-medium text-center">
-                    {authError}
-                  </div>
-                )}
-
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wider">Email Address</label>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wider">Password</label>
-                    <input
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={authLoading}
-                  className="w-full py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer disabled:opacity-50"
-                >
-                  {authLoading ? 'Processing...' : (authMode === 'login' ? 'Log In' : 'Sign Up')}
-                </button>
-
-                <div className="flex items-center justify-between text-xs pt-2">
-                  <button
-                    type="button"
-                    onClick={() => { setAuthMode('prompt'); setAuthError(null); setAuthSuccessMessage(null); }}
-                    className="text-gray-500 hover:text-gray-900 font-semibold cursor-pointer"
-                  >
-                    ← Back
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => { 
-                      setAuthMode(authMode === 'login' ? 'signup' : 'login'); 
-                      setAuthError(null); 
-                      setAuthSuccessMessage(null); 
-                    }}
-                    className="text-orange-600 hover:underline font-semibold cursor-pointer"
-                  >
-                    {authMode === 'login' ? "Don't have an account? Sign Up" : 'Already have an account? Log In'}
-                  </button>
-                </div>
-              </form>
-            )}
+              </div>
+            </form>
           </div>
         </div>
       )}
