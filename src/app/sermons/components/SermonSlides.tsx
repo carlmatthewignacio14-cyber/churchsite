@@ -69,6 +69,7 @@ export default function SermonSlidesSection() {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Check Supabase session on component mount
+  // Check Supabase session on component mount
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -80,11 +81,14 @@ export default function SermonSlidesSection() {
   }, []);
 
   const handleShare = async (title: string, url: string) => {
-    if (!isLoggedIn) {
+    // 1. Instant check on click to avoid race conditions
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
       setShowLoginModal(true);
       return;
     }
 
+    // 2. Try native mobile share sheet if available
     if (navigator.share) {
       try {
         await navigator.share({
@@ -92,21 +96,36 @@ export default function SermonSlidesSection() {
           text: `Check out these sermon slides: "${title}"`,
           url: url,
         });
-      } catch (error) {
-        console.log('Error sharing:', error);
+        return;
+      } catch (error: any) {
+        if (error.name === 'AbortError') return; // User cancelled share sheet, do nothing
       }
-    } else {
+    }
+
+    // 3. Fallback to clipboard copy (with safety backup for all browsers)
+    try {
+      await navigator.clipboard.writeText(url);
+      alert('Presentation share link copied to clipboard!');
+    } catch (err) {
+      // Backup method if clipboard API is restricted by the browser
+      const textArea = document.createElement('textarea');
+      textArea.value = url;
+      document.body.appendChild(textArea);
+      textArea.select();
       try {
-        await navigator.clipboard.writeText(url);
+        document.execCommand('copy');
         alert('Presentation share link copied to clipboard!');
-      } catch (err) {
-        console.error('Failed to copy link', err);
+      } catch (fallbackErr) {
+        prompt('Copy this link manually:', url);
       }
+      document.body.removeChild(textArea);
     }
   };
 
-  const handleDownload = (downloadUrl: string) => {
-    if (!isLoggedIn) {
+  const handleDownload = async (downloadUrl: string) => {
+    // Instant session check on click
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
       setShowLoginModal(true);
       return;
     }
