@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { ChurchRole } from '../contexts/auth-types';
-import { registerChurchLeader } from '../app/dashboard/signupAction';
-import { loginWithPasscodeOnly } from '../app/dashboard/passcodeAction';
+import { ChurchRole } from '@/contexts/auth-types';
+import { registerChurchLeader } from '@/app/dashboard/signupAction';
+import { loginWithPasscodeOnly } from '@/app/dashboard/passcodeAction';
 
 interface PowerPointSlide {
   id: string;
