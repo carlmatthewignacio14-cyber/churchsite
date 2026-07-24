@@ -27,28 +27,56 @@ export default function DashboardPage() {
   ];
 
   useEffect(() => {
-    const fetchUserSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        window.location.href = '/';
-        return;
-      }
-      setCurrentUser(session.user);
-      const role = session.user?.user_metadata?.role || 'Member';
-      setUserRole(role);
+  let isMounted = true;
 
-      // Set initial tab based on role
-      const lowerRole = role.toLowerCase();
-      if (lowerRole === 'leader' || lowerRole === 'pastor') {
-        setActiveTab('management');
-      } else {
-        setActiveTab('chat'); // Members default straight to Chat
-      }
+  const fetchUserAndRole = async () => {
+    // 1. Get auth session
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      router.push('/');
+      return;
+    }
 
-      setLoading(false);
-    };
-    fetchUserSession();
-  }, []);
+    const user = session.user;
+    let fetchedRole = 'Member'; // Fallback default
+
+    // 2. Fetch the user's actual role from the 'rosterlist' table
+    // Adjust 'email' if you link rosterlist by another column like 'user_id' or 'name'
+    const { data: rosterData, error } = await supabase
+      .from('rosterlist')
+      .select('role')
+      .eq('email', user.email)
+      .single();
+
+    if (rosterData && rosterData.role) {
+      fetchedRole = rosterData.role;
+    } else if (user?.user_metadata?.role) {
+      // Fallback to metadata if rosterlist entry isn't found
+      fetchedRole = user.user_metadata.role;
+    }
+
+    if (!isMounted) return;
+
+    setCurrentUser(user);
+    setUserRole(fetchedRole);
+
+    // 3. Automatically route initial tab based on the role from rosterlist
+    const lowerRole = fetchedRole.toLowerCase();
+    if (lowerRole === 'leader' || lowerRole === 'pastor' || lowerRole === 'staff') {
+      setActiveTab('management');
+    } else {
+      setActiveTab('chat');
+    }
+
+    setLoading(false);
+  };
+
+  fetchUserAndRole();
+
+  return () => {
+    isMounted = false;
+  };
+}, [router]);
 
   const handleContentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
