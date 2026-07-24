@@ -7,7 +7,7 @@ import DashboardChat from '@/components/DashboardChat';
 import DashboardSettings from '@/components/DashboardSettings';
 
 export default function DashboardPage() {
-  const router = userRouter();
+  const router = useRouter();
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<string>('New');
   const [loading, setLoading] = useState(true);
