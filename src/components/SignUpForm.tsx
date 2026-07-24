@@ -10,12 +10,11 @@ export default function SignUpForm() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<ChurchRole>('New');
-  
+  const [selectedRoleType, setSelectedRoleType] = useState<string>('New');
   const [tierCode, setTierCode] = useState('');
   
   const [errorMsg, setErrorMsg] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState('');
 
   const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,8 +22,11 @@ export default function SignUpForm() {
     setLoading(true);
 
     try {
-      // 🔒 1. Check Roster Verification for Members, Leaders, and Pastors
-      if (role !== 'New') {
+      let finalRole = 'New';
+      let finalSubRole = 'Visitor';
+
+      // 🔒 1. If not a visitor, verify code via RPC and fetch role/sub_role from database
+      if (selectedRoleType !== 'New') {
         const { data: verification, error: rpcError } = await supabase.rpc('signup_church_member', {
           p_first_name: firstName,
           p_last_name: lastName,
@@ -38,17 +40,30 @@ export default function SignUpForm() {
           setLoading(false);
           return;
         }
+
+        // Pull exact role & sub_role from your database roster row
+        finalRole = verification.role;       // e.g., "Leader"
+        finalSubRole = verification.sub_role; // e.g., "Youth"
       }
 
-      // ✉️ Standard signup for all statuses
+      // ✉️ 2. Create the user account and attach role/sub_role to user metadata
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { role, username, firstName, lastName } }
+        options: { 
+          data: { 
+            role: finalRole,          // Saved to user metadata
+            subRole: finalSubRole,    // Saved to user metadata
+            username, 
+            firstName, 
+            lastName 
+          } 
+        }
       });
+      
       if (error) throw error;
       
-      // Automatically signed in by Supabase session, redirect straight to dashboard
+      // Redirect straight to dashboard after registration
       window.location.href = '/dashboard';
     } catch (err: any) {
       setErrorMsg(err.message || 'An unexpected error occurred during signup.');
@@ -57,10 +72,14 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="w-full text-white bg-slate-950 p-4 rounded-xl border border-slate-800">
+    <div className="w-full text-white bg-slate-950 p-6 rounded-xl border border-slate-800 shadow-xl">
       <h3 className="text-lg font-bold mb-4 text-center">Create Church Account</h3>
       
-      {errorMsg && <p className="bg-red-500/20 text-red-400 p-2.5 text-xs rounded mb-4 text-center border border-red-500/30">{errorMsg}</p>}
+      {errorMsg && (
+        <p className="bg-red-500/20 text-red-400 p-2.5 text-xs rounded mb-4 text-center border border-red-500/30">
+          {errorMsg}
+        </p>
+      )}
 
       <form onSubmit={handleSignUpSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-2">
@@ -81,35 +100,33 @@ export default function SignUpForm() {
         
         <div>
           <label className="text-xs font-semibold text-slate-400 block mb-1">Email Address</label>
-          <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
+          <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="name@example.com" className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
         </div>
 
         <div>
           <label className="text-xs font-semibold text-slate-400 block mb-1">Password</label>
-          <input type="password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
+          <input type="password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none" />
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-slate-400 block mb-1">Your Position Status</label>
+          <label className="text-xs font-semibold text-slate-400 block mb-1">Account Category</label>
           <select 
-            value={role} 
-            onChange={e => { setRole(e.target.value as ChurchRole); setTierCode(''); setErrorMsg(''); }}
+            value={selectedRoleType} 
+            onChange={e => { setSelectedRoleType(e.target.value); setTierCode(''); setErrorMsg(''); }}
             className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none cursor-pointer"
           >
             <option value="New">New (Visitor / Guest)</option>
-            <option value="Member">Member</option>
-            <option value="Leader">Leader</option>
-            <option value="Pastor">Pastor</option>
+            <option value="MemberOrLeader">Existing Member / Leader / Pastor (Has Code)</option>
           </select>
         </div>
         
-        {role !== 'New' && (
+        {selectedRoleType !== 'New' && (
           <div className="bg-amber-500/5 border border-amber-500/20 p-3 rounded-lg space-y-3">
             <div>
-              <label className="text-xs font-semibold text-amber-400 block mb-1">Church Membership / Tier Code</label>
+              <label className="text-xs font-semibold text-amber-400 block mb-1">Enter Membership / Tier Code</label>
               <input 
                 type="text" 
-                placeholder="e.g. CODE2026"
+                placeholder="e.g. COGOPLEADER54!"
                 required 
                 value={tierCode} 
                 onChange={e => setTierCode(e.target.value)} 
