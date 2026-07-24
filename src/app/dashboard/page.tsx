@@ -10,6 +10,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<string>('New');
+  const [userSubRole, setUserSubRole] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
   // Default active tab: 'chat' for members, 'management' for leaders/pastors
@@ -39,26 +40,40 @@ export default function DashboardPage() {
       }
 
       const user = session.user;
-      let fetchedRole = 'Member'; // Fallback default
+      let fetchedRole = 'Member'; 
+      let fetchedSubRole = '';
 
-      // 1. Check rosterlist table (try matching email or user_id)
+      // 1. Check rosterlist table matching email to get both role & sub_role
       const { data: rosterData } = await supabase
         .from('rosterlist')
-        .select('role')
+        .select('role, sub_role')
         .eq('email', user.email)
         .single();
 
-      if (rosterData && rosterData.role) {
-        fetchedRole = rosterData.role;
-      } else if (user?.user_metadata?.role) {
-        // Fallback to metadata
-        fetchedRole = user.user_metadata.role;
+      if (rosterData) {
+        if (rosterData.role) fetchedRole = rosterData.role;
+        if (rosterData.sub_role) fetchedSubRole = rosterData.sub_role;
+      } else {
+        // Fallback to metadata if roster row lookup fails
+        if (user?.user_metadata?.role) fetchedRole = user.user_metadata.role;
+        if (user?.user_metadata?.sub_role) fetchedSubRole = user.user_metadata.sub_role;
       }
 
       if (!isMounted) return;
 
-      setCurrentUser(user);
+      // Attach fetched sub_role into currentUser metadata object for seamless usage
+      const updatedUser = {
+        ...user,
+        user_metadata: {
+          ...user.user_metadata,
+          role: fetchedRole,
+          sub_role: fetchedSubRole
+        }
+      };
+
+      setCurrentUser(updatedUser);
       setUserRole(fetchedRole);
+      setUserSubRole(fetchedSubRole);
 
       // 2. Flexible check for leadership roles
       const lowerRole = fetchedRole.toLowerCase();
@@ -228,21 +243,20 @@ export default function DashboardPage() {
                   <div>
                     <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-widest">Active Profile Dashboard</span>
                     <h1 className="text-2xl font-bold mt-1 text-slate-100">
-                      Welcome, {currentUser?.user_metadata?.username || currentUser?.user_metadata?.name || 'Church Member'}
+                      Welcome, {currentUser?.user_metadata?.firstName || currentUser?.user_metadata?.username || 'Church Member'}
                     </h1>
                     <p className="text-xs text-slate-400 mt-0.5">Account Email: {currentUser?.email}</p>
                   </div>
 
-                  <div className="flex flex-col items-start md:items-end gap-1.5">
-                    <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wider shadow-sm">
-                      {currentUser?.user_metadata?.ministry 
-                        ? `Role: ${currentUser.user_metadata.ministry.replace(" Ministry", "")} Leader` 
-                        : `Role Tier: ${userRole}`}
-                    </span>
-                    {currentUser?.user_metadata?.ministry && (
-                      <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 text-[10px] font-semibold px-2.5 py-0.5 rounded">
-                        📍 {currentUser.user_metadata.ministry}
-                      </span>
+                  {/* Matching Layout Badge (Role + Sub-role Ministry) */}
+                  <div className="flex flex-col items-start md:items-end gap-2">
+                    <div className="bg-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+                      ROLE: {userRole.toUpperCase()} {userSubRole ? `(${userSubRole.toUpperCase()})` : ''}
+                    </div>
+                    {userSubRole && (
+                      <div className="inline-flex items-center gap-1.5 bg-purple-950/80 border border-purple-500/30 text-purple-300 px-3 py-1 rounded-full text-xs font-medium">
+                        📍 {userSubRole} Ministry
+                      </div>
                     )}
                   </div>
                 </div>
@@ -256,7 +270,7 @@ export default function DashboardPage() {
                       <p className="text-base text-white font-medium mt-1">🎯 {currentUser.user_metadata.monthly_assignment}</p>
                     </div>
                   ) : (
-                    <p className="text-sm text-slate-300 mt-1">You are logged on as active <span className="font-semibold">{userRole}</span>. No individual tactical duty restriction is logged for your profile today.</p>
+                    <p className="text-sm text-slate-300 mt-1">You are logged on as active <span className="font-semibold">{userRole}</span> under the <span className="text-purple-400 font-semibold">{userSubRole || 'General'}</span> ministry division.</p>
                   )}
                 </div>
 
