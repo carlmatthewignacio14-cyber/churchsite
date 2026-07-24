@@ -28,13 +28,12 @@ export async function registerChurchLeader(
     return { success: false, message: authError?.message || 'Authentication registration failure.' };
   }
 
-  // 2. Insert user profile data into the 'profiles' table (NOT rosterlist)
+  // 2. Insert user profile data into the 'profiles' table (without email)
   const { error: dbError } = await supabaseAdmin
     .from('profiles')
     .upsert([
       { 
         id: authData.user.id, 
-        email, 
         role, 
         username, 
         ministry: role === 'Leaders' ? ministry : null
