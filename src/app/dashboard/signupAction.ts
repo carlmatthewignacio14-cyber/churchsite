@@ -2,7 +2,7 @@
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 /**
- * Server Action to securely sign up a leader/pastor and log their private passcode
+ * Server Action to securely sign up a leader/pastor and save their profile
  */
 export async function registerChurchLeader(
   email: string, 
@@ -28,16 +28,15 @@ export async function registerChurchLeader(
     return { success: false, message: authError?.message || 'Authentication registration failure.' };
   }
 
-  // 2. Insert profile link and unique passcode into 'rosterlist1'
+  // 2. Insert user profile data into the 'profiles' table (NOT rosterlist)
   const { error: dbError } = await supabaseAdmin
-    .from('rosterlist') // 👈 CHANGED: from 'church_passcodes' to 'rosterlist1'
-    .insert([
+    .from('profiles')
+    .upsert([
       { 
         id: authData.user.id, 
         email, 
         role, 
-        allowed_code: personalCode, // 👈 CHANGED: from 'personal_code' to 'allowed_code'
-        username,                   // 👈 ADDED: matches your rosterlist1 column
+        username, 
         ministry: role === 'Leaders' ? ministry : null
       }
     ]);
@@ -45,11 +44,6 @@ export async function registerChurchLeader(
   if (dbError) {
     // If the database insert fails, roll back and remove the auth account to prevent orphans
     await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
-    
-    // Check if the passcode was rejected because someone else is already using it
-    if (dbError.code === '23505') {
-      return { success: false, message: 'This specific personal passcode is already taken. Please choose a different code.' };
-    }
     return { success: false, message: dbError.message };
   }
 
