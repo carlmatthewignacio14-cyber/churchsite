@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { ChurchRole } from '@/contexts/auth-types'; // Adjust this import path if your types are located elsewhere
+import { ChurchRole } from '@/contexts/auth-types'
+; // Adjust this import path if your types are located elsewhere
 
 interface PowerPointSlide {
   id: string;

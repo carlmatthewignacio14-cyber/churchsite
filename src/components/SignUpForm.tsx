@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { ChurchRole } from '../contexts/auth-types';
+
 
 export default function SignUpForm() {
   const [firstName, setFirstName] = useState('');
