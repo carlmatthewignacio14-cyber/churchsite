@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
@@ -68,6 +68,11 @@ export default function SermonSlidesSection() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [selectedSlideForShare, setSelectedSlideForShare] = useState<PowerPointSlide | null>(null);
   const [copied, setCopied] = useState(false);
+  const [isAppleDevice, setIsAppleDevice] = useState(false);
+
+  useEffect(() => {
+    setIsAppleDevice(/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent));
+  }, []);
 
   const handleShareClick = async (slide: PowerPointSlide) => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -122,7 +127,7 @@ export default function SermonSlidesSection() {
         if (error.name === 'AbortError') return;
       }
     } else {
-      alert('Native system share (Quick Share, AirDrop, Bluetooth, etc.) is not supported on this browser/device.');
+      alert('Native system share is not supported on this browser/device.');
     }
   };
 
@@ -260,7 +265,7 @@ export default function SermonSlidesSection() {
         )}
       </div>
 
-      {/* Bottom Sheet Modal with Horizontal Swipeable App Row */}
+      {/* Bottom Sheet Modal with All Apps & Official Logos */}
       {selectedSlideForShare && (
         <div className="fixed inset-0 bg-black/75 flex items-end sm:items-center justify-center z-50 backdrop-blur-sm p-0 sm:p-4">
           <div className="bg-[#18181b] border-t sm:border border-gray-800 text-white rounded-t-3xl sm:rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl transition-transform duration-300">
@@ -295,29 +300,19 @@ export default function SermonSlidesSection() {
               </button>
             </div>
 
-            {/* Horizontal Swipeable App Row */}
+            {/* Horizontal Swipeable App Row with All Official Logos */}
             <div className="space-y-2">
-              <div className="overflow-x-auto flex items-start gap-4 pb-2 pt-1 px-1 scrollbar-none">
+              <div 
+                className="overflow-x-auto flex items-start gap-4 pb-3 pt-1 px-1 snap-x scrollbar-none"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
                 
-                {/* 1. Quick Share / Apple AirDrop */}
-                <button
-                  onClick={() => triggerSystemShare(selectedSlideForShare)}
-                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group cursor-pointer"
-                >
-                  <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
-                    <svg className="w-7 h-7 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                      <path d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4" />
-                    </svg>
-                  </div>
-                  <span className="text-[11px] text-gray-300 text-center leading-tight">Quick Share</span>
-                </button>
-
-                {/* 2. Facebook */}
+                {/* 1. Facebook */}
                 <a
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(selectedSlideForShare.viewUrl)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group"
+                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group snap-start cursor-pointer"
                 >
                   <div className="w-14 h-14 bg-[#1877F2] rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
                     <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -325,10 +320,10 @@ export default function SermonSlidesSection() {
                   <span className="text-[11px] text-gray-300 text-center leading-tight">Facebook</span>
                 </a>
 
-                {/* 3. Messenger */}
+                {/* 2. Messenger */}
                 <a
                   href={`fb-messenger://share/?link=${encodeURIComponent(selectedSlideForShare.viewUrl)}`}
-                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group"
+                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group snap-start cursor-pointer"
                 >
                   <div className="w-14 h-14 bg-gradient-to-tr from-[#006AFF] to-[#A333FF] rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
                     <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.084 0 11.356c0 3.178 1.354 6.04 3.528 8.083V24l3.322-1.825c1.472.41 3.036.634 4.65 .634 6.627 0 12-5.084 12-11.356S18.627 0 12 0zm1.189 15.05l-3.079-3.282-6.01 3.282 6.608-7.014 3.15 3.283 5.939-3.283-6.608 7.014z"/></svg>
@@ -336,9 +331,9 @@ export default function SermonSlidesSection() {
                   <span className="text-[11px] text-gray-300 text-center leading-tight">Messenger</span>
                 </a>
 
-                {/* 4. Instagram */}
+                {/* 3. Instagram */}
                 <a
-                  href={`https://instagram.com/`}
+                  href="https://instagram.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => {
@@ -346,54 +341,98 @@ export default function SermonSlidesSection() {
                     copyToClipboard(selectedSlideForShare.viewUrl);
                     alert('Link copied! Open Instagram to paste and share.');
                   }}
-                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group"
+                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group snap-start cursor-pointer"
                 >
                   <div className="w-14 h-14 bg-gradient-to-tr from-[#feda75] via-[#d62976] to-[#962fbf] rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
                     <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                   </div>
-                  <span className="text-[11px] text-gray-300 text-center leading-tight">Instagram</span>
+                  <span class="text-[11px] text-gray-300 text-center leading-tight">Instagram</span>
                 </a>
 
-                {/* 5. Messages (SMS) */}
-                <a
-                  href={`sms:?body=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.viewUrl}`)}`}
-                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group"
-                >
-                  <div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
-                    <svg className="w-7 h-7 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                  </div>
-                  <span className="text-[11px] text-gray-300 text-center leading-tight">Messages</span>
-                </a>
+                {/* 4. Messages (Apple vs Android dynamic) */}
+                {isAppleDevice ? (
+                  <a
+                    href={`sms:&body=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.viewUrl}`)}`}
+                    className="flex flex-col items-center gap-1.5 shrink-0 w-16 group snap-start cursor-pointer"
+                  >
+                    <div className="w-14 h-14 bg-[#34C759] rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                      <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 3c-4.97 0-9 3.58-9 8 0 2.14.86 4.1 2.27 5.55L4 20l3.69-1.23C8.94 19.31 10.43 19.6 12 19.6c4.97 0 9-3.58 9-8s-4.03-8-9-8z"/>
+                      </svg>
+                    </div>
+                    <span className="text-[11px] text-gray-300 text-center leading-tight">Messages</span>
+                  </a>
+                ) : (
+                  <a
+                    href={`sms:?body=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.viewUrl}`)}`}
+                    className="flex flex-col items-center gap-1.5 shrink-0 w-16 group snap-start cursor-pointer"
+                  >
+                    <div className="w-14 h-14 bg-[#1A73E8] rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                      <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24">
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                      </svg>
+                    </div>
+                    <span className="text-[11px] text-gray-300 text-center leading-tight">Messages</span>
+                  </a>
+                )}
 
-                {/* 6. Gmail */}
+                {/* 5. Gmail */}
                 <a
                   href={`mailto:?subject=${encodeURIComponent(`Sermon Slides: ${selectedSlideForShare.title}`)}&body=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.viewUrl}`)}`}
-                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group"
+                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group snap-start cursor-pointer"
                 >
-                  <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
-                    <svg className="w-7 h-7 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md group-hover:scale-105 transition">
+                    <svg className="w-7 h-7" viewBox="0 0 24 24">
+                      <path fill="#EA4335" d="M12 13.5l10-6.5V18c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V7l10 6.5z"/>
+                      <path fill="#FBBC05" d="M12 13.5L2 7V5l10 6.5L22 5v2l-10 6.5z"/>
+                      <path fill="#4285F4" d="M2 7v11c0 1.1.9 2 2 2h1c1.1 0 2-.9 2-2V9.5L2 7z"/>
+                      <path fill="#34A853" d="M22 7v11c0 1.1-.9 2-2 2h-1c-1.1 0-2-.9-2-2V9.5L22 7z"/>
+                      <path fill="#C5221F" d="M12 13.5L2 7l10-6.5L22 7l-10 6.5z"/>
+                    </svg>
                   </div>
                   <span className="text-[11px] text-gray-300 text-center leading-tight">Gmail</span>
                 </a>
 
-                {/* 7. Bluetooth */}
-                <button
-                  onClick={() => triggerSystemShare(selectedSlideForShare)}
-                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group cursor-pointer"
-                >
-                  <div className="w-14 h-14 bg-sky-500 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
-                    <svg className="w-7 h-7 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11L12 23V1l5.5 5.5-11 11"/></svg>
-                  </div>
-                  <span className="text-[11px] text-gray-300 text-center leading-tight">Bluetooth</span>
-                </button>
+                {/* 6. AirDrop (Apple) OR Bluetooth (Android) */}
+                {isAppleDevice ? (
+                  <button
+                    onClick={() => triggerSystemShare(selectedSlideForShare)}
+                    className="flex flex-col items-center gap-1.5 shrink-0 w-16 group snap-start cursor-pointer"
+                  >
+                    <div className="w-14 h-14 rounded-2xl bg-[#007AFF] flex flex-col items-center justify-center shadow-md relative overflow-hidden group-hover:scale-105 transition">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full border border-white/40 absolute"></div>
+                        <div className="w-6 h-6 rounded-full border border-white/60 absolute"></div>
+                        <div className="w-2.5 h-2.5 rounded-full bg-white absolute"></div>
+                      </div>
+                    </div>
+                    <span className="text-[11px] text-gray-300 text-center leading-tight">AirDrop</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => triggerSystemShare(selectedSlideForShare)}
+                    className="flex flex-col items-center gap-1.5 shrink-0 w-16 group snap-start cursor-pointer"
+                  >
+                    <div className="w-14 h-14 bg-[#007AFF] rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                      <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.5 6.5l11 11L12 23V1l5.5 5.5-11 11"/>
+                      </svg>
+                    </div>
+                    <span className="text-[11px] text-gray-300 text-center leading-tight">Bluetooth</span>
+                  </button>
+                )}
 
-                {/* 8. More (Other apps) */}
+                {/* 7. More */}
                 <button
                   onClick={() => triggerSystemShare(selectedSlideForShare)}
-                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group cursor-pointer"
+                  className="flex flex-col items-center gap-1.5 shrink-0 w-16 group snap-start cursor-pointer"
                 >
-                  <div className="w-14 h-14 bg-gray-700 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
-                    <svg className="w-7 h-7 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="17" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                  <div className="w-14 h-14 bg-[#2a2f38] rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                    <svg className="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
                   </div>
                   <span className="text-[11px] text-blue-400 font-bold text-center leading-tight">More</span>
                 </button>
@@ -445,6 +484,16 @@ export default function SermonSlidesSection() {
           </div>
         </div>
       )}
+
+      <style jsx global>{`
+        .scrollbar-none::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-none {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
   );
 }
