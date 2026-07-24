@@ -23,7 +23,7 @@ export default function SignUpForm() {
     setLoading(true);
 
     try {
-      // 🔒 1. Check Roster Verification for Members
+      // 🔒 1. Check Roster Verification for Members, Leaders, and Pastors
       if (role !== 'New') {
         const { data: verification, error: rpcError } = await supabase.rpc('signup_church_member', {
           p_first_name: firstName,
@@ -40,7 +40,7 @@ export default function SignUpForm() {
         }
       }
 
-      // ✉️ Standard signup for Visitors & Members
+      // ✉️ Standard signup for all statuses
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -97,7 +97,9 @@ export default function SignUpForm() {
             className="w-full bg-slate-900 border border-slate-800 p-2.5 rounded text-white text-sm focus:border-blue-500 outline-none cursor-pointer"
           >
             <option value="New">New (Visitor / Guest)</option>
-            <option value="Members">Members</option>
+            <option value="Member">Member</option>
+            <option value="Leader">Leader</option>
+            <option value="Pastor">Pastor</option>
           </select>
         </div>
         
@@ -107,7 +109,7 @@ export default function SignUpForm() {
               <label className="text-xs font-semibold text-amber-400 block mb-1">Church Membership / Tier Code</label>
               <input 
                 type="text" 
-                placeholder="e.g. MEMBER2026"
+                placeholder="e.g. CODE2026"
                 required 
                 value={tierCode} 
                 onChange={e => setTierCode(e.target.value)} 
