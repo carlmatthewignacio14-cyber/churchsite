@@ -70,15 +70,35 @@ export default function SermonSlidesSection() {
   const [copied, setCopied] = useState(false);
 
   const handleShareClick = async (slide: PowerPointSlide) => {
-    // Check session instantly on click
+    // 1. Check if user is logged in
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       setShowLoginModal(true);
       return;
     }
-    // Open the multi-option share modal
-    setSelectedSlideForShare(slide);
-    setCopied(false);
+
+    // 2. Trigger the phone's native share drawer (shown in your screenshot)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: slide.title,
+          text: `Check out these sermon slides: ${slide.title}`,
+          url: slide.viewUrl,
+        });
+        return;
+      } catch (error: any) {
+        // If the user cancels/closes the share drawer, do nothing
+        if (error.name === 'AbortError') return;
+      }
+    }
+
+    // 3. Fallback for desktop browsers that don't have a native share drawer
+    try {
+      await navigator.clipboard.writeText(slide.viewUrl);
+      alert('Presentation link copied to clipboard!');
+    } catch (err) {
+      prompt('Copy this link manually:', slide.viewUrl);
+    }
   };
 
   const handleDownload = async (downloadUrl: string) => {
