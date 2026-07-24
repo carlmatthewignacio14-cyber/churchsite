@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
@@ -77,7 +77,7 @@ export default function SermonSlidesSection() {
       return;
     }
 
-    // 2. Trigger the phone's native share drawer (shown in your screenshot)
+    // 2. Try triggering the phone's native share drawer first
     if (navigator.share) {
       try {
         await navigator.share({
@@ -87,18 +87,12 @@ export default function SermonSlidesSection() {
         });
         return;
       } catch (error: any) {
-        // If the user cancels/closes the share drawer, do nothing
-        if (error.name === 'AbortError') return;
+        if (error.name === 'AbortError') return; // User cancelled
       }
     }
 
-    // 3. Fallback for desktop browsers that don't have a native share drawer
-    try {
-      await navigator.clipboard.writeText(slide.viewUrl);
-      alert('Presentation link copied to clipboard!');
-    } catch (err) {
-      prompt('Copy this link manually:', slide.viewUrl);
-    }
+    // 3. Fallback for desktop or unsupported browsers: Open the custom Share Modal
+    setSelectedSlideForShare(slide);
   };
 
   const handleDownload = async (downloadUrl: string) => {
@@ -195,7 +189,7 @@ export default function SermonSlidesSection() {
                       onClick={() => setActiveViewerId(isViewing ? null : slide.id)}
                       className={`w-full sm:w-auto text-center border text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors ${
                         isViewing
-                          ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-250'
+                          ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
                           : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                       }`}
                     >
@@ -265,7 +259,7 @@ export default function SermonSlidesSection() {
         )}
       </div>
 
-      {/* Share Options Modal */}
+      {/* Share Options Modal (Triggers on Desktop / Unsupported Browsers) */}
       {selectedSlideForShare && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4 backdrop-blur-sm">
           <div className="bg-white border border-gray-200 p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl">
@@ -283,7 +277,6 @@ export default function SermonSlidesSection() {
             </p>
 
             <div className="grid grid-cols-2 gap-3 pt-2">
-              {/* Facebook Share */}
               <a
                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(selectedSlideForShare.viewUrl)}`}
                 target="_blank"
@@ -293,17 +286,15 @@ export default function SermonSlidesSection() {
                 🌐 Facebook
               </a>
 
-              {/* Messenger Share */}
               <a
-                href={`https://www.facebook.com/dialog/send?link=${encodeURIComponent(selectedSlideForShare.viewUrl)}&app_id=123456789&redirect_uri=${encodeURIComponent(selectedSlideForShare.viewUrl)}`}
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.title} - ${selectedSlideForShare.viewUrl}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-xl text-xs font-semibold transition"
+                className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-xl text-xs font-semibold transition"
               >
-                💬 Messenger
+                💬 WhatsApp
               </a>
 
-              {/* Viber Share */}
               <a
                 href={`viber://forward?text=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.title} - ${selectedSlideForShare.viewUrl}`)}`}
                 className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-xl text-xs font-semibold transition"
@@ -311,7 +302,6 @@ export default function SermonSlidesSection() {
                 📱 Viber
               </a>
 
-              {/* Email Share */}
               <a
                 href={`mailto:?subject=${encodeURIComponent(`Sermon Slides: ${selectedSlideForShare.title}`)}&body=${encodeURIComponent(`Check out these sermon slides: ${selectedSlideForShare.viewUrl}`)}`}
                 className="flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-800 text-white p-3 rounded-xl text-xs font-semibold transition"
@@ -320,7 +310,6 @@ export default function SermonSlidesSection() {
               </a>
             </div>
 
-            {/* Copy Link Option */}
             <div className="pt-2">
               <button
                 onClick={() => copyToClipboard(selectedSlideForShare.viewUrl)}
