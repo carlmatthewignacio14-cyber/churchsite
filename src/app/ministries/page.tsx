@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import AppImage from '@/components/ui/AppImage';
-import Header from '@/components/Header'; // Adjust path if your Header component is located elsewhere
+import Header from '@/components/Header';
 
 const ministriesList = [
   {
@@ -46,10 +46,10 @@ const ministriesList = [
 export default function MinistriesPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Official Site Header */}
-      <Header />
+      {/* Header with light variant for white background pages */}
+      <Header variant="light" />
 
-      {/* Main Content with padding-top to prevent overlap with the fixed header */}
+      {/* Main Content */}
       <main className="pt-28 pb-24">
         <div className="container mx-auto px-4 max-w-6xl">
           {/* Section Header */}
