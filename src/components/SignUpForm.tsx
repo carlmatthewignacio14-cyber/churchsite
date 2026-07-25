@@ -14,7 +14,7 @@ export default function SignUpForm() {
   const [tierCode, setTierCode] = useState('');
   
   const [errorMsg, setErrorMsg] = useState('');
-  const [loading, setLoading] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
