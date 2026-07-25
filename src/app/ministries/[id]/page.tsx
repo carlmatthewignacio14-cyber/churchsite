@@ -41,8 +41,8 @@ const ministriesDetails: Record<string, {
       messenger: 'https://m.me/kianesses',
     },
     events: [
-      { id: '1', title: 'Friday Night Youth Ignite', date: 'Every Friday', time: '7:00 PM - 9:30 PM', location: 'Youth Center, Room 204', description: 'Worship, interactive message, games, and snack fellowship.' },
-      { id: '2', title: 'Youth Worship Jam Session', date: 'Last Saturday of the Month', time: '5:00 PM - 8:00 PM', location: 'Main Sanctuary', description: 'An acoustic night of extended worship and group prayer.' },
+      { id: '1', title: 'Yuth Retreat', date: 'August 01, 2026', time: '8:00AM - 5:00PM', location: 'To Be Announced', description: 'Worship, interactive message, games, and snack fellowship.' },
+      { id: '2', title: 'Joint Fellowship', date: 'August 02, 2026', time: '2:00PM', location: 'COGOP San Mateo', description: 'Join us for a simple Joint Youth Fellowship as two local youth ministries come together to connect, share a time of worship, and build encouraging friendships.' },
     ],
     testimonials: [
       { quote: 'Finding this youth community completely changed how I view my faith. I found true friends who hold me accountable.', author: 'Joshua M.', role: 'Youth Member (3 Years)' },
@@ -82,7 +82,7 @@ const ministriesDetails: Record<string, {
     leader: {
       name: 'Bro. Jeric Urbano',
       role: 'Men’s Fellowship Leader',
-      bio: 'David is dedicated to encouraging men to walk authentically with God, lead their families with love, and serve with integrity.',
+      bio: 'Bro. Jeric is dedicated to encouraging men to walk authentically with God, lead their families with love, and serve with integrity.',
       image: '/assets/images/mensleader.jpg',
       email: 'men.cogop@gmail.com',
       phone: '+63 919 345 6789',
@@ -106,7 +106,7 @@ const ministriesDetails: Record<string, {
     leader: {
       name: 'Bro. David Glenn Justiniano',
       role: 'Worship Director',
-      bio: 'Jonathan has spent over a decade leading congregations in dynamic worship and training musicians and tech crews to excel in technical arts.',
+      bio: 'Bro. Glenn has spent over a decade leading congregations in dynamic worship and training musicians and tech crews to excel in technical arts.',
       image: '/assets/images/musicleader.jpg',
       email: 'worship.cogop@gmail.com',
       phone: '+63 920 456 7890',
@@ -130,7 +130,7 @@ const ministriesDetails: Record<string, {
     leader: {
       name: 'Sis. Lia May Fernando',
       role: 'Children’s Ministry Coordinator',
-      bio: 'Teacher Anna is an early childhood educator with a deep calling to make learning about Jesus fun, engaging, and foundational for kids.',
+      bio: 'Teacher Lia is an early childhood educator with a deep calling to make learning about Jesus fun, engaging, and foundational for kids.',
       image: '/assets/images/kidsleader.jpg',
       email: 'kids.cogop@gmail.com',
       phone: '+63 921 567 8901',
