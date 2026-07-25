@@ -66,20 +66,21 @@ export default function Header() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 flex justify-center px-4 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 transition-all duration-500 ${
           scrolled ? 'top-3' : 'top-6'
         }`}
         aria-label="Main navigation"
       >
+        {/* Expanded width from max-w-4xl to max-w-7xl to give elements breathing room */}
         <div
-          className={`flex w-full max-w-4xl items-center justify-between border border-border p-2 pl-4 shadow-xl transition-all duration-500 ${
+          className={`flex w-full max-w-7xl items-center justify-between border border-border px-4 py-2.5 shadow-xl transition-all duration-500 rounded-2xl ${
             scrolled ? 'nav-glass' : 'bg-white/20 backdrop-blur-md'
           }`}
         >
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 min-w-0"
+            className="flex items-center gap-3 min-w-0"
             aria-label="Church of God of Prophecy Home"
           >
             <AppLogo size={32} />
@@ -87,17 +88,17 @@ export default function Header() {
               className={`font-display text-base sm:text-lg font-semibold tracking-tight transition-colors duration-500 ${scrolled ? 'text-gray-900' : 'text-white'}`}
             >
               Church of God of Prophecy
-              <span className="block text-sm font-medium tracking-widest">Marikina</span>
+              <span className="block text-xs font-medium tracking-widest uppercase opacity-80">Marikina</span>
             </span>
           </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Desktop Links (Added slightly more spacing gap-2 for cleanliness) */}
+          <div className="hidden md:flex items-center gap-2 lg:gap-4">
             {navLinks?.map((link) => (
               <Link
                 key={link?.href}
                 href={link?.href}
-                className={`px-4 py-2 text-xs font-semibold tracking-widest uppercase transition-colors duration-500 ${
+                className={`px-3 py-2 text-xs lg:text-sm font-semibold tracking-widest uppercase transition-colors duration-500 ${
                   scrolled ? 'text-gray-900 hover:text-gray-600' : 'text-white hover:text-white/70'
                 }`}
               >
@@ -153,15 +154,16 @@ export default function Header() {
               // ❌ SIGNED OUT ACTION GRID: Prompt login panel overlay modal trigger
               (<button
                 onClick={() => setIsAuthOpen(true)}
-                className="bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-all rounded shadow-md"
+                className="bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-all rounded-lg shadow-md"
                 suppressHydrationWarning
-              >LogIn
-                              </button>)
+              >
+                Log In
+              </button>)
             )}
 
             {/* Mobile Hamburger */}
             <button
-              className="md:hidden flex flex-col justify-center items-center w-11 h-11 gap-1.5 focus:outline-none"
+              className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5 focus:outline-none"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
@@ -186,9 +188,10 @@ export default function Header() {
           </div>
         </div>
       </nav>
+
       {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 z-40 bg-background/95 backdrop-blur-xl flex flex-col justify-center items-center gap-8 transition-all duration-500 md:hidden ${
+        className={`fixed inset-0 z-40 bg-background/95 backdrop-blur-xl flex flex-col justify-center items-center gap-6 transition-all duration-500 md:hidden ${
           menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         aria-hidden={!menuOpen}
@@ -198,7 +201,7 @@ export default function Header() {
             key={link?.href}
             href={link?.href}
             onClick={() => setMenuOpen(false)}
-            className="font-display text-4xl font-bold not-italic text-white hover:text-primary transition-colors"
+            className="font-display text-3xl font-bold not-italic text-white hover:text-primary transition-colors"
           >
             {link?.label}
           </Link>
@@ -208,13 +211,14 @@ export default function Header() {
         {!userSession && (
           <button
             onClick={() => { setMenuOpen(false); setIsAuthOpen(true); }}
-            className="mt-4 bg-primary text-primary-foreground px-8 py-4 text-sm font-semibold tracking-widest uppercase w-64 text-center"
+            className="mt-4 bg-primary text-primary-foreground px-8 py-4 text-sm font-semibold tracking-widest uppercase w-64 text-center rounded-lg shadow-lg"
             suppressHydrationWarning
           >
             Log In / Sign Up
           </button>
         )}
       </div>
+
       {/* Connect the underlying authorization popup view components */}
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </>
