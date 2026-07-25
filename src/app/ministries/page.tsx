@@ -45,32 +45,50 @@ const ministriesList = [
 export default function MinistriesPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Site Navigation Header */}
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-        <div className="container mx-auto px-4 max-w-6xl h-16 flex items-center justify-between">
-          <Link href="/" className="font-display font-bold text-lg tracking-wider text-foreground">
-            ChurchSite
+      {/* Actual Site Navigation Pill Header */}
+      <div className="sticky top-4 z-50 px-4 max-w-7xl mx-auto">
+        <header className="bg-[#2d241e]/90 backdrop-blur-md border border-white/10 rounded-full px-6 py-3 shadow-2xl flex items-center justify-between">
+          {/* Logo Brand */}
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-8 h-8 relative rounded-full overflow-hidden bg-primary/20 flex items-center justify-center">
+              <span className="text-xs font-bold text-white">COG</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs font-bold text-white tracking-wide leading-tight">
+                Church of God of Prophecy
+              </span>
+              <span className="text-[10px] text-accent font-semibold tracking-widest uppercase leading-none">
+                MARIKINA
+              </span>
+            </div>
           </Link>
-          <nav className="hidden md:flex items-center gap-6 text-xs font-semibold uppercase tracking-wider">
-            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-            <Link href="/ministries" className="text-primary transition-colors">Ministries</Link>
-            <Link href="/events" className="hover:text-primary transition-colors">Events</Link>
-            <Link href="/give" className="hover:text-primary transition-colors">Give</Link>
-          </nav>
-          <Link
-            href="/"
-            className="bg-primary text-primary-foreground px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-primary/90 transition-colors shadow-sm"
-          >
-            ← Back to Home
-          </Link>
-        </div>
-      </header>
 
-      {/* Main Content with reduced top spacing */}
-      <main className="pt-12 pb-24">
+          {/* Nav Links */}
+          <nav className="hidden lg:flex items-center gap-6 text-[11px] font-bold tracking-widest uppercase text-white/80">
+            <Link href="/" className="hover:text-white transition-colors">HOME</Link>
+            <Link href="/ministries" className="text-accent hover:text-white transition-colors">MINISTRIES</Link>
+            <Link href="/sermons" className="hover:text-white transition-colors">SERMONS</Link>
+            <Link href="/events" className="hover:text-white transition-colors">EVENTS</Link>
+            <Link href="/about" className="hover:text-white transition-colors">ABOUT US</Link>
+            <Link href="/contact" className="hover:text-white transition-colors">CONTACT US</Link>
+            <Link href="/give" className="hover:text-white transition-colors">GIVE</Link>
+          </nav>
+
+          {/* Action Button */}
+          <Link
+            href="/login"
+            className="bg-[#69482b] hover:bg-[#543922] text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
+          >
+            LOG IN
+          </Link>
+        </header>
+      </div>
+
+      {/* Main Content */}
+      <main className="pt-8 pb-24">
         <div className="container mx-auto px-4 max-w-6xl">
-          {/* Header */}
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          {/* Section Header */}
+          <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-semibold tracking-[0.3em] uppercase text-accent block mb-3">
               Get Connected
             </span>
@@ -110,7 +128,7 @@ export default function MinistriesPage() {
                 <div className="p-6 pt-0">
                   <Link
                     href={`/ministries/${ministry.id}`}
-                    className="w-full bg-secondary text-secondary-foreground py-3 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center gap-2 shadow-sm"
+                    className="w-full bg-[#f4ebe1] text-[#4a3525] py-3 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-[#69482b] hover:text-white transition-colors flex items-center justify-center gap-2 shadow-sm"
                   >
                     Explore Ministry &amp; Events →
                   </Link>
