@@ -127,91 +127,102 @@ const recentActivities = [
   },
 ];
 
-function ActivityImageSlider({ images, altText }: { images: string[]; altText: string }) {
+/* Desktop & Tablet Film Strip Setup */
+function DesktopFilmStrip({ images, altText }: { images: string[]; altText: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [dragStartX, setDragStartX] = useState<number | null>(null);
+
+  return (
+    <div className="w-full md:w-[460px] shrink-0 flex flex-col gap-3 select-none">
+      <div className="relative w-full overflow-hidden rounded-xl bg-stone-950/90 border border-stone-800/80 p-3 shadow-2xl">
+        {/* Side-by-side film strip track */}
+        <div 
+          className="flex transition-transform duration-500 ease-out gap-3"
+          style={{ transform: `translateX(-${currentIndex * 50}%)` }}
+        >
+          {images.map((src, i) => (
+            <div 
+              key={i} 
+              className="relative shrink-0 w-[calc(50%-6px)] h-56 rounded-lg overflow-hidden bg-stone-900 border border-stone-800/50 shadow-md group cursor-pointer"
+              onClick={() => setCurrentIndex(i)}
+            >
+              <AppImage
+                src={src}
+                alt={`${altText} - Photo ${i + 1}`}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
+                sizes="230px"
+              />
+              <div className="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] font-medium text-stone-300">
+                {i + 1} / {images.length}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Navigation Controls */}
+        <div className="flex justify-between items-center mt-3 pt-2 border-t border-stone-800/60">
+          <button
+            onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
+            disabled={currentIndex === 0}
+            className="px-3 py-1 bg-stone-800 hover:bg-stone-700 disabled:opacity-30 text-stone-200 text-xs rounded transition-all cursor-pointer"
+          >
+            Previous
+          </button>
+          <div className="text-xs text-stone-400 font-medium">
+            Photo {currentIndex + 1} of {images.length}
+          </div>
+          <button
+            onClick={() => setCurrentIndex((prev) => Math.min(images.length - 2, prev + 1))}
+            disabled={currentIndex >= images.length - 2}
+            className="px-3 py-1 bg-stone-800 hover:bg-stone-700 disabled:opacity-30 text-stone-200 text-xs rounded transition-all cursor-pointer"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Original Mobile View Setup */
+function MobileSlider({ images, altText }: { images: string[]; altText: string }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    setDragStartX(e.clientX);
+    (e.currentTarget as HTMLElement).dataset.startX = String(e.clientX);
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
-    if (dragStartX === null) return;
-    const distance = dragStartX - e.clientX;
-    const minSwipeDistance = 40;
-
-    if (distance > minSwipeDistance) {
-      // Swiped left -> Next image
+    const startX = Number((e.currentTarget as HTMLElement).dataset.startX);
+    if (isNaN(startX)) return;
+    const distance = startX - e.clientX;
+    if (distance > 40) {
       setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    } else if (distance < -minSwipeDistance) {
-      // Swiped right -> Previous image
+    } else if (distance < -40) {
       setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     }
-    setDragStartX(null);
   };
 
   return (
-    <div
+    <div 
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      className="relative w-full md:w-80 h-72 flex items-center justify-center overflow-hidden group select-none py-2 cursor-grab active:cursor-grabbing touch-pan-y"
+      className="w-full flex flex-col items-center select-none mt-4 block md:hidden"
     >
-      {/* Polaroid Deck Container */}
-      <div className="relative w-full h-full flex items-center justify-center">
-        {images.map((src, i) => {
-          const offset = i - currentIndex;
-          
-          const isCenter = offset === 0;
-          const isLeft = offset === -1 || (currentIndex === 0 && i === images.length - 1);
-          const isRight = offset === 1 || (currentIndex === images.length - 1 && i === 0);
-
-          let positionClass = 'opacity-0 pointer-events-none scale-50 translate-x-0 z-0';
-
-          if (isCenter) {
-            positionClass = 'opacity-100 scale-100 translate-x-0 z-20 rotate-0';
-          } else if (isLeft) {
-            positionClass = 'opacity-40 scale-75 -translate-x-16 sm:-translate-x-20 z-10 -rotate-6 hover:opacity-60 cursor-pointer';
-          } else if (isRight) {
-            positionClass = 'opacity-40 scale-75 translate-x-16 sm:translate-x-20 z-10 rotate-6 hover:opacity-60 cursor-pointer';
-          }
-
-          return (
-            <div
-              key={i}
-              onClick={() => {
-                if (isLeft || isRight) setCurrentIndex(i);
-              }}
-              className={`absolute transition-all duration-500 ease-out transform ${positionClass}`}
-            >
-              {/* Polaroid Frame */}
-              <div className="bg-white p-2.5 pb-7 rounded-sm shadow-2xl w-48 sm:w-52 border border-stone-200">
-                <div className="relative w-full h-40 sm:h-44 bg-neutral-100 overflow-hidden rounded-xs">
-                  <AppImage
-                    src={src}
-                    alt={`${altText} - Photo ${i + 1}`}
-                    fill
-                    className="object-cover pointer-events-none"
-                    sizes="200px"
-                  />
-                </div>
-                <div className="text-center mt-2 text-neutral-600 font-sans text-[11px] tracking-wider font-medium">
-                  {i + 1} / {images.length}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+      <div className="relative w-full h-72 rounded-xl overflow-hidden bg-stone-900 border border-stone-800 shadow-md">
+        <AppImage
+          src={images[currentIndex]}
+          alt={`${altText} - Photo ${currentIndex + 1}`}
+          fill
+          className="object-cover pointer-events-none"
+          sizes="100vw"
+        />
       </div>
-
-      {/* Pagination Active Sync Indicator Dots */}
-      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex space-x-1.5 z-30">
+      <div className="flex space-x-1.5 mt-3">
         {images.map((_, i) => (
           <button
             key={i}
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentIndex(i);
-            }}
+            onClick={() => setCurrentIndex(i)}
             className={`w-2 h-2 rounded-full transition-all ${currentIndex === i ? 'bg-amber-400 w-4' : 'bg-white/50'}`}
             aria-label={`Go to slide ${i + 1}`}
           />
@@ -274,11 +285,21 @@ function EventsContent() {
                   </div>
 
                   {activity.images && activity.images.length > 0 && (
-                    <div className="w-full md:w-80 shrink-0 flex justify-center">
-                      <ActivityImageSlider
-                        images={activity.images}
-                        altText={activity.imageAlt || activity.title}
-                      />
+                    <div className="w-full md:w-auto shrink-0 flex justify-center">
+                      {/* Desktop & Tablet Film Strip View */}
+                      <div className="hidden md:block">
+                        <DesktopFilmStrip
+                          images={activity.images}
+                          altText={activity.imageAlt || activity.title}
+                        />
+                      </div>
+                      {/* Mobile Phone View (Original Third Photo Setup) */}
+                      <div className="block md:hidden w-full">
+                        <MobileSlider
+                          images={activity.images}
+                          altText={activity.imageAlt || activity.title}
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
