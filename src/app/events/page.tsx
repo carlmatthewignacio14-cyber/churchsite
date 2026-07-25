@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useRef, Suspense, useEffect } from 'react';
-import Link from 'next/link';
+import React, { useState, Suspense } from 'react';
 import AppImage from '@/components/ui/AppImage';
 import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
@@ -130,90 +129,90 @@ const recentActivities = [
 
 function ActivityImageSlider({ images, altText }: { images: string[]; altText: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [dragStartX, setDragStartX] = useState<number | null>(null);
 
-  const handleScroll = () => {
-    if (!scrollContainerRef.current) return;
-    const container = scrollContainerRef.current;
-    const index = Math.round(container.scrollLeft / container.clientWidth);
-    if (index !== currentIndex && index >= 0 && index < images.length) {
-      setCurrentIndex(index);
+  const handlePointerDown = (e: React.PointerEvent) => {
+    setDragStartX(e.clientX);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (dragStartX === null) return;
+    const distance = dragStartX - e.clientX;
+    const minSwipeDistance = 40;
+
+    if (distance > minSwipeDistance) {
+      // Swiped left -> Next image
+      setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    } else if (distance < -minSwipeDistance) {
+      // Swiped right -> Previous image
+      setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     }
-  };
-
-  const scrollToImage = (index: number) => {
-    if (!scrollContainerRef.current) return;
-    const container = scrollContainerRef.current;
-    container.scrollTo({
-      left: index * container.clientWidth,
-      behavior: 'smooth',
-    });
-    setCurrentIndex(index);
-  };
-
-  const handlePrev = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const targetIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
-    scrollToImage(targetIndex);
-  };
-
-  const handleNext = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const targetIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
-    scrollToImage(targetIndex);
+    setDragStartX(null);
   };
 
   return (
-    <div className="relative w-full md:w-80 h-64 md:h-64 shrink-0 bg-neutral-900 group select-none">
-      <div
-        ref={scrollContainerRef}
-        onScroll={handleScroll}
-        className="w-full h-full flex overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {images.map((src, i) => (
-          <div key={i} className="w-full h-full flex-shrink-0 relative snap-start snap-always">
-            <AppImage
-              src={src}
-              alt={`${altText} - Photo ${i + 1}`}
-              fill
-              className="object-cover pointer-events-none"
-              sizes="(max-width: 768px) 100vw, 320px"
-              priority={i === 0}
-            />
-          </div>
-        ))}
+    <div
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      className="relative w-full md:w-80 h-72 flex items-center justify-center overflow-hidden group select-none py-2 cursor-grab active:cursor-grabbing touch-pan-y"
+    >
+      {/* Polaroid Deck Container */}
+      <div className="relative w-full h-full flex items-center justify-center">
+        {images.map((src, i) => {
+          const offset = i - currentIndex;
+          
+          const isCenter = offset === 0;
+          const isLeft = offset === -1 || (currentIndex === 0 && i === images.length - 1);
+          const isRight = offset === 1 || (currentIndex === images.length - 1 && i === 0);
+
+          let positionClass = 'opacity-0 pointer-events-none scale-50 translate-x-0 z-0';
+
+          if (isCenter) {
+            positionClass = 'opacity-100 scale-100 translate-x-0 z-20 rotate-0';
+          } else if (isLeft) {
+            positionClass = 'opacity-40 scale-75 -translate-x-16 sm:-translate-x-20 z-10 -rotate-6 hover:opacity-60 cursor-pointer';
+          } else if (isRight) {
+            positionClass = 'opacity-40 scale-75 translate-x-16 sm:translate-x-20 z-10 rotate-6 hover:opacity-60 cursor-pointer';
+          }
+
+          return (
+            <div
+              key={i}
+              onClick={() => {
+                if (isLeft || isRight) setCurrentIndex(i);
+              }}
+              className={`absolute transition-all duration-500 ease-out transform ${positionClass}`}
+            >
+              {/* Polaroid Frame */}
+              <div className="bg-white p-2.5 pb-7 rounded-sm shadow-2xl w-48 sm:w-52 border border-stone-200">
+                <div className="relative w-full h-40 sm:h-44 bg-neutral-100 overflow-hidden rounded-xs">
+                  <AppImage
+                    src={src}
+                    alt={`${altText} - Photo ${i + 1}`}
+                    fill
+                    className="object-cover pointer-events-none"
+                    sizes="200px"
+                  />
+                </div>
+                <div className="text-center mt-2 text-neutral-600 font-sans text-[11px] tracking-wider font-medium">
+                  {i + 1} / {images.length}
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      <button
-        onClick={handlePrev}
-        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10 hidden sm:block"
-        aria-label="Previous image"
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-        </svg>
-      </button>
-
-      <button
-        onClick={handleNext}
-        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10 hidden sm:block"
-        aria-label="Next image"
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-        </svg>
-      </button>
-
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1.5 z-10">
+      {/* Pagination Active Sync Indicator Dots */}
+      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex space-x-1.5 z-30">
         {images.map((_, i) => (
           <button
             key={i}
             onClick={(e) => {
               e.preventDefault();
-              scrollToImage(i);
+              setCurrentIndex(i);
             }}
-            className={`w-2 h-2 rounded-full transition-all ${currentIndex === i ? 'bg-white w-4' : 'bg-white/50'}`}
+            className={`w-2 h-2 rounded-full transition-all ${currentIndex === i ? 'bg-amber-400 w-4' : 'bg-white/50'}`}
             aria-label={`Go to slide ${i + 1}`}
           />
         ))}
@@ -239,12 +238,9 @@ function EventsContent() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Official Site Header with light variant */}
       <Header variant="light" />
 
-      {/* Main Content with padding-top to prevent overlap with the fixed header */}
       <main className="pt-28 pb-24">
-        {/* Recent Activities Section */}
         <section className="section-pad mb-16">
           <div className="container mx-auto px-4 max-w-4xl">
             <div className="mb-12 text-center md:text-left">
@@ -261,7 +257,7 @@ function EventsContent() {
                 <div
                   key={activity.id}
                   id={activity.id}
-                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl flex flex-col md:flex-row gap-6 text-stone-100"
+                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl flex flex-col md:flex-row gap-6 text-stone-100 items-center"
                 >
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
@@ -278,7 +274,7 @@ function EventsContent() {
                   </div>
 
                   {activity.images && activity.images.length > 0 && (
-                    <div className="w-full md:w-80 shrink-0 overflow-hidden rounded-xl">
+                    <div className="w-full md:w-80 shrink-0 flex justify-center">
                       <ActivityImageSlider
                         images={activity.images}
                         altText={activity.imageAlt || activity.title}
@@ -291,7 +287,6 @@ function EventsContent() {
           </div>
         </section>
 
-        {/* Upcoming Events Section */}
         <section className="section-pad">
           <div className="container mx-auto px-4 max-w-4xl">
             <div className="mb-12 text-center md:text-left">
