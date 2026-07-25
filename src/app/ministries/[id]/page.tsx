@@ -41,7 +41,7 @@ const ministriesDetails: Record<string, {
       messenger: 'https://m.me/kianesses',
     },
     events: [
-      { id: '1', title: 'Yuth Retreat', date: 'August 01, 2026', time: '8:00AM - 5:00PM', location: 'To Be Announced', description: 'Worship, interactive message, games, and snack fellowship.' },
+      { id: '1', title: 'Youth Retreat', date: 'August 01, 2026', time: '8:00AM - 5:00PM', location: 'To Be Announced', description: 'Worship, interactive message, games, and snack fellowship.' },
       { id: '2', title: 'Joint Fellowship', date: 'August 02, 2026', time: '2:00PM', location: 'COGOP San Mateo', description: 'Join us for a simple Joint Youth Fellowship as two local youth ministries come together to connect, share a time of worship, and build encouraging friendships.' },
     ],
     testimonials: [
