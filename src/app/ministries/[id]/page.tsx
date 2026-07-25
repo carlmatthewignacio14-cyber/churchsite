@@ -11,7 +11,6 @@ const ministriesDetails: Record<string, {
   description: string;
   fullDescription: string;
   image: string;
-  buildingLocation: string;
   schedule: string;
   leader: {
     name: string;
@@ -22,7 +21,7 @@ const ministriesDetails: Record<string, {
     phone: string;
     messenger: string;
   };
-  events: { id: string; title: string; date: string; time: string; location: string; description: string }[];
+  events: { id: string; title: string; date: string; time: string; description: string }[];
   testimonials: { quote: string; author: string; role: string }[];
 }> = {
   youth: {
@@ -30,7 +29,7 @@ const ministriesDetails: Record<string, {
     tagline: 'Ages 13–35',
     description: 'A vibrant space where teenagers and young adults discover identity, purpose, and community.',
     fullDescription: 'Our Youth Ministry is designed to empower the next generation with biblical truth, authentic fellowship, and leadership opportunities. Through weekly gatherings, annual youth camps, and outreach programs, young people find a safe environment to grow in Christ.',
-    image: '/assets/images/710299155_970621969219794_887923649744832117_n-1783629134755.jpg',
+    image: '/assets/images/frontage_youth.jpg',
     buildingLocation: 'Youth Center, Room 204 (Second Floor)',
     schedule: 'Every Sunday at 3:00 PM',
     leader: {
