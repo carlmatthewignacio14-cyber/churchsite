@@ -167,7 +167,7 @@ export default function MinistryDetailPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground pt-24 pb-24">
+    <main className="min-h-screen bg-background text-foreground pt-12 pb-24">
       <div className="container mx-auto px-4 max-w-5xl">
         {/* Back Link */}
         <div className="mb-6">
