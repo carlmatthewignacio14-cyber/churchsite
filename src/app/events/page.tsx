@@ -4,6 +4,7 @@ import React, { useState, useRef, Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import AppImage from '@/components/ui/AppImage';
 import { useSearchParams } from 'next/navigation';
+import Header from '@/components/Header';
 
 const upcomingEvents = [
   {
@@ -164,7 +165,6 @@ function ActivityImageSlider({ images, altText }: { images: string[]; altText: s
 
   return (
     <div className="relative w-full md:w-80 h-64 md:h-64 shrink-0 bg-neutral-900 group select-none">
-      {/* Horizontally scrollable container with snap zones */}
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
@@ -185,19 +185,12 @@ function ActivityImageSlider({ images, altText }: { images: string[]; altText: s
         ))}
       </div>
 
-      {/* Manual Desktop Click Navigation Arrows */}
       <button
         onClick={handlePrev}
         className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10 hidden sm:block"
         aria-label="Previous image"
       >
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
       </button>
@@ -207,18 +200,11 @@ function ActivityImageSlider({ images, altText }: { images: string[]; altText: s
         className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10 hidden sm:block"
         aria-label="Next image"
       >
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
         </svg>
       </button>
 
-      {/* Pagination Active Sync Indicator Dots */}
       <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1.5 z-10">
         {images.map((_, i) => (
           <button
@@ -240,140 +226,116 @@ function EventsContent() {
   const searchParams = useSearchParams();
   const ministryFilter = searchParams ? searchParams.get('ministry') : null;
 
-  // Automatically scroll directly to the matching element when the page loads
   React.useEffect(() => {
     if (ministryFilter) {
-      // Looks for a card container holding id="youth" or id="kids"
       const element = document.getElementById(ministryFilter.toLowerCase());
       if (element) {
         setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 300); // Small delay allows the browser structure to render completely first
+        }, 300);
       }
     }
   }, [ministryFilter]);
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      {/* Navigation Header Link */}
-      <div className="border-b border-border bg-card/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="container mx-auto px-4 max-w-6xl h-16 flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-sm font-semibold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-            >
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            Back to Home
-          </Link>
-          <span className="text-xs font-bold uppercase tracking-[0.3em] text-accent">
-            Church Events
-          </span>
-        </div>
-      </div>
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Official Site Header with light variant */}
+      <Header variant="light" />
 
-      {/* Recent Activities Section */}
-      <section className="section-pad mt-16">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="mb-12 text-center md:text-left">
-            <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-2">
-              Highlights
-            </span>
-            <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
-              Recent Events
-            </h1>
-          </div>
+      {/* Main Content with padding-top to prevent overlap with the fixed header */}
+      <main className="pt-28 pb-24">
+        {/* Recent Activities Section */}
+        <section className="section-pad mb-16">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="mb-12 text-center md:text-left">
+              <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-2">
+                Highlights
+              </span>
+              <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
+                Recent Events
+              </h1>
+            </div>
 
-          {/* Activities Stack */}
-          <div className="space-y-8">
-            {recentActivities?.map((activity) => (
-              <div
-                key={activity.id}
-                id={activity.id}
-                className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl flex flex-col md:flex-row gap-6 text-stone-100"
-              >
-                {/* Text Content */}
-                <div className="flex-1 flex flex-col justify-between">
-                  <div>
-                    <h2 className="font-display text-2xl font-bold text-amber-100 mb-1">
-                      {activity.title}
-                    </h2>
-                    <p className="text-xs text-amber-400 font-semibold tracking-wider uppercase mb-3">
-                      {activity.date} {activity.location ? `| ${activity.location}` : ''}
-                    </p>
-                    <p className="text-sm text-stone-300 leading-relaxed font-light">
-                      {activity.description}
-                    </p>
+            <div className="space-y-8">
+              {recentActivities?.map((activity) => (
+                <div
+                  key={activity.id}
+                  id={activity.id}
+                  className="group relative overflow-hidden rounded-2xl border border-stone-700/30 bg-gradient-to-br from-stone-900/90 via-amber-950/85 to-stone-900/95 backdrop-blur-xl p-6 transition-all duration-300 hover:border-amber-600/40 shadow-xl flex flex-col md:flex-row gap-6 text-stone-100"
+                >
+                  <div className="flex-1 flex flex-col justify-between">
+                    <div>
+                      <h2 className="font-display text-2xl font-bold text-amber-100 mb-1">
+                        {activity.title}
+                      </h2>
+                      <p className="text-xs text-amber-400 font-semibold tracking-wider uppercase mb-3">
+                        {activity.date} {activity.location ? `| ${activity.location}` : ''}
+                      </p>
+                      <p className="text-sm text-stone-300 leading-relaxed font-light">
+                        {activity.description}
+                      </p>
+                    </div>
                   </div>
+
+                  {activity.images && activity.images.length > 0 && (
+                    <div className="w-full md:w-80 shrink-0 overflow-hidden rounded-xl">
+                      <ActivityImageSlider
+                        images={activity.images}
+                        altText={activity.imageAlt || activity.title}
+                      />
+                    </div>
+                  )}
                 </div>
-
-                {/* Slider */}
-                {activity.images && activity.images.length > 0 && (
-                  <div className="w-full md:w-80 shrink-0 overflow-hidden rounded-xl">
-                    <ActivityImageSlider
-                      images={activity.images}
-                      altText={activity.imageAlt || activity.title}
-                    />
-                  </div>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Main Body */}
-      <section className="section-pad">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="mb-12 text-center md:text-left">
-            <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">
-              Calendar
-            </span>
-            <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
-              Upcoming Events
-            </h1>
-          </div>
-          {/* Events List Stack */}
-          <div className="space-y-6">
-            {upcomingEvents?.map((event) => (
-              <div
-                key={event?.id}
-                id={event.id}
-                className="bg-card border border-border p-6 md:p-8 hover:border-primary/40 transition-all rounded shadow-sm"
-              >
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
-                  <div>
-                    <h2 className="font-display text-2xl font-bold text-foreground mb-1">
-                      {event?.title}
-                    </h2>
-                    <p className="text-sm font-semibold uppercase tracking-wider text-accent">
-                      {event?.date}
-                      {(event as { time?: string })?.time
-                        ? ` \u2022 ${(event as { time?: string }).time}`
-                        : ''}
-                    </p>
+        {/* Upcoming Events Section */}
+        <section className="section-pad">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="mb-12 text-center md:text-left">
+              <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">
+                Calendar
+              </span>
+              <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
+                Upcoming Events
+              </h1>
+            </div>
+            
+            <div className="space-y-6">
+              {upcomingEvents?.map((event) => (
+                <div
+                  key={event?.id}
+                  id={event.id}
+                  className="bg-card border border-border p-6 md:p-8 hover:border-primary/40 transition-all rounded shadow-sm"
+                >
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
+                    <div>
+                      <h2 className="font-display text-2xl font-bold text-foreground mb-1">
+                        {event?.title}
+                      </h2>
+                      <p className="text-sm font-semibold uppercase tracking-wider text-accent">
+                        {event?.date}
+                        {(event as { time?: string })?.time
+                          ? ` \u2022 ${(event as { time?: string }).time}`
+                          : ''}
+                      </p>
+                    </div>
+                    <span className="inline-block bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto">
+                      {event?.location}
+                    </span>
                   </div>
-                  <span className="inline-block bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded self-start md:self-auto">
-                    {event?.location}
-                  </span>
+                  <p className="text-sm text-muted-foreground leading-relaxed font-light">
+                    {event?.description}
+                  </p>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed font-light">
-                  {event?.description}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </div>
   );
 }
 
