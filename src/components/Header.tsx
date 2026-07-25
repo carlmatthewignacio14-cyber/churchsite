@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AppLogo from '@/components/ui/AppLogo';
-import { supabase }  from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import AuthModal from './AuthModal';    
 
 const navLinks = [
   { label: 'Home', href: '/' },
+  { label: 'Ministries', href: '/ministries' },
   { label: 'Sermons', href: '/sermons' },
   { label: 'Events', href: '/events' },
   { label: 'About Us', href: '/aboutus' },
@@ -71,7 +72,6 @@ export default function Header() {
         }`}
         aria-label="Main navigation"
       >
-        {/* Expanded width from max-w-4xl to max-w-7xl to give elements breathing room */}
         <div
           className={`flex w-full max-w-7xl items-center justify-between border border-border px-4 py-2.5 shadow-xl transition-all duration-500 rounded-2xl ${
             scrolled ? 'nav-glass' : 'bg-white/20 backdrop-blur-md'
@@ -92,7 +92,7 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Desktop Links (Added slightly more spacing gap-2 for cleanliness) */}
+          {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-2 lg:gap-4">
             {navLinks?.map((link) => (
               <Link
@@ -107,11 +107,10 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Right Interface Controls (Authentication / Profile Section) */}
+          {/* Right Controls */}
           <div className="flex items-center gap-3 relative">
             {userSession ? (
-              // ✅ SIGNED IN ACTION GRID: Interactive Profile Menu
-              (<div className="relative">
+              <div className="relative">
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   className="w-9 h-9 bg-primary text-primary-foreground font-bold rounded-full flex items-center justify-center text-sm border-2 border-primary/20 hover:scale-105 transition-transform shadow-md focus:outline-none"
@@ -119,7 +118,6 @@ export default function Header() {
                 >
                   {getAvatarInitial()}
                 </button>
-                {/* Interactive Profile Dropdown Card Layer */}
                 {profileDropdownOpen && (
                   <div className="absolute right-0 mt-3 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-4 text-white z-50 animate-fadeIn space-y-3">
                     <div className="border-b border-slate-800 pb-2">
@@ -127,11 +125,7 @@ export default function Header() {
                       <p className="text-sm font-bold truncate text-slate-100">
                         {userSession?.user?.user_metadata?.username || userSession?.user?.user_metadata?.name || 'Church Member'}
                       </p>
-                      <p className="text-[10px] bg-blue-600/20 text-blue-400 border border-blue-500/20 w-fit px-1.5 py-0.5 rounded font-bold uppercase tracking-wider mt-1">
-                        {userSession?.user?.user_metadata?.role || 'New'}
-                      </p>
                     </div>
-
                     <div className="flex flex-col gap-1 text-xs">
                       <Link 
                         href="/dashboard" 
@@ -149,16 +143,15 @@ export default function Header() {
                     </div>
                   </div>
                 )}
-              </div>)
+              </div>
             ) : (
-              // ❌ SIGNED OUT ACTION GRID: Prompt login panel overlay modal trigger
-              (<button
+              <button
                 onClick={() => setIsAuthOpen(true)}
                 className="bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-all rounded-lg shadow-md"
                 suppressHydrationWarning
               >
                 Log In
-              </button>)
+              </button>
             )}
 
             {/* Mobile Hamburger */}
@@ -169,21 +162,9 @@ export default function Header() {
               aria-expanded={menuOpen}
               suppressHydrationWarning
             >
-              <span
-                className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
-                  menuOpen ? 'rotate-45 translate-y-2' : ''
-                }`}
-              />
-              <span
-                className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
-                  menuOpen ? 'opacity-0' : ''
-                }`}
-              />
-              <span
-                className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${
-                  menuOpen ? '-rotate-45 -translate-y-2' : ''
-                }`}
-              />
+              <span className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+              <span className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
             </button>
           </div>
         </div>
@@ -207,7 +188,6 @@ export default function Header() {
           </Link>
         ))}
 
-        {/* Mobile Authentication buttons */}
         {!userSession && (
           <button
             onClick={() => { setMenuOpen(false); setIsAuthOpen(true); }}
@@ -219,7 +199,6 @@ export default function Header() {
         )}
       </div>
 
-      {/* Connect the underlying authorization popup view components */}
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </>
   );
