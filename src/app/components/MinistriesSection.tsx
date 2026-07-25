@@ -235,14 +235,14 @@ export default function MinistriesSection() {
                     </span>
                   </p>
 
-                  {/* Learn More Action Button */}
+                  {/* Updated Action Link pointing to the upcoming ministry page & anchor */}
                   <Link
-                    href={`/events?ministry=${m.id.toLowerCase()}#${m.id.toLowerCase()}`}
+                    href={`/ministries/${m.id}#events`}
                     className="inline-block mt-1"
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-[11px] font-bold text-white uppercase tracking-wider">
-                        Learn More &amp; Events
+                        Explore Ministry &amp; Events
                       </span>
                       <svg
                         className="w-3 h-3 text-white fill-none stroke-current stroke-[2.5]"
