@@ -127,100 +127,81 @@ const recentActivities = [
   },
 ];
 
-/* Desktop & Tablet Buttonless Swipe Film Strip */
+/* Desktop & Tablet Buttonless Scroll-Snap Film Strip */
 function DesktopFilmStrip({ images, altText }: { images: string[]; altText: string }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const startXRef = React.useRef<number | null>(null);
+  return (
+    <div 
+      className="w-full md:w-[460px] shrink-0 overflow-x-auto flex snap-x snap-mandatory scroll-smooth gap-3 py-2"
+      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+    >
+      {images.map((src, i) => (
+        <div 
+          key={i} 
+          className="relative shrink-0 w-[calc(50%-6px)] h-56 rounded-xl overflow-hidden shadow-lg bg-stone-900 snap-start snap-always"
+        >
+          <AppImage
+            src={src}
+            alt={`${altText} - Photo ${i + 1}`}
+            fill
+            className="object-cover pointer-events-none"
+            sizes="220px"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
 
-  const handlePointerDown = (e: React.PointerEvent) => {
-    startXRef.current = e.clientX;
+/* Mobile Phone Native Scroll-Snap Swipe Slider */
+function MobileSlider({ images, altText }: { images: string[]; altText: string }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const scrollLeft = scrollRef.current.scrollLeft;
+      const width = scrollRef.current.clientWidth;
+      const index = Math.round(scrollLeft / width);
+      setCurrentIndex(index);
+    }
   };
 
-  const handlePointerUp = (e: React.PointerEvent) => {
-    if (startXRef.current === null) return;
-    const distance = startXRef.current - e.clientX;
-    const minSwipeDistance = 40;
-
-    if (distance > minSwipeDistance) {
-      setCurrentIndex((prev) => Math.min(images.length - 2, prev + 1));
-    } else if (distance < -minSwipeDistance) {
-      setCurrentIndex((prev) => Math.max(0, prev - 1));
+  const scrollToImage = (index: number) => {
+    if (scrollRef.current) {
+      const width = scrollRef.current.clientWidth;
+      scrollRef.current.scrollTo({ left: width * index, behavior: 'smooth' });
+      setCurrentIndex(index);
     }
-    startXRef.current = null;
   };
 
   return (
-    <div 
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-      className="w-full md:w-[460px] shrink-0 overflow-hidden select-none cursor-grab active:cursor-grabbing touch-pan-y py-2"
-    >
+    <div className="w-full flex flex-col items-center select-none mt-4 block md:hidden">
       <div 
-        className="flex transition-transform duration-500 ease-out gap-3"
-        style={{ transform: `translateX(-${currentIndex * 50}%)` }}
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="relative w-full h-72 rounded-xl overflow-x-auto flex snap-x snap-mandatory scroll-smooth"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {images.map((src, i) => (
           <div 
             key={i} 
-            className="relative shrink-0 w-[calc(50%-6px)] h-56 rounded-xl overflow-hidden shadow-lg bg-stone-900 pointer-events-none"
+            className="relative shrink-0 w-full h-full snap-center snap-always rounded-xl overflow-hidden bg-stone-900 border border-stone-800 shadow-md"
           >
             <AppImage
               src={src}
               alt={`${altText} - Photo ${i + 1}`}
               fill
-              className="object-cover"
-              sizes="220px"
+              className="object-cover pointer-events-none"
+              sizes="100vw"
             />
           </div>
         ))}
-      </div>
-    </div>
-  );
-}
-
-/* Mobile Phone Swipe Slider View */
-function MobileSlider({ images, altText }: { images: string[]; altText: string }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const startXRef = React.useRef<number | null>(null);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    startXRef.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (startXRef.current === null) return;
-    const endX = e.changedTouches[0].clientX;
-    const distance = startXRef.current - endX;
-    const minSwipeDistance = 40;
-
-    if (distance > minSwipeDistance) {
-      setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    } else if (distance < -minSwipeDistance) {
-      setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-    }
-    startXRef.current = null;
-  };
-
-  return (
-    <div 
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      className="w-full flex flex-col items-center select-none mt-4 block md:hidden touch-pan-y"
-    >
-      <div className="relative w-full h-72 rounded-xl overflow-hidden bg-stone-900 border border-stone-800 shadow-md">
-        <AppImage
-          src={images[currentIndex]}
-          alt={`${altText} - Photo ${currentIndex + 1}`}
-          fill
-          className="object-cover pointer-events-none"
-          sizes="100vw"
-        />
       </div>
       <div className="flex space-x-1.5 mt-3">
         {images.map((_, i) => (
           <button
             key={i}
-            onClick={() => setCurrentIndex(i)}
+            onClick={() => scrollToImage(i)}
             className={`w-2 h-2 rounded-full transition-all ${currentIndex === i ? 'bg-amber-400 w-4' : 'bg-white/50'}`}
             aria-label={`Go to slide ${i + 1}`}
           />
@@ -284,7 +265,7 @@ function EventsContent() {
 
                   {activity.images && activity.images.length > 0 && (
                     <div className="w-full md:w-auto shrink-0 flex justify-center">
-                      {/* Desktop & Tablet Buttonless Film Strip View */}
+                      {/* Desktop & Tablet Buttonless Scroll-Snap Film Strip View */}
                       <div className="hidden md:block">
                         <DesktopFilmStrip
                           images={activity.images}
