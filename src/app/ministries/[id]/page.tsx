@@ -191,10 +191,6 @@ export default function MinistryDetailPage() {
             {/* Clear Meeting Times & Locations Block */}
             <div className="bg-card border border-border p-4 rounded-xl mt-2 grid grid-cols-1 gap-2 text-xs">
               <div className="flex items-center gap-2">
-                <span className="font-bold uppercase tracking-wider text-accent">📍 Location:</span>
-                <span className="font-semibold text-foreground">{ministry.buildingLocation}</span>
-              </div>
-              <div className="flex items-center gap-2">
                 <span className="font-bold uppercase tracking-wider text-accent">🕒 Schedule:</span>
                 <span className="font-semibold text-foreground">{ministry.schedule}</span>
               </div>
