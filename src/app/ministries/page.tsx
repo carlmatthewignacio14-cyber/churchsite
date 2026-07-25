@@ -11,7 +11,7 @@ const ministriesList = [
     name: 'Youth Ministry',
     tagline: 'Ages 13–35',
     description: 'A vibrant space where teenagers and young adults discover identity, purpose, and community.',
-    image: '/assets/images/710299155_970621969219794_887923649744832117_n-1783629134755.jpg',
+    image: '/assets/images/frontage_youth.jpg',
   },
   {
     id: 'women',
