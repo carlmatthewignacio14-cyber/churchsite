@@ -51,8 +51,7 @@ export default function HeroSection() {
           className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-2xl mx-auto mb-12 animate-fade-in-up"
           style={{ animationDelay: '700ms', animationFillMode: 'both' }}
         >
-          The Church of God of Prophecy is a vibrant, worldwide body of believers, united in
-          worship.
+          Reconciling the world to Christ through the power of the Holy Spirit.
         </p>
 
         <div
