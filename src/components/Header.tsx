@@ -16,7 +16,11 @@ const navLinks = [
   { label: 'Give', href: '/give' },
 ];
 
-export default function Header() {
+interface HeaderProps {
+  variant?: 'default' | 'light';
+}
+
+export default function Header({ variant = 'default' }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -64,6 +68,8 @@ export default function Header() {
     return name?.charAt(0)?.toUpperCase();
   };
 
+  const isDarkText = scrolled || variant === 'light';
+
   return (
     <>
       <nav
@@ -74,7 +80,7 @@ export default function Header() {
       >
         <div
           className={`flex w-full max-w-7xl items-center justify-between border border-border px-4 py-2.5 shadow-xl transition-all duration-500 rounded-2xl ${
-            scrolled ? 'nav-glass' : 'bg-white/20 backdrop-blur-md'
+            scrolled ? 'nav-glass bg-background/80 backdrop-blur-md' : variant === 'light' ? 'bg-white/80 backdrop-blur-md border-gray-200' : 'bg-white/20 backdrop-blur-md'
           }`}
         >
           {/* Logo */}
@@ -85,10 +91,10 @@ export default function Header() {
           >
             <AppLogo size={32} />
             <span
-              className={`font-display text-base sm:text-lg font-semibold tracking-tight transition-colors duration-500 ${scrolled ? 'text-gray-900' : 'text-white'}`}
+              className={`font-display text-base sm:text-lg font-semibold tracking-tight transition-colors duration-500 ${isDarkText ? 'text-gray-900' : 'text-white'}`}
             >
               Church of God of Prophecy
-              <span className="block text-xs font-medium tracking-widest uppercase opacity-80">Marikina</span>
+              <span className={`block text-xs font-medium tracking-widest uppercase ${isDarkText ? 'opacity-70 text-gray-700' : 'opacity-80 text-white'}`}>Marikina</span>
             </span>
           </Link>
 
@@ -99,7 +105,7 @@ export default function Header() {
                 key={link?.href}
                 href={link?.href}
                 className={`px-3 py-2 text-xs lg:text-sm font-semibold tracking-widest uppercase transition-colors duration-500 ${
-                  scrolled ? 'text-gray-900 hover:text-gray-600' : 'text-white hover:text-white/70'
+                  isDarkText ? 'text-gray-900 hover:text-gray-600' : 'text-white hover:text-white/70'
                 }`}
               >
                 {link?.label}
