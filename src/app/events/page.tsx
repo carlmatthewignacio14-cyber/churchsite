@@ -127,87 +127,85 @@ const recentActivities = [
   },
 ];
 
-/* Desktop & Tablet Film Strip Setup */
+/* Desktop & Tablet Buttonless Swipe Film Strip */
 function DesktopFilmStrip({ images, altText }: { images: string[]; altText: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  return (
-    <div className="w-full md:w-[460px] shrink-0 flex flex-col gap-3 select-none">
-      <div className="relative w-full overflow-hidden rounded-xl bg-stone-950/90 border border-stone-800/80 p-3 shadow-2xl">
-        {/* Side-by-side film strip track */}
-        <div 
-          className="flex transition-transform duration-500 ease-out gap-3"
-          style={{ transform: `translateX(-${currentIndex * 50}%)` }}
-        >
-          {images.map((src, i) => (
-            <div 
-              key={i} 
-              className="relative shrink-0 w-[calc(50%-6px)] h-56 rounded-lg overflow-hidden bg-stone-900 border border-stone-800/50 shadow-md group cursor-pointer"
-              onClick={() => setCurrentIndex(i)}
-            >
-              <AppImage
-                src={src}
-                alt={`${altText} - Photo ${i + 1}`}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
-                sizes="230px"
-              />
-              <div className="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] font-medium text-stone-300">
-                {i + 1} / {images.length}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Navigation Controls */}
-        <div className="flex justify-between items-center mt-3 pt-2 border-t border-stone-800/60">
-          <button
-            onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
-            disabled={currentIndex === 0}
-            className="px-3 py-1 bg-stone-800 hover:bg-stone-700 disabled:opacity-30 text-stone-200 text-xs rounded transition-all cursor-pointer"
-          >
-            Previous
-          </button>
-          <div className="text-xs text-stone-400 font-medium">
-            Photo {currentIndex + 1} of {images.length}
-          </div>
-          <button
-            onClick={() => setCurrentIndex((prev) => Math.min(images.length - 2, prev + 1))}
-            disabled={currentIndex >= images.length - 2}
-            className="px-3 py-1 bg-stone-800 hover:bg-stone-700 disabled:opacity-30 text-stone-200 text-xs rounded transition-all cursor-pointer"
-          >
-            Next
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* Original Mobile View Setup */
-function MobileSlider({ images, altText }: { images: string[]; altText: string }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const startXRef = React.useRef<number | null>(null);
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    (e.currentTarget as HTMLElement).dataset.startX = String(e.clientX);
+    startXRef.current = e.clientX;
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
-    const startX = Number((e.currentTarget as HTMLElement).dataset.startX);
-    if (isNaN(startX)) return;
-    const distance = startX - e.clientX;
-    if (distance > 40) {
-      setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    } else if (distance < -40) {
-      setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    if (startXRef.current === null) return;
+    const distance = startXRef.current - e.clientX;
+    const minSwipeDistance = 40;
+
+    if (distance > minSwipeDistance) {
+      setCurrentIndex((prev) => Math.min(images.length - 2, prev + 1));
+    } else if (distance < -minSwipeDistance) {
+      setCurrentIndex((prev) => Math.max(0, prev - 1));
     }
+    startXRef.current = null;
   };
 
   return (
     <div 
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      className="w-full flex flex-col items-center select-none mt-4 block md:hidden"
+      className="w-full md:w-[460px] shrink-0 overflow-hidden select-none cursor-grab active:cursor-grabbing touch-pan-y py-2"
+    >
+      <div 
+        className="flex transition-transform duration-500 ease-out gap-3"
+        style={{ transform: `translateX(-${currentIndex * 50}%)` }}
+      >
+        {images.map((src, i) => (
+          <div 
+            key={i} 
+            className="relative shrink-0 w-[calc(50%-6px)] h-56 rounded-xl overflow-hidden shadow-lg bg-stone-900 pointer-events-none"
+          >
+            <AppImage
+              src={src}
+              alt={`${altText} - Photo ${i + 1}`}
+              fill
+              className="object-cover"
+              sizes="220px"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* Mobile Phone Swipe Slider View */
+function MobileSlider({ images, altText }: { images: string[]; altText: string }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const startXRef = React.useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    startXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (startXRef.current === null) return;
+    const endX = e.changedTouches[0].clientX;
+    const distance = startXRef.current - endX;
+    const minSwipeDistance = 40;
+
+    if (distance > minSwipeDistance) {
+      setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    } else if (distance < -minSwipeDistance) {
+      setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    }
+    startXRef.current = null;
+  };
+
+  return (
+    <div 
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className="w-full flex flex-col items-center select-none mt-4 block md:hidden touch-pan-y"
     >
       <div className="relative w-full h-72 rounded-xl overflow-hidden bg-stone-900 border border-stone-800 shadow-md">
         <AppImage
@@ -286,14 +284,14 @@ function EventsContent() {
 
                   {activity.images && activity.images.length > 0 && (
                     <div className="w-full md:w-auto shrink-0 flex justify-center">
-                      {/* Desktop & Tablet Film Strip View */}
+                      {/* Desktop & Tablet Buttonless Film Strip View */}
                       <div className="hidden md:block">
                         <DesktopFilmStrip
                           images={activity.images}
                           altText={activity.imageAlt || activity.title}
                         />
                       </div>
-                      {/* Mobile Phone View (Original Third Photo Setup) */}
+                      {/* Mobile Phone View */}
                       <div className="block md:hidden w-full">
                         <MobileSlider
                           images={activity.images}
