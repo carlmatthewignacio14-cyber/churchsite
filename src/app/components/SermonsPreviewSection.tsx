@@ -25,6 +25,7 @@ const sundayServices: SundayService[] = [
     date: 'July 26, 2026',
     facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1049594534661098',
     featured: true, 
+  },
   {
     id: '4',
     title: 'Crossing For One Broken Life | Mark 5:1-20',
