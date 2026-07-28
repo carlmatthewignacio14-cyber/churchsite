@@ -24,6 +24,13 @@ const sundayServices: SundayService[] = [
     title: 'John Mark, From Desertion to Mission',
     date: 'July 26, 2026',
     facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1049594534661098',
+    featured: true, 
+  },
+  {
+    id: '4',
+    title: 'John Mark, From Desertion to Mission',
+    date: 'July 26, 2026',
+    facebookVideoUrl: 'https://www.facebook.com/cogopmarikinaph/videos/1049594534661098',
     featured: true,
   },
   {
