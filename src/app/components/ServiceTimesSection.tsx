@@ -10,8 +10,18 @@ interface ServiceTime {
 }
 
 const services: ServiceTime[] = [
-  { day: 'Sunday', times: ['8:00 AM'], type: 'Main Worship Service', note: 'Sunday School for kids is available' },
-  { day: 'Sunday Afternoon', times: ['3:00 PM'], type: 'Youth Service', note: 'Ages 14-35 are welcome' },
+  {
+    day: 'Sunday',
+    times: ['8:00 AM'],
+    type: 'Main Worship Service',
+    note: 'Sunday School for kids is available',
+  },
+  {
+    day: 'Sunday Afternoon',
+    times: ['3:00 PM'],
+    type: 'Youth Service',
+    note: 'Ages 14-35 are welcome',
+  },
   { day: 'Wednesday', times: ['7:30 PM'], type: 'Midweek Service' },
   { day: 'Saturday', times: ['7:00 AM'], type: "Men's Gathering" },
 ];
@@ -75,16 +85,29 @@ export default function ServiceTimesSection() {
       : 'opacity-0 translate-y-7 blur-[5px]';
 
   return (
-    <section id="service-times" className="section-pad bg-background relative z-10" suppressHydrationWarning>
+    <section
+      id="service-times"
+      className="section-pad bg-background relative z-10"
+      suppressHydrationWarning
+    >
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Section heading */}
         <div ref={headingRef} className={`mb-12 ${revealClass(headingRevealed)}`}>
           <span className="text-xs font-semibold tracking-[0.4em] uppercase text-accent block mb-3">
             Join Us
           </span>
-          <h2 style={{ fontFamily: "'Montserrat', sans-serif" }} className="text-section-title font-regular text-foreground">
-            Service Times<br />
-            <span style={{ fontFamily: "'Gabriel Sans', sans-serif" }} className="not-italic font-bold">&amp; Location</span>
+          <h2
+            style={{ fontFamily: "'Montserrat', sans-serif" }}
+            className="text-section-title font-regular text-foreground"
+          >
+            Service Times
+            <br />
+            <span
+              style={{ fontFamily: "'Gabriel Sans', sans-serif" }}
+              className="not-italic font-bold"
+            >
+              &amp; Location
+            </span>
           </h2>
         </div>
 
@@ -100,13 +123,15 @@ export default function ServiceTimesSection() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-xs font-bold tracking-widest uppercase text-accent">{s.day}</span>
+                      <span className="text-xs font-bold tracking-widest uppercase text-accent">
+                        {s.day}
+                      </span>
                       <div className="h-px flex-1 bg-border" />
                     </div>
-                    <h3 className="font-display text-xl font-semibold text-foreground mb-1">{s.type}</h3>
-                    {s.note && (
-                      <p className="text-xs text-muted-foreground mt-1">{s.note}</p>
-                    )}
+                    <h3 className="font-display text-xl font-semibold text-foreground mb-1">
+                      {s.type}
+                    </h3>
+                    {s.note && <p className="text-xs text-muted-foreground mt-1">{s.note}</p>}
                   </div>
                   <div className="flex flex-col items-end gap-1 shrink-0">
                     {s.times.map((t) => (
@@ -124,7 +149,17 @@ export default function ServiceTimesSection() {
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
                   {isMounted && (
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true" suppressHydrationWarning>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      className="text-primary"
+                      aria-hidden="true"
+                      suppressHydrationWarning
+                    >
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
@@ -133,7 +168,8 @@ export default function ServiceTimesSection() {
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">Find Us</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    33 Banaba St, Nangka,<br />
+                    33 Banaba St, Nangka,
+                    <br />
                     Marikina, 1808 Metro Manila
                   </p>
                   <a
@@ -144,7 +180,16 @@ export default function ServiceTimesSection() {
                   >
                     Get Directions
                     {isMounted && (
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true" suppressHydrationWarning>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        aria-hidden="true"
+                        suppressHydrationWarning
+                      >
                         <path d="M5 12h14M12 5l7 7-7 7" />
                       </svg>
                     )}

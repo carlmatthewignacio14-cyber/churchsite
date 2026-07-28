@@ -52,8 +52,8 @@ export default function PrayerSection() {
     !mounted
       ? ''
       : revealed
-      ? 'opacity-100 translate-y-0 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]'
-      : 'opacity-0 translate-y-6';
+        ? 'opacity-100 translate-y-0 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]'
+        : 'opacity-0 translate-y-6';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,7 +82,10 @@ export default function PrayerSection() {
   };
 
   return (
-    <section id="prayer" className="section-pad bg-muted/30 border-t border-border relative z-10 overflow-hidden">
+    <section
+      id="prayer"
+      className="section-pad bg-muted/30 border-t border-border relative z-10 overflow-hidden"
+    >
       {/* Decorative blob */}
       <div className="absolute top-0 right-0 w-96 h-96 blob-primary opacity-30 pointer-events-none" />
 
@@ -98,19 +101,38 @@ export default function PrayerSection() {
               <span className="not-italic font-bold">Prayer Request</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-8 max-w-md">
-              Our prayer team reads every request and lifts each one before God. You are never alone — share what&apos;s on your heart.
+              Our prayer team reads every request and lifts each one before God. You are never alone
+              — share what&apos;s on your heart.
             </p>
 
             {/* Commitments */}
             <div className="space-y-4">
               {[
-                { icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', text: 'All requests are kept confidential' },
-                { icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', text: 'Our dedicated prayer team prays weekly' },
-                { icon: 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z', text: 'Personal follow-up available on request' },
+                {
+                  icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
+                  text: 'All requests are kept confidential',
+                },
+                {
+                  icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+                  text: 'Our dedicated prayer team prays weekly',
+                },
+                {
+                  icon: 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
+                  text: 'Personal follow-up available on request',
+                },
               ].map((item) => (
                 <div key={item.text} className="flex items-start gap-3">
                   <div className="w-8 h-8 bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      className="text-primary"
+                      aria-hidden="true"
+                    >
                       <path d={item.icon} />
                     </svg>
                   </div>
@@ -121,20 +143,37 @@ export default function PrayerSection() {
           </div>
 
           {/* Right: Form */}
-          <div ref={rightRef} className={`bg-card border border-border p-8 md:p-10 ${revealClass(rightRevealed)}`}>
+          <div
+            ref={rightRef}
+            className={`bg-card border border-border p-8 md:p-10 ${revealClass(rightRevealed)}`}
+          >
             {submitted ? (
               <div className="flex flex-col items-center justify-center text-center py-12 gap-4">
                 <div className="w-16 h-16 bg-primary/10 flex items-center justify-center mb-2">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true">
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    className="text-primary"
+                    aria-hidden="true"
+                  >
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </div>
-                <h3 className="font-display text-2xl font-semibold text-foreground">Prayer Received</h3>
+                <h3 className="font-display text-2xl font-semibold text-foreground">
+                  Prayer Received
+                </h3>
                 <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
                   Thank you for trusting us with your heart. Our team will be praying for you.
                 </p>
                 <button
-                  onClick={() => { setSubmitted(false); setForm({ name: '', email: '', request: '', private: false }); }}
+                  onClick={() => {
+                    setSubmitted(false);
+                    setForm({ name: '', email: '', request: '', private: false });
+                  }}
                   className="mt-4 text-xs font-semibold uppercase tracking-widest text-primary hover:text-primary/70 transition-colors"
                 >
                   Submit Another Request
@@ -142,7 +181,9 @@ export default function PrayerSection() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                <h3 className="font-display text-xl font-semibold text-foreground mb-6">Share Your Request</h3>
+                <h3 className="font-display text-xl font-semibold text-foreground mb-6">
+                  Share Your Request
+                </h3>
 
                 <div className="relative">
                   <input
@@ -156,7 +197,10 @@ export default function PrayerSection() {
                     aria-label="Your name"
                     suppressHydrationWarning
                   />
-                  <label htmlFor="prayer-name" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
+                  <label
+                    htmlFor="prayer-name"
+                    className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground"
+                  >
                     Name
                   </label>
                 </div>
@@ -172,7 +216,10 @@ export default function PrayerSection() {
                     aria-label="Email address"
                     suppressHydrationWarning
                   />
-                  <label htmlFor="prayer-email" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
+                  <label
+                    htmlFor="prayer-email"
+                    className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground"
+                  >
                     Email (Optional)
                   </label>
                 </div>
@@ -189,7 +236,10 @@ export default function PrayerSection() {
                     aria-label="Prayer request"
                     suppressHydrationWarning
                   />
-                  <label htmlFor="prayer-request" className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground">
+                  <label
+                    htmlFor="prayer-request"
+                    className="absolute -top-4 left-0 text-[10px] uppercase tracking-widest text-muted-foreground"
+                  >
                     Your Request
                   </label>
                 </div>
@@ -201,15 +251,27 @@ export default function PrayerSection() {
                     role="checkbox"
                     aria-checked={form.private}
                     tabIndex={0}
-                    onKeyDown={(e) => e.key === 'Enter' && setForm({ ...form, private: !form.private })}
+                    onKeyDown={(e) =>
+                      e.key === 'Enter' && setForm({ ...form, private: !form.private })
+                    }
                   >
                     {form.private && (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="3"
+                        aria-hidden="true"
+                      >
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     )}
                   </div>
-                  <span className="text-sm text-muted-foreground">Keep this request private (prayer team only)</span>
+                  <span className="text-sm text-muted-foreground">
+                    Keep this request private (prayer team only)
+                  </span>
                 </label>
 
                 {error && (
@@ -226,7 +288,16 @@ export default function PrayerSection() {
                 >
                   {loading ? (
                     <>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="animate-spin" aria-hidden="true">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        className="animate-spin"
+                        aria-hidden="true"
+                      >
                         <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                       </svg>
                       Submitting...
@@ -234,7 +305,16 @@ export default function PrayerSection() {
                   ) : (
                     <>
                       Submit Prayer Request
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform" aria-hidden="true">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        className="group-hover:translate-x-1 transition-transform"
+                        aria-hidden="true"
+                      >
                         <path d="M5 12h14M12 5l7 7-7 7" />
                       </svg>
                     </>

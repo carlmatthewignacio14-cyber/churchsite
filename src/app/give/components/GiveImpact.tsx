@@ -12,13 +12,17 @@ interface ImpactItem {
 const impacts: ImpactItem[] = [
   {
     icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+    stat: '500+',
     label: 'Families Supported',
-    description: 'Meals, emergency funds, and counseling provided to Nashville families through our benevolence program annually.',
+    description:
+      'Meals, emergency funds, and counseling provided to Nashville families through our benevolence program annually.',
   },
   {
     icon: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 22V12h6v10',
+    stat: '133',
     label: 'Mission Partners',
-    description: 'Local and international ministry partners funded through your generosity, reaching communities in 133 countries.',
+    description:
+      'Local and international ministry partners funded through your generosity, reaching communities in 133 countries.',
   },
 ];
 
@@ -70,11 +74,13 @@ export default function GiveImpact() {
             Where Your Gift Goes
           </span>
           <h2 className="font-display text-section-title font-light italic text-foreground">
-            Real<br />
+            Real
+            <br />
             <span className="not-italic font-bold">Impact</span>
           </h2>
           <p className="text-muted-foreground max-w-lg mx-auto mt-4 leading-relaxed">
-            We believe in complete financial transparency. Here&apos;s what your generosity made possible last year.
+            We believe in complete financial transparency. Here&apos;s what your generosity made
+            possible last year.
           </p>
         </div>
 
@@ -86,12 +92,25 @@ export default function GiveImpact() {
               className="bg-card border border-border p-8 hover:border-primary/30 transition-all group"
             >
               <div className="w-12 h-12 bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary" aria-hidden="true">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  className="text-primary"
+                  aria-hidden="true"
+                >
                   <path d={item.icon} />
                 </svg>
               </div>
-              <div className="font-display text-4xl font-light text-foreground mb-1">{item.stat}</div>
-              <div className="text-xs uppercase tracking-widest text-accent font-semibold mb-4">{item.label}</div>
+              <div className="font-display text-4xl font-light text-foreground mb-1">
+                {item.stat}
+              </div>
+              <div className="text-xs uppercase tracking-widest text-accent font-semibold mb-4">
+                {item.label}
+              </div>
               <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
             </div>
           ))}
@@ -100,9 +119,14 @@ export default function GiveImpact() {
         {/* Financial transparency note */}
         <div className="mt-10 border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground max-w-xl">
-            Church of God of Prophecy publishes a full annual financial report available to all members and donors. We are committed to being good stewards of every gift entrusted to us.
+            Church of God of Prophecy publishes a full annual financial report available to all
+            members and donors. We are committed to being good stewards of every gift entrusted to
+            us.
           </p>
-          <button className="shrink-0 border border-primary text-primary px-6 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all">
+          <button
+            suppressHydrationWarning
+            className="shrink-0 border border-primary text-primary px-6 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all"
+          >
             View Annual Report
           </button>
         </div>
