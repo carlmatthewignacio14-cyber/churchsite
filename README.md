@@ -17,6 +17,8 @@ A modern Next.js 15 application built with TypeScript and Tailwind CSS.
   yarn install
   ```
 
+   Copy `.env.example` to `.env.local` and fill in the values needed for local development. Never commit populated environment files.
+
 2. Start the development server:
   ```bash
   npm run dev
@@ -67,11 +69,11 @@ This project uses Tailwind CSS for styling with the following features:
 
 ## 📱 Deployment
 
-Build the application for production:
+On Netlify, use `npm run build` as the build command and `.next` as the publish directory. The existing Next.js runtime plugin handles server routes and middleware; this application is not a static export.
 
-  ```bash
-  npm run build
-  ```
+Configure deployment environment variables in Netlify rather than in committed `.env` files. Supabase requires `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. The prayer-request integration requires `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `RESEND_API_KEY`, and `RESEND_FROM_EMAIL`. Set `NEXT_PUBLIC_SITE_URL` to the deployed site URL. Keep server credentials available to Functions as well as builds, and keep Netlify secrets scanning enabled.
+
+Credentials previously committed to the repository must be rotated or revoked with their providers, and replacement values must be saved in Netlify and local ignored environment files. Deleting a file from the current source does not remove it from Git history.
 
 ## 📚 Learn More
 
