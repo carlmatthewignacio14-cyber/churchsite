@@ -135,10 +135,7 @@ export default function ServiceTimesSection() {
                   </div>
                   <div className="flex flex-col items-end gap-1 shrink-0">
                     {s.times.map((t) => (
-                      <span
-                        key={t}
-                        className="text-lg font-display font-light text-foreground"
-                      >
+                      <span key={t} className="text-lg font-display font-light text-foreground">
                         {t}
                       </span>
                     ))}
