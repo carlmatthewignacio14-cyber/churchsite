@@ -67,6 +67,27 @@ This project uses Tailwind CSS for styling with the following features:
 
 ## 📱 Deployment
 
+### Environment variables and secrets
+
+For local development, copy `.env.example` to `.env.local` and populate the
+variables needed for the features you use. The example contains variable names
+only; local environment files and Netlify-generated files are ignored by Git.
+Never commit credentials or generate environment files as part of deployment.
+
+For Netlify deployments, configure the required variables in the dashboard under
+**Site configuration → Environment variables** for each deployment context you
+use. Make server-side credentials available to both Builds and Functions when
+using scoped variables, and keep secrets out of `NEXT_PUBLIC_*` variables.
+Prayer-request email delivery uses `RESEND_API_KEY` and `RESEND_FROM_EMAIL`; the
+Google integration uses `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and
+`GOOGLE_REFRESH_TOKEN`. Configure the public Supabase variables and
+`NEXT_PUBLIC_SITE_URL` for the deployed site as well.
+
+Credentials previously committed to the repository must be revoked or rotated
+with their providers, especially `RESEND_API_KEY`, and their replacements saved
+in Netlify. Removing a file does not remove its contents from Git history.
+Keep Netlify secrets scanning enabled; do not bypass it with scan exclusions.
+
 Build the application for production:
 
   ```bash
