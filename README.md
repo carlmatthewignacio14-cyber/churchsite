@@ -67,6 +67,33 @@ This project uses Tailwind CSS for styling with the following features:
 
 ## 📱 Deployment
 
+### Environment variables and credentials
+
+For local development, copy `.env.example` to `.env.local` and fill in the
+values privately. Local environment files are ignored by Git; the example
+contains variable names only and must never contain credentials.
+
+For Netlify deployments, configure the required values under **Site
+configuration → Environment variables**, for the appropriate deploy contexts.
+Do not put values in source files or `netlify.toml`. Server-side integrations
+need their variables available to Functions; variables used during compilation
+also need the Builds scope. Only intentionally public configuration belongs in
+`NEXT_PUBLIC_` variables, since these values can be included in browser assets.
+
+The prayer-request API requires `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and
+`GOOGLE_REFRESH_TOKEN`. Email confirmations additionally use `RESEND_API_KEY`.
+Configure other variables from `.env.example` only for integrations in use.
+
+The previously tracked `.env` was removed after secrets scanning blocked a
+deploy. Treat the credentials it contained as compromised: revoke or rotate
+private API keys, OAuth client secrets, and refresh tokens with their providers,
+then update Netlify and local configuration. Removing the file does not remove
+credentials from existing Git history. Coordinate any history cleanup with
+repository collaborators after rotation.
+
+Keep Netlify secrets scanning enabled. Do not suppress the reported keys to
+work around this failure; the repository must not contain their values.
+
 Build the application for production:
 
   ```bash
